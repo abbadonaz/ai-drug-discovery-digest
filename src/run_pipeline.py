@@ -23,7 +23,7 @@ FILTERED_PATH = "data/filtered_papers.json"
 SENTENCES_PATH = "data/paper_sentences.json"
 SUMMARIES_PATH = "data/summaries.json"
 
-BLOG_PATH = "blog/index.html"
+BLOG_PATH = "docs/index.html"
 
 
 def main():
