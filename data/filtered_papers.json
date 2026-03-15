@@ -1,5 +1,29 @@
 [
   {
+    "title": "On the Reliability of AI Methods in Drug Discovery: Evaluation of Boltz-2 for Structure and Binding Affinity Prediction",
+    "authors": [
+      "Shunzhou Wan",
+      "Xibei Zhang",
+      "Xiao Xue",
+      "Peter V. Coveney"
+    ],
+    "abstract": "Despite continuing hype about the role of AI in drug discovery, no \"AI-discovered drugs\" have so far received regulatory approval. Here we assess one of the latest AI based tools in this domain. The ability to rapidly predict protein-ligand structures and binding affinities is pivotal for accelerating drug discovery. Boltz-2, a recently developed biomolecular foundation model, aims to bridge the gap between AI efficiency and physics-based precision through a joint \"co-folding\" approach. In this study, we provide an extensive evaluation of Boltz-2 using two large-scale datasets: 16,780 compounds for 3CLPro and 21,702 compounds for TNKS2. We compare Boltz-2 predicted structures with traditional docking and binding affinities with binding free energies derived from the physics-based ESMACS protocol. Structural analysis reveals significant global RMSD variations, indicating that Boltz-2 predicts multiple protein conformations and ligand binding positions rather than a single converged pose. Energetic evaluations exhibit only weak to moderate correlations across the global datasets. Furthermore, a focused analysis of the top 100 compounds yields no significant correlation between the Boltz-2 predictions and the binding free energies from fine-grained ESMACS, alongside observed saturation difference in ligand structures. Our results show that while Boltz-2 offers substantial speed for initial screening, it lacks the energetic resolution required for lead identification. These findings highlight the necessity of employing physics-based methods for the reliability and refinement of AI-derived models.",
+    "url": "http://arxiv.org/abs/2603.05532v1",
+    "pdf_url": "https://arxiv.org/pdf/2603.05532v1",
+    "published": "2026-03-02T16:46:26+00:00",
+    "primary_category": "physics.chem-ph",
+    "categories": [
+      "physics.chem-ph",
+      "cs.AI"
+    ],
+    "semantic_score": 0.563330352306366,
+    "positive_score": 17,
+    "negative_score": 0,
+    "topic_match_score": 4,
+    "topic": "Docking & Structure-Based Design",
+    "relevance_score": 0.978330352306366
+  },
+  {
     "title": "MMAI Gym for Science: Training Liquid Foundation Models for Drug Discovery",
     "authors": [
       "Maksim Kuznetsov",
@@ -41,38 +65,28 @@
     "relevance_score": 0.831662917137146
   },
   {
-    "title": "Designing the Haystack: Programmable Chemical Space for Generative Molecular Discovery",
+    "title": "Binding Free Energies without Alchemy",
     "authors": [
-      "Yuchen Zhu",
-      "Donghai Zhao",
-      "Yangyang Zhang",
-      "Yitong Li",
-      "Xiaorui Wang",
-      "Shuwang Li",
-      "Yue Kong",
-      "Beichen Zhang",
-      "Ricki Chen",
-      "Chang Liu",
-      "Xingcai Zhang",
-      "Tingjun Hou",
-      "Chang-Yu Hsieh"
+      "Michael Brocidiacono",
+      "Brandon Novy",
+      "Rishabh Dey",
+      "Konstantin I. Popov",
+      "Alexander Tropsha"
     ],
-    "abstract": "Chemical space exploration underlies drug discovery, yet most generative models treat chemical space as a fixed, implicitly learned distribution, focusing on sampling molecules rather than deliberately designing the space itself. We introduce SpaceGFN, a generative framework that elevates chemical space to a programmable computational object: a controllable degree of freedom enabling explicit construction and adaptive traversal of structured molecular universes. SpaceGFN decouples space definition from exploration. Users specify building blocks and reaction rules to construct chemically and synthetically coherent spaces, while a GFlowNet performs efficient, property-biased sampling within them. In Discovery mode, we demonstrate programmable space design through two strategies. A pseudo-natural product space assembles natural product-like architectures. An evolution-inspired (Evo) space recombines endogenous metabolite fragments via enzyme-consistent transformations, introducing an evolutionary prior into chemical generation. This bias yields favorable shifts in predicted metabolic and toxicological profiles while preserving pharmacological diversity, supported by broad docking enrichment across therapeutic targets. In Editing mode, SpaceGFN enables reaction-consistent lead optimization through a curated toolkit of executable synthetic transformations, allowing local, synthesis-aware modification of existing compounds instead of unrestricted graph mutation. Across 96 drug targets, SpaceGFN achieves strong optimization performance while maintaining structural diversity under synthetic constraints. By integrating programmable chemical universe construction with flow-based exploration and reaction-level editing, SpaceGFN establishes a general paradigm for deliberate navigation of therapeutic chemical space.",
-    "url": "http://arxiv.org/abs/2603.00614v1",
-    "pdf_url": "https://arxiv.org/pdf/2603.00614v1",
-    "published": "2026-02-28T12:16:01+00:00",
-    "primary_category": "physics.chem-ph",
+    "abstract": "Absolute Binding Free Energy (ABFE) methods are among the most accurate computational techniques for predicting protein-ligand binding affinities, but their utility is limited by the need for many simulations of alchemically modified intermediate states. We propose Direct Binding Free Energy (DBFE), an end-state ABFE method in implicit solvent that requires no alchemical intermediates. DBFE outperforms OBC2 double decoupling on a host-guest benchmark and performs comparably to OBC2 MM/GBSA on a protein-ligand benchmark. Since receptor and ligand simulations can be precomputed and amortized across compounds, DBFE requires only one complex simulation per ligand compared to the many lambda windows needed for double decoupling, making it a promising candidate for virtual screening workflows. We publicly release the code for this method at https://github.com/molecularmodelinglab/dbfe.",
+    "url": "http://arxiv.org/abs/2603.12253v1",
+    "pdf_url": "https://arxiv.org/pdf/2603.12253v1",
+    "published": "2026-03-12T17:58:49+00:00",
+    "primary_category": "q-bio.QM",
     "categories": [
-      "physics.chem-ph",
-      "q-bio.BM",
       "q-bio.QM"
     ],
-    "semantic_score": 0.6024775505065918,
-    "positive_score": 12,
+    "semantic_score": 0.49625110626220703,
+    "positive_score": 14,
     "negative_score": 0,
-    "topic_match_score": 1,
+    "topic_match_score": 3,
     "topic": "Docking & Structure-Based Design",
-    "relevance_score": 0.8224775505065918
+    "relevance_score": 0.826251106262207
   },
   {
     "title": "GlassMol: Interpretable Molecular Property Prediction with Concept Bottleneck Models",
@@ -121,74 +135,28 @@
     "relevance_score": 0.733651614189148
   },
   {
-    "title": "Benchmarking GNN Models on Molecular Regression Tasks with CKA-Based Representation Analysis",
+    "title": "FuseDiff: Symmetry-Preserving Joint Diffusion for Dual-Target Structure-Based Drug Design",
     "authors": [
-      "Rajan",
-      "Ishaan Gupta"
+      "Jianliang Wu",
+      "Anjie Qiao",
+      "Zhen Wang",
+      "Zhewei Wei",
+      "Sheng Chen"
     ],
-    "abstract": "Molecules are commonly represented as SMILES strings, which can be readily converted to fixed-size molecular fingerprints. These fingerprints serve as feature vectors to train ML/DL models for molecular property prediction tasks in the field of computational chemistry, drug discovery, biochemistry, and materials science. Recent research has demonstrated that SMILES can be used to construct molecular graphs where atoms are nodes ($V$) and bonds are edges ($E$). These graphs can subsequently be used to train geometric DL models like GNN. GNN learns the inherent structural relationships within a molecule rather than depending on fixed-size fingerprints. Although GNN are powerful aggregators, their efficacy on smaller datasets and inductive biases across different architectures is less studied. In our present study, we performed a systematic benchmarking of four different GNN architectures across a diverse domain of datasets (physical chemistry, biological, and analytical). Additionally, we have also implemented a hierarchical fusion (GNN+FP) framework for target prediction. We observed that the fusion framework consistently outperforms or matches the performance of standalone GNN (RMSE improvement > $7\\%$) and baseline models. Further, we investigated the representational similarity using centered kernel alignment (CKA) between GNN and fingerprint embeddings and found that they occupy highly independent latent spaces (CKA $\\le0.46$). The cross-architectural CKA score suggests a high convergence between isotopic models like GCN, GraphSAGE and GIN (CKA $\\geq0.88$), with GAT learning moderately independent representation (CKA $0.55-0.80$).",
-    "url": "http://arxiv.org/abs/2602.20573v1",
-    "pdf_url": "https://arxiv.org/pdf/2602.20573v1",
-    "published": "2026-02-24T05:53:24+00:00",
+    "abstract": "Dual-target structure-based drug design aims to generate a single ligand together with two pocket-specific binding poses, each compatible with a corresponding target pocket, enabling polypharmacological therapies with improved efficacy and reduced resistance. Existing approaches typically rely on staged pipelines, which either decouple the two poses via conditional-independence assumptions or enforce overly rigid correlations, and therefore fail to jointly generate two target-specific binding modes. To address this, we propose FuseDiff, an end-to-end diffusion model that jointly generates a ligand molecular graph and two pocket-specific binding poses conditioned on both pockets. FuseDiff features a message-passing backbone with Dual-target Local Context Fusion (DLCF), which fuses each ligand atom's local context from both pockets to enable expressive joint modeling while preserving the desired symmetries. Together with explicit bond generation, FuseDiff enforces topological consistency across the two poses under a shared graph while allowing target-specific geometric adaptation in each pocket. To support principled training and evaluation, we derive a dual-target training set and use an independent held-out test set for evaluation. Experiments on the benchmark and a real-world dual-target system show that FuseDiff achieves state-of-the-art docking performance and enables the first systematic assessment of dual-target pose quality prior to docking-based pose search.",
+    "url": "http://arxiv.org/abs/2603.05567v1",
+    "pdf_url": "https://arxiv.org/pdf/2603.05567v1",
+    "published": "2026-03-05T14:22:59+00:00",
     "primary_category": "cs.LG",
     "categories": [
       "cs.LG"
     ],
-    "semantic_score": 0.5984997153282166,
-    "positive_score": 8,
-    "negative_score": 4,
-    "topic_match_score": 2,
-    "topic": "QSAR & Property Prediction",
-    "relevance_score": 0.7184997153282165
-  },
-  {
-    "title": "MultiPUFFIN: A Multimodal Domain-Constrained Foundation Model for Molecular Property Prediction of Small Molecules",
-    "authors": [
-      "Idelfonso B. R. Nogueira",
-      "Carine M. Rebelloa",
-      "Mumin Enis Leblebici",
-      "Erick Giovani Sperandio Nascimento"
-    ],
-    "abstract": "Predicting physicochemical properties across chemical space is vital for chemical engineering, drug discovery, and materials science. Current molecular foundation models lack thermodynamic consistency, while domain-informed approaches are limited to single properties and small datasets. We introduce MultiPUFFIN, a domain-constrained multimodal foundation model addressing both limitations simultaneously. MultiPUFFIN features: (i) an encoder fusing SMILES, graphs, and 3D geometries via gated cross-modal attention, alongside experimental condition and descriptor encoders; (ii) prediction heads embedding established correlations (e.g., Wagner, Andrade, van't Hoff, and Shomate equations) as inductive biases to ensure thermodynamic consistency; and (iii) a two-stage multi-task training strategy.Extending prior frameworks, MultiPUFFIN predicts nine thermophysical properties simultaneously. It is trained on a multi-source dataset of 37,968 unique molecules (40,904 rows). With roughly 35 million parameters, MultiPUFFIN achieves a mean $R^2 = 0.716$ on a challenging scaffold-split test set of 8,877 molecules. Compared to ChemBERTa-2 (pre-trained on 77 million molecules), MultiPUFFIN outperforms the fine-tuned baseline across all nine properties despite using 2000x fewer training molecules. Advantages are strikingly apparent for temperature-dependent properties, where ChemBERTa-2 lacks the architectural capacity to incorporate thermodynamic conditions.These results demonstrate that multimodal encoding and domain-informed biases substantially reduce data and compute requirements compared to brute-force pre-training. Furthermore, MultiPUFFIN handles missing modalities and recovers meaningful thermodynamic parameters without explicit supervision. Systematic ablation studies confirm the property-specific benefits of these domain-informed prediction heads.",
-    "url": "http://arxiv.org/abs/2603.00857v1",
-    "pdf_url": "https://arxiv.org/pdf/2603.00857v1",
-    "published": "2026-03-01T01:18:42+00:00",
-    "primary_category": "cs.LG",
-    "categories": [
-      "cs.LG",
-      "cs.AI"
-    ],
-    "semantic_score": 0.5754066705703735,
-    "positive_score": 5,
-    "negative_score": 4,
-    "topic_match_score": 2,
-    "topic": "QSAR & Property Prediction",
-    "relevance_score": 0.6504066705703735
-  },
-  {
-    "title": "MolFM-Lite: Multi-Modal Molecular Property Prediction with Conformer Ensemble Attention and Cross-Modal Fusion",
-    "authors": [
-      "Syed Omer Shah",
-      "Mohammed Maqsood Ahmed",
-      "Danish Mohiuddin Mohammed",
-      "Shahnawaz Alam",
-      "Mohd Vahaj ur Rahman"
-    ],
-    "abstract": "Most machine learning models for molecular property prediction rely on a single molecular representation (either a sequence, a graph, or a 3D structure) and treat molecular geometry as static. We present MolFM-Lite, a multi-modal model that jointly encodes SELFIES sequences (1D), molecular graphs (2D), and conformer ensembles (3D) through cross-attention fusion, while conditioning predictions on experimental context via Feature-wise Linear Modulation (FiLM). Our main methodological contributions are: (1) a conformer ensemble attention mechanism that combines learnable attention with Boltzmann-weighted priors over multiple RDKit-generated conformers, capturing the thermodynamic distribution of molecular shapes; and (2) a cross-modal fusion layer where each modality can attend to others, enabling complementary information sharing. We evaluate on four MoleculeNet scaffold-split benchmarks using our model's own splits, and report all baselines re-evaluated under the same protocol. Comprehensive ablation studies across all four datasets confirm that each architectural component contributes independently, with tri-modal fusion providing 7-11% AUC improvement over single-modality baselines and conformer ensembles adding approximately 2% over single-conformer variants. Pre-training on ZINC250K (~250K molecules) using cross-modal contrastive and masked-atom objectives enables effective weight initialization at modest compute cost. We release all code, trained models, and data splits to support reproducibility.",
-    "url": "http://arxiv.org/abs/2602.22405v1",
-    "pdf_url": "https://arxiv.org/pdf/2602.22405v1",
-    "published": "2026-02-25T20:59:14+00:00",
-    "primary_category": "cs.LG",
-    "categories": [
-      "cs.LG",
-      "cs.CV"
-    ],
-    "semantic_score": 0.49418479204177856,
-    "positive_score": 5,
+    "semantic_score": 0.46770793199539185,
+    "positive_score": 7,
     "negative_score": 0,
     "topic_match_score": 2,
-    "topic": "QSAR & Property Prediction",
-    "relevance_score": 0.6491847920417785
+    "topic": "Docking & Structure-Based Design",
+    "relevance_score": 0.6527079319953918
   },
   {
     "title": "Conformal Graph Prediction with Z-Gromov Wasserstein Distances",
@@ -243,7 +211,7 @@
     "abstract": "HIF2\u03b1 is aberrantly upregulated in some renal cell carcinomas due to VHL mutations, supporting HIF2\u03b1 inhibition as a compelling therapeutic approach for such cases. Therefore, the six compounds (designated as Compounds 1-6) were screened from the Maybridge database based on the constructed pharmacophore model and molecular docking. Subsequently, the docking models of Compounds 1-6 with HIF2\u03b1 were analysed. Affinity assays revealed that both Compound-4 and Compound-5 exhibited robust affinity towards human recombinant HIF2\u03b1. MD simulations displayed that Compound-4 and Compound-5 stably bound to the active pocket of HIF2\u03b1. Cell experiments demonstrated that Compound-4 effectively inhibited the growth of the 786-O human renal cell carcinomas line (IC",
     "url": "https://pubmed.ncbi.nlm.nih.gov/41493169/",
     "source": "pubmed",
-    "published": "2026-03-08T13:07:04.717045",
+    "published": "2026-03-15T18:01:16.966784",
     "semantic_score": 0.3419521749019623,
     "positive_score": 11,
     "negative_score": 0,
@@ -252,110 +220,27 @@
     "relevance_score": 0.6269521749019623
   },
   {
-    "title": "Learning Complex Physical Regimes via Coverage-oriented Uncertainty Quantification: An application to the Critical Heat Flux",
+    "title": "Beyond Accuracy: Reliability and Uncertainty Estimation in Convolutional Neural Networks",
     "authors": [
-      "Michele Cazzola",
-      "Alberto Ghione",
-      "Lucia Sargentini",
-      "Julien Nespoulous",
-      "Riccardo Finotello"
+      "Sanne Ruijs",
+      "Alina Kosiakova",
+      "Farrukh Javed"
     ],
-    "abstract": "A central challenge in scientific machine learning (ML) is the correct representation of physical systems governed by multi-regime behaviours. In these scenarios, standard data analysis techniques often fail to capture the nature of the data, as the system's response varies significantly across the state space due to its stochasticity and the different physical regimes. Uncertainty quantification (UQ) should thus not be viewed merely as a safety assessment, but as a support to the learning task itself, guiding the model to internalise the behaviour of the data. We address this by focusing on the Critical Heat Flux (CHF) benchmark and dataset presented by the OECD/NEA Expert Group on Reactor Systems Multi-Physics. This case study represents a test for scientific ML due to the non-linear dependence of CHF on the inputs and the existence of distinct microscopic physical regimes. These regimes exhibit diverse statistical profiles, a complexity that requires UQ techniques to internalise the data behaviour and ensure reliable predictions. In this work, we conduct a comparative analysis of UQ methodologies to determine their impact on physical representation. We contrast post-hoc methods, specifically conformal prediction, against end-to-end coverage-oriented pipelines, including (Bayesian) heteroscedastic regression and quality-driven losses. These approaches treat uncertainty not as a final metric, but as an active component of the optimisation process, modelling the prediction and its behaviour simultaneously. We show that while post-hoc methods ensure statistical calibration, coverage-oriented learning effectively reshapes the model's representation to match the complex physical regimes. The result is a model that delivers not only high predictive accuracy but also a physically consistent uncertainty estimation that adapts dynamically to the intrinsic variability of the CHF.",
-    "url": "http://arxiv.org/abs/2602.21701v1",
-    "pdf_url": "https://arxiv.org/pdf/2602.21701v1",
-    "published": "2026-02-25T09:04:15+00:00",
+    "abstract": "Deep neural networks (DNNs) have become integral to a wide range of scientific and practical applications due to their flexibility and strong predictive performance. Despite their accuracy, however, DNNs frequently exhibit poor calibration, often assigning overly confident probabilities to incorrect predictions. This limitation underscores the growing need for integrated mechanisms that provide reliable uncertainty estimation. In this article, we compare two prominent approaches for uncertainty quantification: a Bayesian approximation via Monte Carlo Dropout and the nonparametric Conformal Prediction framework. Both methods are assessed using two convolutional neural network architectures; H-CNN VGG16 and GoogLeNet, trained on the Fashion-MNIST dataset. The empirical results show that although H-CNN VGG16 attains higher predictive accuracy, it tends to exhibit pronounced overconfidence, whereas GoogLeNet yields better-calibrated uncertainty estimates. Conformal Prediction additionally demonstrates consistent validity by producing statistically guaranteed prediction sets, highlighting its practical value in high-stakes decision-making contexts. Overall, the findings emphasize the importance of evaluating model performance beyond accuracy alone and contribute to the development of more reliable and trustworthy deep learning systems.",
+    "url": "http://arxiv.org/abs/2603.10731v1",
+    "pdf_url": "https://arxiv.org/pdf/2603.10731v1",
+    "published": "2026-03-11T13:05:15+00:00",
     "primary_category": "cs.LG",
     "categories": [
       "cs.LG",
-      "physics.data-an",
       "stat.ML"
     ],
-    "semantic_score": 0.2846776247024536,
+    "semantic_score": 0.2601601481437683,
     "positive_score": 12,
     "negative_score": 0,
     "topic_match_score": 4,
     "topic": "Uncertainty Quantification",
-    "relevance_score": 0.6246776247024536
-  },
-  {
-    "title": "Hierarchical Molecular Representation Learning via Fragment-Based Self-Supervised Embedding Prediction",
-    "authors": [
-      "Jiele Wu",
-      "Haozhe Ma",
-      "Zhihan Guo",
-      "Thanh Vinh Vo",
-      "Tze Yun Leong"
-    ],
-    "abstract": "Graph self-supervised learning (GSSL) has demonstrated strong potential for generating expressive graph embeddings without the need for human annotations, making it particularly valuable in domains with high labeling costs such as molecular graph analysis. However, existing GSSL methods mostly focus on node- or edge-level information, often ignoring chemically relevant substructures which strongly influence molecular properties. In this work, we propose Graph Semantic Predictive Network (GraSPNet), a hierarchical self-supervised framework that explicitly models both atomic-level and fragment-level semantics. GraSPNet decomposes molecular graphs into chemically meaningful fragments without predefined vocabularies and learns node- and fragment-level representations through multi-level message passing with masked semantic prediction at both levels. This hierarchical semantic supervision enables GraSPNet to learn multi-resolution structural information that is both expressive and transferable. Extensive experiments on multiple molecular property prediction benchmarks demonstrate that GraSPNet learns chemically meaningful representations and consistently outperforms state-of-the-art GSSL methods in transfer learning settings.",
-    "url": "http://arxiv.org/abs/2602.20344v1",
-    "pdf_url": "https://arxiv.org/pdf/2602.20344v1",
-    "published": "2026-02-23T20:41:44+00:00",
-    "primary_category": "cs.LG",
-    "categories": [
-      "cs.LG",
-      "cs.AI",
-      "q-bio.QM"
-    ],
-    "semantic_score": 0.4588259756565094,
-    "positive_score": 5,
-    "negative_score": 0,
-    "topic_match_score": 2,
-    "topic": "QSAR & Property Prediction",
-    "relevance_score": 0.6138259756565093
-  },
-  {
-    "title": "MACE-POLAR-1: A Polarisable Electrostatic Foundation Model for Molecular Chemistry",
-    "authors": [
-      "Ilyes Batatia",
-      "William J. Baldwin",
-      "Domantas Kuryla",
-      "Joseph Hart",
-      "Elliott Kasoar",
-      "Alin M. Elena",
-      "Harry Moore",
-      "Miko\u0142aj J. Gawkowski",
-      "Benjamin X. Shi",
-      "Venkat Kapil",
-      "Panagiotis Kourtis",
-      "Ioan-Bogdan Magd\u0103u",
-      "G\u00e1bor Cs\u00e1nyi"
-    ],
-    "abstract": "Accurate modelling of electrostatic interactions and charge transfer is fundamental to computational chemistry, yet most machine learning interatomic potentials (MLIPs) rely on local atomic descriptors that cannot capture long-range electrostatic effects. We present a new electrostatic foundation model for molecular chemistry that extends the MACE architecture with explicit treatment of long-range interactions and electrostatic induction. Our approach combines local many-body geometric features with a non-self-consistent field formalism that updates learnable charge and spin densities through polarisable iterations to model induction, followed by global charge equilibration via learnable Fukui functions to control total charge and total spin. This design enables an accurate and physical description of systems with varying charge and spin states while maintaining computational efficiency. Trained on the OMol25 dataset of 100 million hybrid DFT calculations, our models achieve chemical accuracy across diverse benchmarks, with accuracy competitive with hybrid DFT on thermochemistry, reaction barriers, conformational energies, and transition metal complexes. Notably, we demonstrate that the inclusion of long-range electrostatics leads to a large improvement in the description of non-covalent interactions and supramolecular complexes over non-electrostatic models, including sub-kcal/mol prediction of molecular crystal formation energy in the X23-DMC dataset and a fourfold improvement over short-ranged models on protein-ligand interactions. The model's ability to handle variable charge and spin states, respond to external fields, provide interpretable spin-resolved charge densities, and maintain accuracy from small molecules to protein-ligand complexes positions it as a versatile tool for computational molecular chemistry and drug discovery.",
-    "url": "http://arxiv.org/abs/2602.19411v1",
-    "pdf_url": "https://arxiv.org/pdf/2602.19411v1",
-    "published": "2026-02-23T01:09:54+00:00",
-    "primary_category": "physics.chem-ph",
-    "categories": [
-      "physics.chem-ph",
-      "cs.LG"
-    ],
-    "semantic_score": 0.46341758966445923,
-    "positive_score": 10,
-    "negative_score": 4,
-    "topic_match_score": 2,
-    "topic": "Computational Chemistry",
-    "relevance_score": 0.6134175896644593
-  },
-  {
-    "title": "An Active Learning Framework for Data-Efficient, Human-in-the-Loop Enzyme Function Prediction",
-    "authors": [
-      "Ashley Babjac",
-      "Adrienne Hoarfrost"
-    ],
-    "abstract": "Generalizable protein function prediction is increasingly constrained by the growing mismatch between exponentially expanding sequences of environmental proteins and the comparatively slow accumulation of experimentally verified functional data. Active learning offers a promising path forward for accelerating biological function prediction, by selecting the most informative proteins to experimentally annotate for data-efficient training, yet its potential remains largely unexplored. We introduce HATTER (Human-in-the-loop Adaptive Toolkit for Transferable Enzyme Representations), a modular framework that integrates multiple active learning strategies with human-in-the-loop experimental annotation to efficiently fine tune function prediction models. We compare active learning training to standard supervised training for biological enzyme function prediction, demonstrating that active learning achieves performance comparable to standard training across diverse protein sequence evaluation datasets while requiring fewer model updates, processing less data, and substantially reducing computational cost. Interestingly, point-based uncertainty sampling methods like entropy or margin sampling perform as well or better than more complex acquisition functions such as bayesian sampling or BALD, highlighting the relative importance of sequence diversity in training datasets and model architecture design. These results demonstrate that human-in-the-loop active learning can efficiently accelerate enzyme discovery, providing a flexible platform for adaptive, scalable, and expert-guided protein function prediction.",
-    "url": "http://arxiv.org/abs/2602.23269v1",
-    "pdf_url": "https://arxiv.org/pdf/2602.23269v1",
-    "published": "2026-02-26T17:42:06+00:00",
-    "primary_category": "q-bio.QM",
-    "categories": [
-      "q-bio.QM"
-    ],
-    "semantic_score": 0.46980956196784973,
-    "positive_score": 4,
-    "negative_score": 0,
-    "topic_match_score": 2,
-    "topic": "Bayesian Optimization & Active Learning",
-    "relevance_score": 0.6098095619678497
+    "relevance_score": 0.6001601481437683
   },
   {
     "title": "Rigidity-Aware Geometric Pretraining for Protein Design and Conformational Ensembles",
@@ -368,9 +253,9 @@
       "Weiyang Liu",
       "Shengchao Liu"
     ],
-    "abstract": "Generative models have recently advanced $\\textit{de novo}$ protein design by learning the statistical regularities of natural structures. However, current approaches face three key limitations: (1) Existing methods cannot jointly learn protein geometry and design tasks, where pretraining can be a solution; (2) Current pretraining methods mostly rely on local, non-rigid atomic representations for property prediction downstream tasks, limiting global geometric understanding for protein generation tasks; and (3) Existing approaches have yet to effectively model the rich dynamic and conformational information of protein structures. To overcome these issues, we introduce $\\textbf{RigidSSL}$ ($\\textit{Rigidity-Aware Self-Supervised Learning}$), a geometric pretraining framework that front-loads geometry learning prior to generative finetuning. Phase I (RigidSSL-Perturb) learns geometric priors from 432K structures from the AlphaFold Protein Structure Database with simulated perturbations. Phase II (RigidSSL-MD) refines these representations on 1.3K molecular dynamics trajectories to capture physically realistic transitions. Underpinning both phases is a bi-directional, rigidity-aware flow matching objective that jointly optimizes translational and rotational dynamics to maximize mutual information between conformations. Empirically, RigidSSL variants improve designability by up to 43\\% while enhancing novelty and diversity in unconditional generation. Furthermore, RigidSSL-Perturb improves the success rate by 5.8\\% in zero-shot motif scaffolding and RigidSSL-MD captures more biophysically realistic conformational ensembles in G protein-coupled receptor modeling. The code is available at: https://github.com/ZhanghanNi/RigidSSL.git.",
-    "url": "http://arxiv.org/abs/2603.02406v1",
-    "pdf_url": "https://arxiv.org/pdf/2603.02406v1",
+    "abstract": "Generative models have recently advanced $\\textit{de novo}$ protein design by learning the statistical regularities of natural structures. However, current approaches face three key limitations: (1) Existing methods cannot jointly learn protein geometry and design tasks, where pretraining can be a solution; (2) Current pretraining methods mostly rely on local, non-rigid atomic representations for property prediction downstream tasks, limiting global geometric understanding for protein generation tasks; and (3) Existing approaches have yet to effectively model the rich dynamic and conformational information of protein structures. To overcome these issues, we introduce $\\textbf{RigidSSL}$ ($\\textit{Rigidity-Aware Self-Supervised Learning}$), a geometric pretraining framework that front-loads geometry learning prior to generative finetuning. Phase I (RigidSSL-Perturb) learns geometric priors from 432K structures from the AlphaFold Protein Structure Database with simulated perturbations. Phase II (RigidSSL-MD) refines these representations on 1.3K molecular dynamics trajectories to capture physically realistic transitions. Underpinning both phases is a bi-directional, rigidity-aware flow matching objective that jointly optimizes translational and rotational dynamics to maximize mutual information between conformations. Empirically, RigidSSL variants improve designability by up to 43% while enhancing novelty and diversity in unconditional generation. Furthermore, RigidSSL-Perturb improves the success rate by 5.8% in zero-shot motif scaffolding and RigidSSL-MD captures more biophysically realistic conformational ensembles in G protein-coupled receptor modeling.",
+    "url": "http://arxiv.org/abs/2603.02406v2",
+    "pdf_url": "https://arxiv.org/pdf/2603.02406v2",
     "published": "2026-03-02T21:32:30+00:00",
     "primary_category": "cs.LG",
     "categories": [

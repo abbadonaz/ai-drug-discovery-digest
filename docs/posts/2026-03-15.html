@@ -1,0 +1,614 @@
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>AI & Cheminformatics Weekly</title>
+
+<style>
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f8fafc;
+    color: #0f172a;
+    max-width: 960px;
+    margin: auto;
+    padding: 40px;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.logo {
+    width: 90px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+h1 {
+    font-size: 40px;
+    margin-bottom: 8px;
+}
+
+.tagline {
+    font-size: 18px;
+    color: #64748b;
+}
+
+.hero {
+    background: white;
+    padding: 30px;
+    border-radius: 14px;
+    margin-bottom: 40px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.trend {
+    background: #eef2ff;
+    padding: 25px;
+    border-radius: 12px;
+    margin-bottom: 40px;
+}
+
+.section-title {
+    margin-top: 60px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.paper-card {
+    background: white;
+    padding: 26px;
+    border-radius: 12px;
+    margin-bottom: 22px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.paper-title {
+    font-weight: 600;
+    font-size: 19px;
+    margin-bottom: 6px;
+}
+
+.meta {
+    font-size: 13px;
+    color: #64748b;
+    margin-bottom: 12px;
+}
+
+.summary p {
+    margin-bottom: 10px;
+    line-height: 1.6;
+}
+
+.summary strong {
+    display: block;
+    margin-top: 10px;
+    font-weight: 600;
+}
+
+.summary ul {
+    margin-left: 18px;
+    margin-bottom: 12px;
+}
+
+.summary li {
+    margin-bottom: 6px;
+}
+
+a {
+    color: #2563eb;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+.footer {
+    text-align: center;
+    margin-top: 80px;
+    font-size: 14px;
+    color: #64748b;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<img class="logo" src="https://github.com/abbadonaz.png">
+
+<h1>Weekly Science Digest</h1>
+
+<div class="tagline">
+☕ Sunday Coffee Briefing on Drug Discovery & Molecular AI
+</div>
+
+</div>
+
+
+        <div class="hero">
+
+            <h2>⭐ Paper of the Week</h2>
+
+            <div class="paper-title">On the Reliability of AI Methods in Drug Discovery: Evaluation of Boltz-2 for Structure and Binding Affinity Prediction</div>
+
+            <div class="meta">
+            Area: Docking & Structure-Based Design
+            </div>
+
+            <div class="summary">
+            <h3></h3>
+<p><strong>Problem</strong>
+Recent advances in generative artificial intelligence have aimed to expand the chemical space for drug discovery by rapidly designing novel compounds through deep generative models and reinforcement learning
+- based optimization. However, the precise determination of binding affinities remains a challenge due to limitations in computational cost.</p>
+<h3></h3>
+<p><strong>Method</strong>
+The paper uses a generative molecular AI, REINVENT, which employs reinforcement learning to optimize molecules based on external scoring functions for their fitness. This work also explores surrogate docking approaches for rapid screening of vast compound libraries.</p>
+<h3></h3>
+<p><strong>Dataset / Benchmark</strong>
+The study utilizes two datasets: initial ∼10,000 compounds screened from ZINC15 and MCULE compound databases using a surrogate docking model for 3CLPro, and another set generated using REINVENT based on 27 known compounds with experimental affinity measurements for TNKS2.</p>
+<h3></h3>
+<p><strong>Key Findings</strong>
+- The generative active learning (GAL) iterations produced new batches of compounds with improved fitness over time.
+- Surrogate docking approaches were found practical for rapidly screening a vast number of compounds from existing libraries, bypassing the high computational cost associated with physics
+- based approaches.
+- A billion parameter foundation model was employed, demonstrating potential in accelerating drug discovery by predicting protein
+- ligand structures and binding affinities efficiently.</p>
+<h3></h3>
+<p><strong>Why It Matters</strong>
+These advancements address a significant challenge in drug discovery: the need for fast, yet accurate methods to screen vast compound libraries and predict binding affinities. Improved computational approaches have the potential to revolutionize every stage of early drug development, from target identification to lead optimization. However, it is crucial to recognize that AI models are only as good as the data they are trained on, and further developments are necessary for them to incorporate physics
+- based interactions and uncertainty quantification.</p>
+            </div>
+
+            <a href="http://arxiv.org/abs/2603.05532v1">Read the paper →</a>
+
+        </div>
+        
+    <div class="trend">
+
+        <h2>☕ Trend of the Week</h2>
+
+        <div class="summary">
+        <p>This week's digest highlights significant advancements in the fields of drug discovery, cheminformatics, computational chemistry, and molecular machine learning. Recurring methods involve the application of generative artificial intelligence, Bayesian optimization, and uncertainty quantification techniques.</p>
+<p>Important trends in molecular AI and computational chemistry include the development of drug
+- discovery generalist models that can perform competitively across diverse molecular reasoning workloads and the creation of frameworks for Conformal Graph Prediction to provide uncertainty quantification for graph
+- valued data, such as molecules.</p>
+<p>These developments matter for industrial R&amp;D as they address challenges in drug discovery, including the need for fast, yet accurate methods to screen vast compound libraries, predict binding affinities, and design proteins with desired properties. Improved computational approaches have the potential to revolutionize every stage of early drug development, from target identification to lead optimization. However, it is crucial to recognize that AI models are only as good as the data they are trained on, and further developments are necessary for disentangling the latent chemical space, capturing physically realistic transitions, and ensuring model interpretability.</p>
+        </div>
+
+    </div>
+    
+        <div class='section-title'>
+        QSAR & Property Prediction
+        </div>
+        
+            <div class="paper-card">
+
+                <div class="paper-title">
+                MMAI Gym for Science: Training Liquid Foundation Models for Drug Discovery
+                </div>
+
+                <div class="meta">
+                Area: QSAR & Property Prediction
+                </div>
+
+                <div class="summary">
+                <h3></h3>
+<p><strong>Problem</strong>
+Molecular prediction tasks in drug discovery, such as molecular optimization, ADMET property prediction, retrosynthesis, drug
+- target activity prediction, and functional group reasoning, require models that perform competitively and efficiently across diverse workloads encountered in medicinal chemistry, biology, and early clinical development. However, general
+- purpose large language models (LLMs) do not reliably deliver the scientific understanding and performance required for these tasks.</p>
+<h3></h3>
+<p><strong>Method</strong>
+The authors propose a training recipe using supervised fine
+- tuning (SFT) and reinforcement learning fine
+- tuning (RFT) on domain
+- specific data to turn a general
+- purpose causal LLM into a drug
+- discovery generalist. This approach is instantiated in MMAI Gym, a structured training and evaluation environment that provides curated scientific reasoning traces across key modalities and tasks in drug discovery.</p>
+<h3></h3>
+<p><strong>Dataset / Benchmark</strong>
+The work utilizes the MMAI Gym for Science, which offers molecular data formats, modalities, task
+- specific reasoning, training, and benchmarking recipes designed to teach foundation models the "language of molecules" for solving practical drug discovery problems. Performance is evaluated using a diverse set of chemistry
+- oriented benchmarks relevant to drug discovery and development.</p>
+<h3></h3>
+<p><strong>Key Findings</strong>
+- The proposed method achieves competitive or state
+- of
+- the
+- art results across a diverse set of molecular prediction tasks, outperforming larger models in many cases.
+- Unlike other approaches that rely primarily on generic reasoning reinforcement learning (RL) or fine
+- tuning on a single benchmark’s training split, MMAI Gym emphasizes domain
+- faithful reasoning chains, task formats used by practitioners, and evaluation under distribution shift via held
+- out and out
+- of
+- distribution benchmarks.
+- The use of MMAI Gym to train an efficient Liquid Foundation Model (LFM) demonstrates that smaller, purpose
+- trained foundation models can outperform substantially larger general
+- purpose or specialist models on molecular benchmarks.</p>
+<h3></h3>
+<p><strong>Why It Matters</strong>
+This work provides a promising approach for developing drug
+- discovery generalist models that perform competitively across diverse molecular reasoning workloads encountered in medicinal chemistry, biology, and early clinical development. By utilizing domain
+- specific supervision, the proposed method can lead to robust multi
+- task LLMs for scientific R&amp;D, potentially revolutionizing drug discovery, computational chemistry, and molecular machine learning.</p>
+                </div>
+
+                <a href="http://arxiv.org/abs/2603.03517v1">Read paper →</a>
+
+            </div>
+            
+            <div class="paper-card">
+
+                <div class="paper-title">
+                GlassMol: Interpretable Molecular Property Prediction with Concept Bottleneck Models
+                </div>
+
+                <div class="meta">
+                Area: QSAR & Property Prediction
+                </div>
+
+                <div class="summary">
+                <h3></h3>
+<p><strong>Problem</strong>
+Machine learning
+- enabled molecular property prediction faces challenges in interpretability, limiting collaboration with domain experts in drug discovery and computational chemistry.</p>
+<h3></h3>
+<p><strong>Method</strong>
+The paper proposes GlassMol, a model
+- agnostic adaptation of Concept
+- Based Machines (CBMs) to molecular property prediction, bridging the Annotation Gap through RDKit for automated concept computation and Large Language Models (LLMs) for task
+- aware concept selection.</p>
+<h3></h3>
+<p><strong>Dataset / Benchmark</strong>
+Experiments were conducted on thirteen diverse chemical datasets.</p>
+<h3></h3>
+<p><strong>Key Findings</strong>
+- GlassMol generally matches or exceeds black
+- box baselines, demonstrating that interpretability need not come at the cost of performance.
+- The learned concepts are chemically meaningful and align with medicinal chemistry intuition.
+- Explicit concept supervision helps disentangle the latent chemical space, enabling informed decisions.</p>
+<h3></h3>
+<p><strong>Why It Matters</strong>
+GlassMol offers a promising path to keep human experts informed and engaged in the prediction process, potentially accelerating the discovery of safe and effective therapeutics by addressing interpretability concerns in machine learning methods used for molecular property prediction.</p>
+                </div>
+
+                <a href="http://arxiv.org/abs/2603.01274v1">Read paper →</a>
+
+            </div>
+            
+        <div class='section-title'>
+        Docking & Structure-Based Design
+        </div>
+        
+            <div class="paper-card">
+
+                <div class="paper-title">
+                Binding Free Energies without Alchemy
+                </div>
+
+                <div class="meta">
+                Area: Docking & Structure-Based Design
+                </div>
+
+                <div class="summary">
+                <h3></h3>
+<p><strong>Problem</strong>
+Drug discovery requires finding small
+- molecule binders to proteins of interest. Traditional methods are computationally expensive due to the need for many molecular dynamics simulations on alchemically modified states.</p>
+<h3></h3>
+<p><strong>Method</strong>
+The proposed method is Direct Binding Free Energy (DBFE), a new implicit solvent ABFE method that utilizes only end
+- state simulation data; no alchemical intermediates are needed.</p>
+<h3></h3>
+<p><strong>Dataset / Benchmark</strong>
+Not specified in the provided text.</p>
+<h3></h3>
+<p><strong>Key Findings</strong>
+- DBFE reduces the per
+- ligand cost to a single complex simulation compared to methods requiring many complex lambda windows.
+- The primary accuracy bottleneck for implicit solvent methods on protein
+- ligand systems is the solvent model itself, rather than conformational entropy.
+- DBFE approximates the binding free energy as an exponentially weighted sum of binding free energies to rigid receptors, which can be computed more easily by precomputing potential energy grids for each receptor conformation.</p>
+<h3></h3>
+<p><strong>Why It Matters</strong>
+DBFE could potentially speed up virtual screening workflows in drug discovery by reducing computational expenses and improving the accuracy of binding affinity predictions. This method's simplicity and efficiency make it a promising candidate for large
+- scale drug discovery efforts.</p>
+                </div>
+
+                <a href="http://arxiv.org/abs/2603.12253v1">Read paper →</a>
+
+            </div>
+            
+            <div class="paper-card">
+
+                <div class="paper-title">
+                FuseDiff: Symmetry-Preserving Joint Diffusion for Dual-Target Structure-Based Drug Design
+                </div>
+
+                <div class="meta">
+                Area: Docking & Structure-Based Design
+                </div>
+
+                <div class="summary">
+                <h3></h3>
+<p><strong>Problem</strong>
+Dual
+- target SBDD aims to design a single ligand with two target
+- specific binding poses, enabling polypharmacological therapies for improved efficacy and reduced resistance. The problem lies in the scarcity of dual
+- target SBDD datasets for learning compatible binding poses across targets.</p>
+<h3></h3>
+<p><strong>Method</strong>
+The proposed method is based on learning a conditional density <code>p(𝐺, 𝑋1, 𝑋2 | 𝑃1, 𝑃2)</code>, where 𝑃1, 𝑃2 denote the two target pockets, 𝐺 denotes the ligand molecular graph, and 𝑋1, 𝑋2 denote the corresponding binding poses. This formulation directly supports de novo design and produces target
+- specific binding modes end
+- to
+- end, without requiring a separate step for pose recovery.</p>
+<h3></h3>
+<p><strong>Dataset / Benchmark</strong>
+The dataset consists of single
+- target active molecules from ChEMBL for each pocket (GSK3𝛽: 2128; JNK3: 791). Three graph
+- isomorphic molecules shared by both sets are treated as reference dual
+- target ligands.</p>
+<h3></h3>
+<p><strong>Key Findings</strong>
+- Generated ligands exhibit improved molecular properties, with an increase in QED (↑) for drug
+- likeness (Avg.).
+- The generated ligands show compatibility with both target pockets in terms of protein–ligand interactions.
+- Dual
+- target SBDD models outperform existing search
+- based methods that rely on external building
+- block spaces and iterative oracle/docking evaluations.</p>
+<h3></h3>
+<p><strong>Why It Matters</strong>
+This work offers a practical design principle for multi
+- target SBDD with the potential to accelerate polypharmacology
+- oriented drug discovery, enabling the development of inhibitors that simultaneously act on multiple targets, such as GSK3𝛽 and JNK3, which is regarded as a potential strategy for Alzheimer's disease.</p>
+                </div>
+
+                <a href="http://arxiv.org/abs/2603.05567v1">Read paper →</a>
+
+            </div>
+            
+        <div class='section-title'>
+        Bayesian Optimization & Active Learning
+        </div>
+        
+            <div class="paper-card">
+
+                <div class="paper-title">
+                Bayesian Optimization in Chemical Compound Sub-Spaces using Low-Dimensional Molecular Descriptors
+                </div>
+
+                <div class="meta">
+                Area: Bayesian Optimization & Active Learning
+                </div>
+
+                <div class="summary">
+                <h3></h3>
+<p><strong>Problem</strong>
+ML models are utilized as substitutes for experiments or quantum
+- chemistry computations, aiming to efficiently screen chemical compound sub
+- spaces. However, the vast size of the chemical compound space and the high cost of Bayesian optimization make the search for molecules with desired properties extremely challenging.</p>
+<h3></h3>
+<p><strong>Method</strong>
+The study proposes using Bayesian Optimization (BO) in chemical compound spaces as a potential approach to reduce data requirements for molecular property discovery. This method is applied within high
+- dimensional descriptor spaces, which are often needed to capture complex chemical features.</p>
+<h3></h3>
+<p><strong>Dataset / Benchmark</strong>
+Not specified in the provided excerpts.</p>
+<h3></h3>
+<p><strong>Key Findings</strong>
+- The work highlights the significance of low
+- dimensional, interpretable descriptors for data
+- efficient optimization and robust inverse molecular design.
+- Bayesian Optimization is established as a practical tool for molecular discovery in small
+- data regimes.
+- The study suggests that direct optimization within chemical compound sub
+- spaces can identify specific molecules with high precision.</p>
+<h3></h3>
+<p><strong>Why It Matters</strong>
+This research could significantly impact drug discovery, computational chemistry, and molecular machine learning by enabling more efficient screening of chemical compounds, particularly in situations where data is scarce. The findings may lead to the development of more effective optimization methods for molecular property discovery.</p>
+                </div>
+
+                <a href="http://arxiv.org/abs/2603.02605v1">Read paper →</a>
+
+            </div>
+            
+            <div class="paper-card">
+
+                <div class="paper-title">
+                Deep learning-guided evolutionary optimization for protein design
+                </div>
+
+                <div class="meta">
+                Area: Bayesian Optimization & Active Learning
+                </div>
+
+                <div class="summary">
+                <h3></h3>
+<p><strong>Problem</strong>
+Sequential optimization of protein sequences for specific characteristics like binding potential, structural properties, or catalytic activities is computationally expensive due to the need for multiple evaluations involving structure prediction or docking simulations.</p>
+<h3></h3>
+<p><strong>Method</strong>
+BoGA (Bayesian Optimization Genetic Algorithm) combines evolutionary search with Bayesian optimization in an online learning loop, utilizing a surrogate model trained on prior evaluations to approximate the objective function and guide the search towards promising regions of sequence space.</p>
+<h3></h3>
+<p><strong>Dataset / Benchmark</strong>
+The performance of BoGA is demonstrated on sequence and structure
+- level optimization tasks, and its application is highlighted for the design of peptide binders against pneumolysin.</p>
+<h3></h3>
+<p><strong>Key Findings</strong>
+- Larger proposal pools in BoGA yield more high
+- confidence binders, as measured by predicted interface pTM (ipTM) and peptide predicted aligned error (PAE).
+- Optimization trajectories show that BoGA accelerates the identification of high
+- confidence candidates.
+- The model selects both high confidence, high scoring binders, and low confidence binders that score highly under expected improvement.</p>
+<h3></h3>
+<p><strong>Why It Matters</strong>
+BoGA's combination of Bayesian optimization and genetic algorithms addresses the challenge of efficient exploration of sequence space, potentially streamlining the identification of functional proteins for next
+- generation therapeutics and biotechnology. The utility of BoGA for peptide binder design against biologically relevant targets is demonstrated in this application.</p>
+                </div>
+
+                <a href="http://arxiv.org/abs/2603.02753v1">Read paper →</a>
+
+            </div>
+            
+        <div class='section-title'>
+        Computational Chemistry
+        </div>
+        
+            <div class="paper-card">
+
+                <div class="paper-title">
+                Rigidity-Aware Geometric Pretraining for Protein Design and Conformational Ensembles
+                </div>
+
+                <div class="meta">
+                Area: Computational Chemistry
+                </div>
+
+                <div class="summary">
+                <h3></h3>
+<p><strong>Problem</strong>
+The challenge lies in designing proteins with desired properties, particularly due to the requirement for diverse, multi
+- scale data that spans both rigid geometric motifs and dynamic variability. This is a fundamental challenge for structure
+- based pretraining, as all
+- atom modeling is computationally expensive.</p>
+<h3></h3>
+<p><strong>Method</strong>
+We propose RigidSSL (Rigidity
+- Aware SelfSupervised Learning), a two
+- stage geometric pretraining framework for protein structure generation. The first phase (RigidSSL
+- Perturb) learns geometric priors from 432K structures, with simulated perturbations, while the second phase (RigidSSL
+- MD) refines these representations on molecular dynamics trajectories to capture physically realistic transitions.</p>
+<h3></h3>
+<p><strong>Dataset / Benchmark</strong>
+The method is applied on 432K structures from the AlphaFold Protein Structure Database and 1.3K molecular dynamics trajectories.</p>
+<h3></h3>
+<p><strong>Key Findings</strong>
+- RigidSSL variants learn to represent a wider and more physically realistic conformational landscape of G protein
+- coupled receptors (GPCRs), achieving the best performance on 7 out of 9 metrics in ensemble generation.
+- In protein design tasks, RigidSSL
+- Perturb improves the average success rate by 5.8% in motif scaffolding.</p>
+<h3></h3>
+<p><strong>Why It Matters</strong>
+This work matters for drug discovery, computational chemistry, and molecular machine learning as it provides a more effective pretraining paradigm for protein structure generation. The proposed RigidSSL framework can learn geometric priors from diverse data, improving the conformational diversity of generated structures, which is crucial for understanding protein function and designing proteins with desired properties.</p>
+                </div>
+
+                <a href="http://arxiv.org/abs/2603.02406v2">Read paper →</a>
+
+            </div>
+            
+        <div class='section-title'>
+        Uncertainty Quantification
+        </div>
+        
+            <div class="paper-card">
+
+                <div class="paper-title">
+                Conformal Graph Prediction with Z-Gromov Wasserstein Distances
+                </div>
+
+                <div class="meta">
+                Area: Uncertainty Quantification
+                </div>
+
+                <div class="summary">
+                <h3></h3>
+<p><strong>Problem</strong>
+The scientific problem lies in the need for a model that can predict structured graphs, such as molecules, with uncertainty quantification. This is particularly important in situations where experimental validation of results is costly, especially in drug discovery, computational chemistry, and molecular machine learning.</p>
+<h3></h3>
+<p><strong>Method</strong>
+The proposed method is a framework for Conformal Graph Prediction based on Z
+- Gromov
+- Wasserstein non
+- conformity scores. This approach extends Conformal Prediction to graph
+- valued outputs, providing a set of plausible graphs rather than a single prediction.</p>
+<h3></h3>
+<p><strong>Dataset / Benchmark</strong>
+The method is evaluated on a synthetic image
+- to
+- graph task and a real molecule prediction problem.</p>
+<h3></h3>
+<p><strong>Key Findings</strong>
+- The framework demonstrates effectiveness and versatility in both the synthetic and real
+- world tasks.
+- It provides a model
+- agnostic approach applicable to both direct graph predictors and SMILES
+- based pipelines.
+- The use of Z
+- Gromov–Wasserstein distance ensures permutation
+- invariant scores, making it suitable for graph
+- valued outputs.</p>
+<h3></h3>
+<p><strong>Why It Matters</strong>
+This work addresses a significant challenge in the graph setting, where outputs live in a highly structured, non
+- Euclidean, and combinatorial space. By providing uncertainty quantification for graph
+- valued data, it offers a more robust and reliable approach to structured prediction tasks, with potential implications for drug discovery, computational chemistry, and molecular machine learning.</p>
+                </div>
+
+                <a href="http://arxiv.org/abs/2603.02460v3">Read paper →</a>
+
+            </div>
+            
+            <div class="paper-card">
+
+                <div class="paper-title">
+                Beyond Accuracy: Reliability and Uncertainty Estimation in Convolutional Neural Networks
+                </div>
+
+                <div class="meta">
+                Area: Uncertainty Quantification
+                </div>
+
+                <div class="summary">
+                <h3></h3>
+<p><strong>Problem</strong>
+In the realm of deep learning, a systematic comparison between Bayesian and Conformal approaches for uncertainty quantification (UQ) across diverse neural network architectures is scarce. This study aims to bridge this gap.</p>
+<h3></h3>
+<p><strong>Method</strong>
+The research compares two UQ methods: Bayesian approximation via Monte Carlo Dropout (MC Dropout) and the nonparametric Conformal Prediction framework, across two convolutional neural network architectures: H
+- CNN VGG16 and GoogLeNet.</p>
+<h3></h3>
+<p><strong>Dataset / Benchmark</strong>
+The study utilizes the Fashion
+- MNIST dataset for a standardized image classification benchmark, ensuring a precise comparison of the selected methods across model architectures without data inconsistency.</p>
+<h3></h3>
+<p><strong>Key Findings</strong>
+- The findings highlight the complementary roles of MC Dropout and Conformal Prediction in deep learning UQ.
+- Systematic patterns in class
+- level ambiguity are revealed, showcasing how models respond to visually similar categories.
+- The hierarchical architecture of the H
+- CNN VGG16 model reduces misclassification of ambiguous classes and enhances model interpretability.</p>
+<h3></h3>
+<p><strong>Why It Matters</strong>
+This work advances the development of models that not only provide accurate predictions but also are transparent, trustworthy, and align better with human reasoning. The insights gained can contribute to improving the safety and reliability of deep learning applications in drug discovery, computational chemistry, and molecular machine learning.</p>
+                </div>
+
+                <a href="http://arxiv.org/abs/2603.10731v1">Read paper →</a>
+
+            </div>
+            
+
+<div class="footer">
+
+Generated automatically from arXiv, PubMed & ChemRxiv.<br>
+Curated by <b>abbadonaz</b>
+
+</div>
+
+</body>
+
+</html>
