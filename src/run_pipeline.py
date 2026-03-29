@@ -142,8 +142,10 @@ def main():
     print("\nDownloading PDFs and extracting key sentences...")
 
     paper_sentences = []
+    brief_papers = []
 
-    for paper in filtered[:20]:  # keep runtime manageable
+    # Top 12 get full two-stage summarization
+    for paper in filtered[:12]:
 
         pdf_path = download_pdf(paper)
 
@@ -169,10 +171,22 @@ def main():
             "title": paper["title"],
             "url": paper["url"],
             "topic": paper.get("topic", "Other"),
-            "sentences": ranked
+            "sentences": ranked,
+            "context": combined_text,
+            "sections": sections,
         })
 
-    print(f"Processed PDFs for {len(paper_sentences)} papers")
+    # Remaining papers get brief entries (title, URL, topic only)
+    for paper in filtered[12:25]:  # up to 25 total
+        brief_papers.append({
+            "title": paper["title"],
+            "url": paper["url"],
+            "topic": paper.get("topic", "Other"),
+            "brief": True,
+        })
+
+    print(f"Processed PDFs for {len(paper_sentences)} featured papers")
+    print(f"Added {len(brief_papers)} brief references")
 
     save_json(paper_sentences, SENTENCES_PATH)
 
@@ -184,13 +198,24 @@ def main():
     # 4 Generate summaries
     # --------------------------------------------------
 
-    print("\nGenerating structured summaries...")
+    print("\nGenerating structured summaries for featured papers...")
 
     summaries = summarize_papers(paper_sentences)
 
     summaries = rank_papers(summaries)
 
-    print(f"Generated {len(summaries)} summaries")
+    # Add brief papers (without full summaries)
+    for brief in brief_papers:
+        summaries.append({
+            "title": brief["title"],
+            "url": brief["url"],
+            "topic": brief.get("topic", "Other"),
+            "tldr": "",
+            "brief": True,
+            "score": 0,
+        })
+
+    print(f"Generated {len(summaries)} total entries ({len(paper_sentences)} featured + {len(brief_papers)} brief)")
 
     save_json(summaries, SUMMARIES_PATH)
 

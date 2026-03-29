@@ -55,7 +55,10 @@ import ollama
 
 def generate_weekly_narrative(summaries):
 
-    context = build_trend_input(summaries)
+    # Use only featured papers for narrative (not brief links)
+    featured = [s for s in summaries if not s.get("brief", False)]
+
+    context = build_trend_input(featured)
 
     prompt = TREND_PROMPT.format(summaries=context)
 
