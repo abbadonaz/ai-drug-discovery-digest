@@ -20,6 +20,10 @@ KEYWORDS = [
     "molecular generation",
     "generative",
     "synthesis",
+    "active learning",
+    "fep",
+    "fep calculation",
+    "free energy perturbation",
 ]
 
 

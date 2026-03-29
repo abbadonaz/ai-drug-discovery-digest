@@ -21,6 +21,9 @@ KEYWORDS = [
     "reinvent",
     "active learning",
     "bayesian optimization",
+    "fep",
+    "fep calculation",
+    "free energy perturbation",
     "uncertainty",
 ]
 

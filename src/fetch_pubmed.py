@@ -17,6 +17,9 @@ OR molecular generation
 OR generative chemistry
 OR Bayesian optimization
 OR active learning
+OR fep
+OR "fep calculation"
+OR "free energy perturbation"
 OR uncertainty quantification
 )
 """

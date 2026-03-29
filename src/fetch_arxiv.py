@@ -21,6 +21,9 @@ QUERY = """
     ti:reinvent OR abs:reinvent OR
     ti:"bayesian optimization" OR abs:"bayesian optimization" OR
     ti:"active learning" OR abs:"active learning" OR
+    ti:"fep" OR abs:"fep" OR
+    ti:"fep calculation" OR abs:"fep calculation" OR
+    ti:"free energy perturbation" OR abs:"free energy perturbation" OR
     ti:"uncertainty quantification" OR abs:"uncertainty quantification" OR
     ti:"molecular representation" OR abs:"molecular representation" OR
     ti:"graph neural network" OR abs:"graph neural network"

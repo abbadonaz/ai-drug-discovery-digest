@@ -17,6 +17,7 @@ TOPICS = {
         "dft",
         "molecular dynamics",
         "free energy",
+        "free energy perturbation",
         "fep",
         "force field",
         "ab initio",
