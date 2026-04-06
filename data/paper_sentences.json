@@ -1,316 +1,119 @@
 [
   {
-    "title": "On the Reliability of AI Methods in Drug Discovery: Evaluation of Boltz-2 for Structure and Binding Affinity Prediction",
-    "url": "http://arxiv.org/abs/2603.05532v1",
-    "topic": "Docking & Structure-Based Design",
+    "title": "ADMET Profiling of a Mitochondria-Focused Compound Library: Physicochemical Baselines, Membrane Permeability Classification, and Tier-Based Filtering for AI-Driven Drug Discovery",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001519/v1",
+    "topic": "QSAR & ADMET",
     "sentences": [
-      "Recent advances in generative artificial intelligence (AI) have substantially expanded the accessible chemical space for drug discovery, enabling the rapid design of novel compounds through deep generative models and reinforcement learning-based optimisation.",
-      "More compounds were then generated iteratively with REINVENT, which uses reinforcement learning (RL), to optimise molecules subjected to external \u201cinformation\u201d i.e., scoring functions which evaluate each compound for its fitness.",
-      "The two datasets consist of initial \u223c10,000 compounds each, screened from ZINC15 and MCULE compound databases using a surrogate docking model for 3CLPro, or generated using REINVENT, a generative molecular AI, based on 27 known compounds with available experimental affinity measurements for TNKS2.",
-      "In each generative active learning (GAL) iteration, a new batch of compounds was produced with improved fitness.",
-      "During this period, a wide range of promising tools and deep-learning architectures have proliferated, claiming the ability to revolutionise every stage of the early drug development pipeline \u2013 from the identification of novel drug targets and the prediction of their 3D structures to the rapid identification and optimisation of lead compounds.",
-      "ESMACS has been applied to datasets of tens of thousands of compounds on exascale computers for drug discovery.",
-      "The high computational cost of physics-based approaches limits their applications to relatively small sets of compounds, necessitating faster alternatives for large-scale screening.",
-      "Traditionally, the field has relied on a trade-off between high-throughput, lower-precision methods like molecular docking and computationally demanding, high-precision physics-based approaches.",
-      "The development of surrogate docking approaches makes it practical to rapidly screen a vast number of compounds from existing libraries.",
-      "1 Introduction More than a decade has passed since the initial wave of optimistic projections suggested that artificial intelligence (AI) would fundamentally transform the landscape of drug discovery.",
-      "This capability directly dictates the efficiency of the entire discovery pipeline, as the precision of these energetic estimations is essential for the effective identification and subsequent optimisation of novel drug candidates.",
-      "Rather than learning the underlying physics of molecular recognition, the model appears to rely on ad hoc statistical heuristics that are largely decoupled from local atomic environments.",
-      "Indeed, the precise determination of the binding affinities of small molecules to their target proteins remains a cornerstone of structure-based drug design.",
-      "Abstract Despite continuing hype about the role of AI in drug discovery, no \u201cAI-discovered drugs\u201d have so far received regulatory approval.",
-      "We removed the compounds that encountered execution errors during the molecular dynamics simulation or the free energy calculation steps, resulting in final datasets of 16,780 and 21,702 compounds for the two molecular systems (\u223c0.7% failures).",
-      "For a drug screening project, like our previous study, tens of thousands of compounds need to be evaluated.",
-      "The ability to rapidly predict proteinligand structures and binding affinities is pivotal for accelerating drug discovery.",
-      "It is categorized as a billion parameter foundat\nconclusion, while Boltz-2 offers an efficient tool for generating protein\u2013ligand complexes when canonical docking approaches are unfeasible, its poor performance in affinity ranking indicates that it cannot serve as a reliable substitute for high precision, physics-based methods in late-stage drug discovery.",
-      "It should be noted that, like all AI methods, foundation models cannot magically create or predict arbitrary molecules and molecular structures; they are only as good as the data they are trained on.",
-      "Until foundation models can move beyond these mathematical artifacts to incorporate the rigour and uncertainty quantification of physics-based interactions, they will remain insufficient for navigating the complex activity cliffs of real-world chemical space.",
-      "For each ligand in the 3CLPro and TNKS2 datasets, the model was provided with the protein sequence and SMILES strings for the ligands.",
-      "However, despite such unprecedented successes, the impact of AI on drug discovery remains a subject of critical debate.",
-      "4.1 Dataset preparation The datasets for 3CLPro and TNKS2 were obtained from a large-scale compound library previously described by Loeffler et al .",
-      "It is categorized as a billion parameter foundation model because it is trained on a vast dataset of protein structures and millions of experimental binding records.",
-      "For each compound, we extracted the predicted binding affinity (reported as a continuous score) and the 3D atomic coordinates of the pose with the highest confidence."
-    ]
+      "ADMET Profiling of a Mitochondria-Focused Compound Library: Physicochemical Baselines, Membrane Permeability Classification, and Tier-Based Filtering for AI-Driven Drug Discovery"
+    ],
+    "context": "ADMET Profiling of a Mitochondria-Focused Compound Library: Physicochemical Baselines, Membrane Permeability Classification, and Tier-Based Filtering for AI-Driven Drug Discovery",
+    "sections": {
+      "abstract": "ADMET Profiling of a Mitochondria-Focused Compound Library: Physicochemical Baselines, Membrane Permeability Classification, and Tier-Based Filtering for AI-Driven Drug Discovery"
+    }
   },
   {
-    "title": "MMAI Gym for Science: Training Liquid Foundation Models for Drug Discovery",
-    "url": "http://arxiv.org/abs/2603.03517v1",
-    "topic": "QSAR & Property Prediction",
-    "sentences": [
-      "Across essential drug discovery tasks \u2013 including molecular optimization, ADMET property prediction, retrosynthesis, drug\u2013target activity prediction, and functional group reasoning \u2013 the resulting model achieves near specialist-level performance and, in the majority of settings, surpasses larger models, while remaining more efficient and broadly applicable in the domain.",
-      "To address this gap, we introduce the MMAI Gym for Science, a one-stop shop molecular data formats and modalities as well as task-specific reasoning, training, and benchmarking recipes designed to teach foundation models the \u201clanguage of molecules\u201d in order to solve practical drug discovery problems.",
-      "(2025), a highly efficient language model, into a powerful model for drug discovery, where it achieves competitive or state-of-the-art results across a diverse set of molecular prediction tasks.",
-      "We propose a training recipe that uses supervised (SFT) and reinforcement learning (RFT) finetuning on domain-specific data to turn a general-purpose causal LLM into a drug-discovery generalist.",
-      "in some cases by up to an order of magnitude on task metrics \u2013 LFM2\u2019s performance on selected chemistry-oriented benchmarks relevant to drug discovery and development.",
-      "As a result, it remains challenging to obtain a single \u201cgeneralist\u201d model that performs competitively in the diverse molecular reasoning workloads encountered in medicinal chemistry, biology, and early clinical development.",
-      "We instantiate this approach in MMAI Gym, a structured training and evaluation environment that provides curated scientific reasoning traces across key modalities and tasks in drug discovery.",
-      "ABSTRACT General-purpose large language models (LLMs) that rely on in-context learning do not reliably deliver the scientific understanding and performance required for drug discovery tasks.",
-      "Despite promising demonstrations, current LLM-based approaches typically lag behind specialist methods on core drug discovery benchmarks, and performance gains obtained via prompting or task-local fine-tuning often do not translate into robust, cross-task capability.",
-      "We use MMAI Gym to train an efficient Liquid Foundation Model (LFM) for these applications, demonstrating that smaller, purpose-trained foundation models can outperform substantially larger generalpurpose or specialist models on molecular benchmarks.",
-      "Unlike approaches that rely primarily on generic reasoning reinforcement learning (RL) or fine-tuning on a single benchmark\u2019s training split, MMAI Gym emphasizes domain-faithful reasoning chains, task formats used by practitioners, and evaluation under distribution shift via held-out and out-of-distribution benchmarks.",
-      "These results suggest that domain-specific reasoning supervision can be an effective path toward robust multi-task LLMs for scientific R&D.",
-      "Published as a workshop paper at ICLR 2026 Figure 2: MMAI Gym: Integrated Data, Training, and Benchmark Suite Empirically, these architectural design choices translate into substantial efficiency gains during both prefill and decode.",
-      "Simply increasing model size or introducing reasoning tokens does not yield significant performance gains.",
-      "These local operators encode short range \u201cmotifs\u201d in the sequence, which are subsequently integrated over long contexts by the small number of global attention operators.",
-      "Our results show that a single SFT+RFT run substantially improves \u2013 Published as a workshop paper at ICLR 2026 Figure 1: LFM2 Architecture & Efficiency.",
-      "Each LFM2 block is composed of two sequential Norm-Operator-Residual schemes: first, where the sequence operator is either a ShortConv or GQA, and second, where the operator is SwiGLU feed-forward layers (Shazeer, 2020) for the position-wise MLP readout.",
-      "This trend reflects the contrast between the LFM hybrid design, with its linear-time ShortConv operators and limited GQA, and attention-dominant transformers that incur quadratic scaling at longer contexts.",
-      "The gated short convolution operator, for a hidden sequence h \u2208 RL\u00d7d, computes the following, (B, C, \u02dch) = hWin, (cid:16) (cid:17) C \u2299 Convk(B \u2299 \u02dch) o = Wout (1) where Win \u2208 Rd\u00d73d, Wout \u2208 Rd\u00d7d are learned linear projections, Convk denotes a depthwise 1D convolution with k = 3, and \u2299 denotes the canonical Hadamard product."
-    ]
-  },
-  {
-    "title": "Binding Free Energies without Alchemy",
-    "url": "http://arxiv.org/abs/2603.12253v1",
-    "topic": "Docking & Structure-Based Design",
-    "sentences": [
-      "In a typical screen, a \u201cdocking\u201d algorithm first predicts a binding pose for each compound within the protein binding site, and then another algorithm is used to score the compound for its predicted binding ability.",
-      "Since receptor and ligand simulations can be precomputed and amortized across compounds, DBFE requires only one complex simulation per ligand compared to the many lambda windows needed for double decoupling, making it a promising candidate for virtual screening workflows.",
-      "0 2 : v i X r a Introduction A critical early step in drug discovery is finding small-molecule binders to proteins of interest.",
-      "13 All such methods are computationally expensive due to the need to run many molecular dynamics simulations on \u201calchemically modified\u201d states; however, they are highly correlated with experimental binding affinities.",
-      "In practice, however, methods such as BAR require a certain amount of phase-space overlap between the two states in order to \nIntroduction A critical early step in drug discovery is finding small-molecule binders to proteins of interest.",
-      "Abstract Absolute Binding Free Energy (ABFE) methods are among the most accurate computational techniques for predicting protein-ligand binding affinities, but their utility is limited by the need for many simulations of alchemically modified intermediate states.",
-      "We assume we have run MD simulations of the protein, ligand, and protein-ligand complex; thus we have access to samples from UP , UL, and UP L.",
-      "In a virtual screen, a model scores millions or even billions of compounds for their ability to bind to the target; the top-scoring compounds are then suggested for experimental validation.",
-      "Our results suggest that the primary accuracy bottleneck for implicit solvent methods on protein-ligand systems is the solvent model itself, rather than conformational entropy.",
-      "7\u20139 These utilize complex functions whose parameters are fit according to training data, and they can often achieve high accuracy on protein-ligand complexes that are similar to those seen in the training set.",
-      "We can easily introduce phase-space ove\nresults suggest that the primary accuracy bottleneck for implicit solvent methods on protein-ligand systems is the solvent model itself, rather than conformational entropy.",
-      "Since the receptor and ligand simulations can be precomputed and cached, the per-ligand cost reduces to a single complex simulation compared to the many complex lambda windows needed for DD.",
-      "Structure-based virtual screening aims to speed up this process by computationally suggesting binders given the 3D structure of the target protein.",
-      "21 Finally, AlGDock approximates the binding free energy as an exponentially weighted sum of binding free energies to rigid receptors, which it can compute more easily by precomputing potential energy grids for each receptor conformation.",
-      "We publicly release the code for this method at https://github.com/molecularmodelinglab/dbfe.",
-      "Molecular Mechanics/Poisson Boltzmann (or Generalized Born) Surface Area (MM/PBSA or MM/GBSA) also uses molecular dynamics simulations to predict binding free energy, but does not simulate alchemical intermediates; it is thus faster, but at the expense of neglecting conformational entropy.",
-      "22 In this work, we propose Direct Binding Free Energy (DBFE), a new implicit solvent ABFE method that utilizes only end-state simulation data; no alchemical intermediates are needed.",
-      "20 Mining Minima avoids expensive molecular dynamics simulations altogether, and instead explicitly approximates partition functions as a sum over multiple harmonic energy wells.",
-      "Thus, ABFE has emerged as the gold standard computational technique to predict proteinligand binding affinities in the absence of experimental data about the protein target.",
-      "2 Methods 2.1 Intuition Alchemical binding free energy methods seek to estimate the free energy of transforming a protein-ligand system from an initial potential energy function U0 to a final energy function U1.",
-      "10\u201312 On the other hand, absolute binding affinity (ABFE) calculations utilize rigorous statistical mechanics to predict the Gibbs free energy of binding.",
-      "17,18 MD simulations for ABFE typically employ explicit waters, though ABFE with implicit solvent has been suggested as a faster alternative.",
-      "In this work, all ligand transformations account for molecular symmetry (i.e., equivalent atom permutations) via modified code from spyrmsd.",
-      "1\u20133 Traditional scoring methods such as AutoDock Vina 4 and Glide 5 use a physics-inspired energy function with a single frozen receptor conformation, neglecting the importance of the inherently dynamic nature of the system.",
-      "2.2 The Direct Binding Free Energy method We desire to compute the Gibbs free energy \u2206G for the transformation P + L \u2192 P L, where P is a protein, L is a small molecule ligand, and P L is their complex."
-    ]
-  },
-  {
-    "title": "GlassMol: Interpretable Molecular Property Prediction with Concept Bottleneck Models",
-    "url": "http://arxiv.org/abs/2603.01274v1",
-    "topic": "QSAR & Property Prediction",
-    "sentences": [
-      "Machine learning-enabled molecular property prediction seeks to leverage the highthroughput nature of computation to identify promising areas of research for wet-lab chemists, increasing the efficiency of the entire research pipeline .",
-      "A systematic evaluation on thirteen benchmark datasets demonstrating competitive or superior performance compared t\nIntroduction Machine learning-enabled molecular property prediction seeks to leverage the highthroughput nature of computation to identify promising areas of research for wet-lab chemists, increasing the efficiency of the entire research pipeline .",
-      "This computational approach has already demonstrated tangible impact in identifying novel antibiotics, optimizing molecular properties, and enabling de novo drug design .",
-      "Though both learning strategies exhibit state-of-the-art performance on molecular tasks, they are not designed with an interpretability-first approach, limiting collaboration with domain exp\nresults on Therapeutics Data Commons datasets.",
-      "However, adapting CBMs to chemistry faces three challenges: the Relevance Gap (selecting task-relevant concepts from a large descriptor space), the Annotation Gap (obtaining concept supervision for molecular data), and the Capacity Gap (degrading performance due to bottleneck constraints).",
-      "A model-agnostic CBM framework and corresponding open-source code applicable to molecular property prediction tasks with continuous concept labels.",
-      "By learning from vast chemical databases where exhaustive experimental testing is prohibitively expensive, ML models prioritize promising compounds for wet-lab validation, reducing both cost and development timelines.",
-      "This suggests that the explicit modeling of chemical concepts helps the model focus on specific toxicophores (structural alerts) rather than overfitting to spurious correlations in the high-dimensional latent space.",
-      "Machine learning accelerates molecular property prediction, yet stateof-the-art Large Language Models and Graph Neural Networks operate as black boxes.",
-      "By leveraging RDKit for automated concept computation and LLMs for task-aware concept selection, we effectively bridge the annotation and relevance gaps that have previously hindered the adoption of CBMs for molecular tasks.",
-      "We investigate the influence of architect\nConclusion In this work, we apply CBMs to molecular property prediction, allowing a model to project GNN and LLM embeddings to the concept space before generating a prediction.",
-      "To address these challenges, we propose GlassMol, a model-agnostic adaptation of CBMs to molecular property prediction.",
-      "These substructures are known metabolic liabilities, confirming that the model aligns with medicinal chemistry intuition.",
-      "(Relevance Gap): Unlike computer vision, where concepts are intuitive (e.g., wing color), the chemical descriptor space contains hundreds of physicochemical properties.",
-      "GlassMol bridges the Annotation Gap by computing chemical descriptors via RDKit, addresses the Relevance Gap through LLM-guided concept selection, and empirically demonstrates that interpretability need not sacrifice performance.",
-      "As machine learning methods evolve in both quality and complexity, the CBM architecture offers a promising path to keep human experts informed and engaged in the prediction process, potentially accelerating the discovery of safe and effective therapeutics.",
-      "This suggests that explicit concept supervision helps disentangle the latent chemical space, enabling the linear predictor to make robust, informed decisions.",
-      "Our experiments on thirteen diverse chemical datasets demonstrate that GlassMol generally matches or exceeds black-box baselines, suggesting that interpretability need not come at the cost of performance.",
-      "A model might correctly flag a molecule as hepatotoxic for reasons unrelated to its actual mechanism, making it difficult to guide lead optimization.",
-      "GNNs  have been extensively applied to 2D and 3D molecular tasks, utilizing supervised and unsupervised approaches to capture topological nuances .",
-      "We select two representative molecules from different tasks to demonstrate interpretability.",
-      "(Annotation Gap): Standard molecular datasets provide only structures and final labels.",
-      "In drug discovery, where safety is critical, this opacity risks masking false correlations and excluding human expertise.",
-      "Interpretability and Verification (RQ2) 4.3 To address RQ2, we validate whether the learned concepts are chemically meaningful through both latent space visualization and granular case studies.",
-      "In drug discovery, where regulatory approval and patient safety demand rigorous justification, such opacity poses significant challenges."
-    ]
-  },
-  {
-    "title": "Bayesian Optimization in Chemical Compound Sub-Spaces using Low-Dimensional Molecular Descriptors",
-    "url": "http://arxiv.org/abs/2603.02605v1",
-    "topic": "Bayesian Optimization & Active Learning",
-    "sentences": [
-      "ML models can serve as surrogates for experiments or quantum-chemistry computations, enabling efficient screening of chemical compound sub-spaces, such as sets of structural isomers or specific classes of ligands.",
-      "Combined with the high cost Bayesian optimization in chemical compound sub-spaces A PREPRINT of experimental screening and quantum-chemistry calculations, the size of the chemical compound space makes the search for molecules with desired physical and chemical properties extremely challenging.",
-      "experimental or quantum-chemical confirmation of molecular properties), gradient-free settings, and global optimization.",
-      "A possible approach to reduce the data requirements for molecular property discovery is Bayesian optimization (BO).",
-      "While these descriptors have enabled accurate ML predictions for a wide range of molecular properties, optimization within the high-dimensional chemical compound space represented by such descriptors remains highly challenging.",
-      "To a\nresults highlight the critical role of low-dimensional, interpretable descriptors in enabling data-efficient optimization and robust inverse molecular design, and establish Bayesian optimization as a practical tool for molecular discovery in small-data regimes.",
-      "An alternative strategy is direct optimization within chemical compound sub-spaces to identify specific molecules with high precision.",
-      "In chemistry and materials science, BO has been applied to diverse optimization problems, including catalyst discovery , molecular docking , and material property optimization .",
-      "A great variety of molecular descriptors have been developed to encode compositional, structural, and electronic property information into numerical features suitable for learning algorithms.",
-      "Various ML methods have been employed for molecular property predictions, including feed-forward neural networks (NNs) , large language models (LLMs) , generative adversarial networks (GANs) , variational autoencoders (VAEs) , kernel methods , random forests , and reinforcement learning (RL) .",
-      "Our previous work  introduced physically motivated and low-dimensional molecular descriptor vectors that preserve essential chemical information while substantially reducing dimensionality.",
-      "These approaches have demonstrated remarkable success in accelerating molecular discovery.",
-      "The chemical compound space is vast due to the combinatorial nature of molecular structures.",
-      "Therefore, data-efficient and gradient-free methods are needed to allow direct optimization in chemical sub-spaces, especially when data are scarce.",
-      "This issue is especially pronounced in chemistry, where high-quality data are scarce, yet molecular descriptor spaces are often high-dimensional in order to capture subtle structural variations and complex chemical features.",
-      "The development of such efficient optimizers faces two challenges: (i) molecules are complex and generally require high-dimensional numerical descriptors, which leads to high-dimensional optimization problems; and (ii) optimization requires the inverse mapping from numerical descriptors to molecules.",
-      "In the present work, we exploit these low-dimensional descriptors to explore the feasibility of BO in chemical compound spaces.",
-      "High-precision optimization of molecular properties should be validated using experiments or quantum-chemical calculations to confirm the candidates proposed by the optimizer.",
-      "This requires efficient optimization schemes, capable of converging to optimal solutions in complex molecule spaces with a small number of confirmations.",
-      "This difficulty arises from the fundamentally non-smooth nature of the objective landscape, as molecules are inherently discrete graphs of atoms and bonds.",
-      "However, high-throughput screening often trades accuracy for speed, and may therefore overlook important molecules.",
-      "However, Bayesian optimization is particularly sensitive to the dimensionality problem and, as other optimization approaches, requires overcoming the inverse problem.",
-      "The number of molecules suitable for medical applications is estimated to range from 1023 to 1060 .",
-      "Our previous work  introduced physically motivated and low-dimensional molecular descriptor vectors that preserve es",
-      "High dimensionality of the input space limits the probabilistic surrogate models underlying BO."
-    ]
-  },
-  {
-    "title": "FuseDiff: Symmetry-Preserving Joint Diffusion for Dual-Target Structure-Based Drug Design",
-    "url": "http://arxiv.org/abs/2603.05567v1",
-    "topic": "Docking & Structure-Based Design",
-    "sentences": [
-      "In contrast to search-based approaches that explore chemical space via multi-objective scoring , this formulation directly supports de novo design and produces target-specific binding modes end-to-end, rather than treating pose recovery as a downstream docking step.",
-      "Structure-aware dual-target drug design through collaborative learning of pharmacophore combination and molecular simulation.",
-      "More broadly, our study suggests a practical design principle for multi-target SBDD with the potential to accelerate polypharmacology-oriented drug discovery.",
-      "Estimation of synthetic accessibility score of drug-like molecules based on molecular complexity and fragment contributions.",
-      "We adopt widely used metrics from prior work  and report (i) QED (\u2191)  for drug-likeness; Table 1: Molecular property statistics of generated ligands and reference ligands (Avg.).",
-      "Existing methods often adopt a two-stage pipeline: they first generate 2D molecular graphs (or SMILES) conditioned on both targets using chemical language models or synthesis-aware search, and then recover 3D binding poses via post-hoc optimization or separate single-target pose predictors .",
-      "1 Introduction Structure-based drug design (SBDD) exploits the three-dimensional structure of a biological target to design ligands with high affinity and selectivity for a given binding site .",
-      "Three-Dimensional Convolutional Neural Networks and a Cross-Docked Data Set for Structure-Based Drug Design.",
-      "We sample 1000 molecules for each method and define DL (drug-like) as QED > 0.6, SA > 0.7, logP \u2208 [\u22120.4, 5.6], and LPSK = 5.",
-      "To addres\nIntroduction Structure-based drug design (SBDD) exploits the three-dimensional structure of a biological target to design ligands with high affinity and selectivity for a given binding site .",
-      "Reframing Structure-Based Drug Design Model Evaluation via Metrics Correlated to Practical Needs.",
-      "First, dual-target SBDD datasets that explicitly support learning this density are scarce, as such data must jointly specify the ligand identity and paired binding poses across targets.",
-      "3D Equivariant Diffusion for Target-Aware Molecule Generation and Affinity Prediction.",
-      "Abstract Dual-target structure-based drug design aims to generate a single ligand together with two pocket-specific binding poses, each compatible with a corresponding target pocket, enabling polypharmacological therapies with improved efficacy and reduced resistance.",
-      "4.2 Results and Analysis Table 1 summarizes molecular property statistics of the generated ligands.",
-      "With this goal, dual-target SBDD can be cast as conditional density estimation\u2013one of the most natural and general formulations\u2013 namely learning \ud835\udc5d (\ud835\udc3a, \ud835\udc4b1, \ud835\udc4b2 | \ud835\udc431, \ud835\udc432), where \ud835\udc431, \ud835\udc432 denote the two target pockets, \ud835\udc3a denotes the ligand molecular graph, and \ud835\udc4b1, \ud835\udc4b2 denote the corresponding binding poses.",
-      "Geometric deep learning methods and applications in 3D structure-based drug design.",
-      "We evaluate generated ligands from two perspectives: molecular properties and protein\u2013ligand interactions.",
-      "We curate single-target active molecules from ChEMBL for each pocket (GSK3\ud835\udefd: 2128; JNK3: 791) and identify 3 graph-isomorphic molecules shared by both sets (Appendix E), which we treat as reference dual-target ligands.",
-      "designing inhibitors that simultaneously act on GSK3\ud835\udefd and JNK3 is regarded as a potential polypharmacology strategy for AD .",
-      "For each instance, we sample \ud835\udc3e=10 ligands by each method conditioned on (\ud835\udc431, \ud835\udc432), and report the overall mean (Avg.) and median (Med.) over all generated ligands.",
-      "LinkerNet  is a diffusion-based model for co-designing molecular fragment poses and the linker.",
-      "For the DL molecules generated by FuseDiff and DualDiff, we evaluate structure-based binding affinity proxies on both pockets using AutoDock Vina and summarize the score distributions with KDE (Fig.",
-      "Accordingly, dual-target SBDD seeks to design a single ligand together with two target-specific binding poses, each compatible with its corresponding pocket.",
-      "We exclude search-based methods (e.g., CombiMOTS) that rely on MCTS with iterative oracle/docking evaluations over an external building-block space, as their compute-budgeted search setting is not directly comparable to our learned generative baselines."
-    ]
-  },
-  {
-    "title": "Conformal Graph Prediction with Z-Gromov Wasserstein Distances",
-    "url": "http://arxiv.org/abs/2603.02460v3",
-    "topic": "Uncertainty Quantification",
-    "sentences": [
-      "We evaluate the proposed approach on a synthetic task and a real problem of molecule identification.",
-      "\u2022 a set of numerical experiments showing the effectiveness and the versatility of the framework on a synthetic image-to-graph task and a real molecule prediction problem.",
-      "This choice is also supported by a specific focus on molecular identification tasks, where only a specific amount of configurations are possible.",
-      "Recent advances and prospects of computational methods for metabolite identification: a review with emphasis on machine learning approaches.",
-      "Chemberta: large-scale self-supervised pretraining for molecular property prediction.",
-      "Breaking the modality barrier: Generative modeling for accurate molecule retrieval from mass spectra.",
-      "However, none of these approaches provides the user with confidence sets which raises a significant risk for discovery Figure 1: Conformal metabolite prediction set at 90% marginal coverage for molecule identification on MassSpecGym.",
-      "Selfsupervised learning of molecular representations from millions of tandem mass spectra using dreams.",
-      "We focus on Supervised Graph Prediction settings where each input is associated with a finite, input-dependent candidate set of graphs, as commonly assumed in structured output prediction and molecular identification.",
-      "Specbridge: Bridging mass spectrometry and molecular representations via cross-modal alignment.",
-      "proposed a general framework for conformal structured prediction, constructing structured prediction sets via implicit representations, e.g., directed acyclic graphs for hierarchical labels.",
-      "In this paper, we choose the agnostic, distribution free, and post-training framework of Conformal Prediction (CP).",
-      "or identification, especially when experimental validation of the results is costly.",
-      "These challenges are amplified in the graph setting, where outputs live in a highly structured, non-Euclidean, and combinatorial space.",
-      "Standard conformal prediction relies on a single global threshold, implicitly assuming homogeneous uncertainty across inputs.",
-      "This task consists in learning a predictive model that maps an input variable of any modality (text, image, tabular or distributional) to a target graph of arbitrary size.",
-      "Our framework is model-agnostic and applies to both direct graph predictors and SMILES-based pipelines.",
-      "Abstract Supervised graph prediction addresses regression problems where the outputs are structured graphs.",
-      "Uncertainty quantification for graph-valued data aims to produce a set of plausible graphs rather than a single prediction.",
-      "We adopt Optimal Transport distances, namely Gromov\u2013Wasserstein and its variants, to define permutationinvariant scores and extend Conformal Prediction to graphvalued outputs with validity in the quotiented graph space.",
-      "Although several approaches exist for graphvalued prediction, principled uncertainty quantification remains limited.",
-      "We begin by reviewing the two central components of our framework: conformal prediction and the Z-Gromov\u2013 Wasserstein (Z-GW) distance, a metric on metric measure spaces, under which graphs naturally appear as an example of discrete metric measure spaces.",
-      "In short, our contributions include: \u2022 a framework for Conformal Graph Prediction based on Z-Gromov-Wasserstein non-conformity scores and the proof of its validity in quotiented graph spaces.",
-      "Graphvalued regression: Prediction of unlabelled networks in a non-euclidean graph space.",
-      "A central challenge is therefore the choice of a suitable nonconformity score, which determines the structure and informativeness of the resulting conformal sets."
-    ]
-  },
-  {
-    "title": "Deep learning-guided evolutionary optimization for protein design",
-    "url": "http://arxiv.org/abs/2603.02753v1",
-    "topic": "Bayesian Optimization & Active Learning",
-    "sentences": [
-      "Another common optimization algorithm which has been applied to protein design is Bayesian Optimization (BO) .",
-      "For example, genetic algorithms (GAs) use mutation, recombination, and selection to iteratively improve candidate sequences, mimicking natural evolution and have proven effective in a wide range of areas, including protein design .",
-      "The design of proteins with specific characteristics, such as binding potential, structural properties, or catalytic activities holds transformative potential for next-generation therapeutics and biotechnology .",
-      "However, GAs typically require many evaluations of the objective function to identify high-performing sequences, which can be computationally expensive when evaluations involve structure prediction or docking simulations.",
-      "Building upon our previous development of BoPep, a Bayesian optimization framework for binder discovery , BoGA extends this concept by incorporating a genetic algorithm as a stochastic proposal generator within a surrogate modeling loop.",
-      "Several methods have formulated protein design as a black-box optimization problem in sequence space and approached it using optimization algorithms.",
-      "2 Main Classical genetic algorithms (GAs) for protein sequence design optimize a target property, such as antimicrobial potency or binding affinity, by iteratively mutating an evolving population of sequences.",
-      "The optimization objective was a previously developed scalar combination of structural prediction confidence metrics and biophysical measures of binding favorability .",
-      "While such algorithms, referred to as surrogate-assisted evolutionary algorithms or machine learning-guided directed evolution , have recently been proposed in the literature, they are yet to be applied to protein design, and their performance in this domain remains to be explored.",
-      "Bayesian optimization (BO) introduces a surrogate model trained on evaluated data to approximate the true objective function.",
-      "We then demonstrate BoGA\u2019s performance on sequenceand structure-level optimization tasks, before applying it to the design of peptide binders against pneumolysin.",
-      "While GAs can discover functional proteins, the efficiency is limited by the number of evaluations required to locate optimal solutions.",
-      "Furthermore, the larger proposal pool yielded more high-confidence binders, measured by predicted interface pTM (ipTM) and peptide predicted aligned error (PAE) (Fig.",
-      "This application highlights the utility of BoGA for the efficient design of peptide binders against a biologically relevant target, demonstrating how surrogate modeling can accelerate the identification of high-confidence candidates.",
-      "Here, we present BoGA (Bayesian Optimization Genetic Algorithm), a framework that combines evolutionary search with Bayesian optimization in an online learning loop.",
-      "The left panel shows optimization trajectories for different values of kpropose, and the right panel shows the distribution of fitness values at various stages of optimization.",
-      "In BO, a surrogate model is trained on prior evaluations to approximate the objective function and guide the search towards promising regions of sequence space.",
-      "This surrogate captures uncertainty in unobserved regions of sequence space and enables an acquisition function, such as expected improvement, to prioritize new candidates that balance exploitation (sampling near known high-performing sequences) and exploration (sampling uncertain regions).",
-      "BoGA is implemented within the BoPep suite, which provides modular support for embedding models, surrogate architectures, probabilistic inference modes, and docking-based evaluation functions.",
-      "To address this challenge, various computational methods have emerged to efficiently explore sequence space and identify candidates meeting specific design criteria .",
-      "Right: Kernel density estimates of the binding score distribution during early (0-10), intermediate (10-50), and late (50-100) generations, showing that larger proposal pools accelerate discovery of high-scoring binders.",
-      "c Structure-guided optimization using AlphaFold 2-predicted secondary structure weighted by predicted TM-score (pTM).",
-      "Independent structure prediction using AlphaFold 3  further supported the binding pose of the top binders.",
-      "The resulting fitness distribution became bimodal as optimization proceeded, which likely demonstrates that the model selected both high confidence, high scoring binders, and low confidence binders that scored highly under expected improvement.",
-      "For comparison, we also performed optimization using kpropose = 10, to quantify the impact of the surrogate model on binder design."
-    ]
-  },
-  {
-    "title": "Beyond Accuracy: Reliability and Uncertainty Estimation in Convolutional Neural Networks",
-    "url": "http://arxiv.org/abs/2603.10731v1",
-    "topic": "Uncertainty Quantification",
-    "sentences": [
-      "Yet, few studies offer a systematic comparison of Bayesian and Conformal approaches, particularly across diverse neural network architectures.",
-      "Deep Bayesian active learning with image data, in: Proceedings of the 34th International Conference on Machine Learning (ICML 2017), JMLR.org, Sydney, NSW,",
-      "Abstract Deep neural networks (DNNs) have become integral to a wide range of scientific and practical applications due to their flexibility and strong predictive performance.",
-      "Finally, they demonstrate the complementary strengths of Bayesian and Conformal approaches: while Bayesian methods capture internal model uncertainty, Conformal Prediction guarantees empirical coverage and corrects for calibration weaknesses.",
-      "By examining both Bayesian and Conformal frameworks across distinct architectures (VGG16 and GoogLeNet), the study advances the development of models that are not only accurate but also transparent and trustworthy.",
-      "As deep learning research grows, uncertainty quantification (UQ) has become increasingly relevant.",
-      "It also explores prior research on the FashionMNIST dataset as a benchmarking tool for neural network models and describes the rationale behind selecting the CNN architectures used in the article.",
-      "In this article, we compare two prominent approaches for uncertainty quantification: a Bayesian approximation via Monte Carlo Dropout and the nonparametric Conformal Prediction framework.",
-      "Alzubaidi, L., Zhang, J., Humaidi, A.J., Al-Dujaili, A., Duan, Y., Al-Shamma, O., Santamar\u00eda, J., Fadhel, M.A., Al-Amidie, M., Farhan, L., 2021.",
-      "Literature Review This section reviews the importance of uncertainty quantification (UQ) in deep learning and examines two leading methods: Bayesian approximation via Monte Carlo Dropout (MC Dropout) and Conformal Prediction (CP).",
-      "Bayesian inference for uncertainty quantification in binary classification tasks with limited data.",
-      "One widely used technique is Bayesian inference with Monte Carlo (MC) Dropout, which approximates a posterior distribution while maintaining computational efficiency (see, for example, (Gal and Ghahramani, 2016) and (Son and Seok, 2026)).",
-      "Towards safe deep learning: Accurately quantifying biomarker uncertainty in neural network predictions, in: Frangi, A.F., Schnabel, J.A., Davatzikos, C., Alberola-L\u00f3pez, C., Fichtinger, G.",
-      "Bayesian neural networks for stock price forecasting before and during COVID-19 pandemic.",
-      "Conformal Prediction additionally demonstrates consistent validity by producing statistically guaranteed prediction sets, highlighting its practical value in high-stakes decision-making contexts.",
-      "References Abdar, M., Pourpanah, F., Hussain, S., Rezazadegan, D., Liu, L., Ghavamzadeh, M., Fieguth, P., Cao, X., Khosravi, A., Acharya, U.R., Makarenkov, V., Nahavandi, S., 2021.",
-      "Despite their impressive performance, DNNs are often regarded as \u201cblack boxes\u201d due to their limited interpretability and the difficulty of aligning their internal representations with human reasoning (Roth and Bajorath, 2024).",
-      "Literature\nconclusion, these findings highlight the complementary roles of MC Dropout and Conformal Prediction.",
-      "This paper addressed the gap in the existing literature by comparing two fundamentally different approaches to uncertainty estimation in deep convolutional neural networks: Bayesian approximation via Monte Carlo Dropout and the nonparametric method of Conformal Prediction.",
-      "Dropout as a bayesian approximation: Representing model uncertainty in deep learning, in: Proceedings of the 33rd International Conference on Machine Learning, PMLR, New York, New York, USA.",
-      "The Fashion-MNIST dataset is used throughout, offering a standardized benchmark in image classification for a precise comparison of the selected methods across model architectures without unexplained effects from data inconsistency.",
-      "Second, they reveal systematic patterns in class-level ambiguity, showing how models respond to visually similar categories.",
-      "(Eds.), Medical Image Computing and Computer Assisted Intervention \u2013 MICCAI 2018, Springer International Publishing, Cham.",
-      "This study aims to fill this gap by conducting a comparative analysis of two uncertainty estimation methods: Bayesian inference via MC Dropout and Conformal Prediction across two convolutional neural network architectures: H-CNN VGG16 and GoogLeNet.",
-      "Its hierarchical architecture helps reduce misclassification of ambiguous classes and enhances model interpretability."
-    ]
-  },
-  {
-    "title": "Rigidity-Aware Geometric Pretraining for Protein Design and Conformational Ensembles",
-    "url": "http://arxiv.org/abs/2603.02406v2",
+    "title": "Molecular-Level Insights into Alkali-Metal Cation–CO2 Interactions at Electrified Copper Interfaces by Molecular Dynamics Simulations",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001527/v1",
     "topic": "Computational Chemistry",
     "sentences": [
-      "The ability to design proteins with desired properties has the potential to revolutionize multiple disciplines.",
-      "This limitation highlights a fundamental challenge for structure-based pretraining: the requirement for diverse, multi-scale data, including conformational ensembles derived from molecular dynamics (MD) simulations, that span both rigid geometric motifs and dynamic variability to support generative modeling with improved conformational diversity.",
-      "Achieving representations that are both global and efficient is nontrivial, in part because all-atom modeling is computationally expensive, which limits scalability and learning efficiency on large geometric datasets.",
-      "ABSTRACT Generative models have recently advanced de novo protein design by learning the statistical regularities of natural structures.",
-      "Phase I (RigidSSL-Perturb) learns geometric priors from 432K structures from the AlphaFold Protein Structure Database with simulated perturbations.",
-      "However, the effectiveness of this paradigm critically depends on how protein geometry is represented, which determines what structural priors can be learned and transferred.",
-      "INTRODUCTION Proteins are large and complex biomolecules whose three-dimensional structures determine their diverse biological functions, enabling precise molecular activities such as substrate specificity, binding affinity, and catalytic activity (LaPelusa & Kaushik, 2025).",
-      "However, these datasets are dominated by static structures and largely overlook the intrinsic conformational flexibility of proteins.",
-      "To address these challenges, we propose RigidSSL (Rigidity-Aware SelfSupervised Learning), a two-stage geometric pretraining framework for protein structure generation.",
-      "Furthermore, RigidSSL-Perturb improves the success rate by 5.8% in zero-shot motif scaffolding and RigidSSL-MD captures more biophysically realistic conformational ensembles in G protein-coupled receptor modeling.",
-      "Challenge 1: Learning geometry and generation simultaneously brings in challenges in model generalization.",
-      "In ensemble generation, RigidSSL variants learn to represent a wider and more physically realistic conformational landscape of G protein-coupled receptors (GPCRs), collectively achieving the best performance on 7 out of 9 metrics.",
-      "Phase II (RigidSSL-MD) refines these representations on 1.3K molecular dynamics trajectories to capture physically realistic transitions.",
-      "To verify the effectiveness of RigidSSL, we consider two types of downstream tasks: (1) protein design, including protein unconditional generation and motif scaffolding, and (2) conformational ensemble generation.",
-      "In addition to the choice of protein backbone representation, the availability and quality of the dataset present another critical bottleneck for effective structure-based pretraining.",
-      "Realizing an effective pretraining paradigm places stringent requirements on the underlying representations, which must support scalable computation while faithfully capturing global geometry.",
-      "RigidSSL explicitly follows the backbone modeling via residue-level translations and rotations in SE(3), which substantially reduces degrees of freedom and allows the model to learn geometric priors under physical constraints.",
-      "This tight coupling can lead to inefficient optimization and limit generalization to novel or out-of-distribution design tasks.",
-      "As a result, models pretrained solely on such static snapshots primarily learn the geometry of static states, failing to capture near-native fluctuations or transitions among metastable conformations.",
-      "Thus, a protein chain can be modeled as a sequence of rigid residues, where each residue is parameterized by a translation and a rotation.",
-      "To address these challenges, we propose RigidSSL (Rigidity-Aware SelfSupervised Learning), a two-stage geometric pretraini\nresult, models pretrained solely on such static snapshots primarily learn the geometry of static states, failing to capture near-native fluctuations or transitions among metastable conformations.",
-      "Such pretrained representations can then serve as a foundation for diverse generative tasks.",
-      "In this formulation, bond lengths and bond angles within the backbone are fixed to idealized values, and only torsional rotations (\u03d5, \u03c8, \u03c9) are allowed to vary.",
-      "In motif scaffolding, RigidSSL-Perturb improves the average success rate by 5.8%.",
-      "Building on such representation, RigidSSL employs a two-phase pretraining strategy that sequentially integrates multi-scale structural information from static and dynamic data."
-    ]
+      "Molecular-Level Insights into Alkali-Metal Cation–CO2 Interactions at Electrified Copper Interfaces by Molecular Dynamics Simulations"
+    ],
+    "context": "Molecular-Level Insights into Alkali-Metal Cation–CO2 Interactions at Electrified Copper Interfaces by Molecular Dynamics Simulations",
+    "sections": {
+      "abstract": "Molecular-Level Insights into Alkali-Metal Cation–CO2 Interactions at Electrified Copper Interfaces by Molecular Dynamics Simulations"
+    }
+  },
+  {
+    "title": "Large Language Model-Guided Bayesian Optimization of Ag+ Doping in CdSe Nanoplatelets Enables Deterministic Optical Prediction across the Gamut",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001652/v1",
+    "topic": "Bayesian Optimization & Active Learning",
+    "sentences": [
+      "Large Language Model-Guided Bayesian Optimization of Ag+ Doping in CdSe Nanoplatelets Enables Deterministic Optical Prediction across the Gamut"
+    ],
+    "context": "Large Language Model-Guided Bayesian Optimization of Ag+ Doping in CdSe Nanoplatelets Enables Deterministic Optical Prediction across the Gamut",
+    "sections": {
+      "abstract": "Large Language Model-Guided Bayesian Optimization of Ag+ Doping in CdSe Nanoplatelets Enables Deterministic Optical Prediction across the Gamut"
+    }
+  },
+  {
+    "title": "In Silico Pharmacological Profiling of MitoCorex Candidate Molecules: ADMET, Target Engagement, Selectivity, and Stability Analysis",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001670/v1",
+    "topic": "QSAR & ADMET",
+    "sentences": [
+      "In Silico Pharmacological Profiling of MitoCorex Candidate Molecules: ADMET, Target Engagement, Selectivity, and Stability Analysis"
+    ],
+    "context": "In Silico Pharmacological Profiling of MitoCorex Candidate Molecules: ADMET, Target Engagement, Selectivity, and Stability Analysis",
+    "sections": {
+      "abstract": "In Silico Pharmacological Profiling of MitoCorex Candidate Molecules: ADMET, Target Engagement, Selectivity, and Stability Analysis"
+    }
+  },
+  {
+    "title": "Pan-Mitochondrial Privileged Scaffolds: Adenine, Pyridine, and a 7H-Purine Bioisostere as Multi-Target Fragments in the MitoCoreX Drug Discovery Campaign",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001671/v1",
+    "topic": "Drug Discovery & Cheminformatics",
+    "sentences": [
+      "Pan-Mitochondrial Privileged Scaffolds: Adenine, Pyridine, and a 7H-Purine Bioisostere as Multi-Target Fragments in the MitoCoreX Drug Discovery Campaign"
+    ],
+    "context": "Pan-Mitochondrial Privileged Scaffolds: Adenine, Pyridine, and a 7H-Purine Bioisostere as Multi-Target Fragments in the MitoCoreX Drug Discovery Campaign",
+    "sections": {
+      "abstract": "Pan-Mitochondrial Privileged Scaffolds: Adenine, Pyridine, and a 7H-Purine Bioisostere as Multi-Target Fragments in the MitoCoreX Drug Discovery Campaign"
+    }
+  },
+  {
+    "title": "STING, guided active learning for Machine Learned Interatomic Potentials examined on Lithium Thiophosphate solid state electrolytes",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001544/v1",
+    "topic": "Bayesian Optimization & Active Learning",
+    "sentences": [
+      "STING, guided active learning for Machine Learned Interatomic Potentials examined on Lithium Thiophosphate solid state electrolytes"
+    ],
+    "context": "STING, guided active learning for Machine Learned Interatomic Potentials examined on Lithium Thiophosphate solid state electrolytes",
+    "sections": {
+      "abstract": "STING, guided active learning for Machine Learned Interatomic Potentials examined on Lithium Thiophosphate solid state electrolytes"
+    }
+  },
+  {
+    "title": "A Continuous-Space Analytical Framework for Committor Functions from Molecular Dynamics",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001632/v1",
+    "topic": "Computational Chemistry",
+    "sentences": [
+      "A Continuous-Space Analytical Framework for Committor Functions from Molecular Dynamics"
+    ],
+    "context": "A Continuous-Space Analytical Framework for Committor Functions from Molecular Dynamics",
+    "sections": {
+      "abstract": "A Continuous-Space Analytical Framework for Committor Functions from Molecular Dynamics"
+    }
+  },
+  {
+    "title": "Water molecular dynamics during dough heating by Fast Field Cycling Nuclear Magnetic Resonance",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001606/v1",
+    "topic": "Computational Chemistry",
+    "sentences": [
+      "Water molecular dynamics during dough heating by Fast Field Cycling Nuclear Magnetic Resonance"
+    ],
+    "context": "Water molecular dynamics during dough heating by Fast Field Cycling Nuclear Magnetic Resonance",
+    "sections": {
+      "abstract": "Water molecular dynamics during dough heating by Fast Field Cycling Nuclear Magnetic Resonance"
+    }
+  },
+  {
+    "title": "Stochastic neural dynamic modeling and analysis under environmental noise for exploring the production of K-complexes.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41940263/",
+    "topic": "Computational Chemistry",
+    "sentences": [
+      "UNLABELLED: K-complexes (KCs), sleep-specific neuroprotective waveforms, demonstrate significant modulation by environmental noise (EN).",
+      "However, the principles governing how EN modulates KCs occurrence remain poorly understood.",
+      "To address this gap, we develop a stochastic neural dynamic model incorporating EN (SNDM-KCs) and explore the modulation effects of EN on KCs from the perspective of stochastic dynamics.",
+      "The Gaussian colored noise (GCN) is first applied to model EN and introduced into the deterministic Costa neural mass model to build the SNDM-KCs.",
+      "Next, bifurcation analysis is conducted to demonstrate that the prerequisite for occurrence of KCs corresponds to a large-amplitude departure from a stable equilibrium induced by GCN in the dynamic system.",
+      "Subsequently, we study the impact of GCN on KCs by integrating SNDM-KCs with defined two metrics to quantitatively measure the elicitation variation of KCs.",
+      "Numerical simulations suggest that both KCs occurrence probability and rate increase with noise intensity D and correlation rate [Formula: see text] of GCN.",
+      "Meanwhile, building on stochastic escape theory, we establish the relationship between model behaviour and stochastic escape metrics: first escape probability (FEP) and the mean first exit time (MFET), to investigate how EN modulates KCs through the lens of stochastic dynamics.",
+      "The results demonstrate that as the escape probability of the system rises, the occurrence probability of KC increases accordingly.",
+      "Meanwhile, a shorter time to escape from the safe domain indicates a faster occurrence rate of KCs."
+    ],
+    "context": "UNLABELLED: K-complexes (KCs), sleep-specific neuroprotective waveforms, demonstrate significant modulation by environmental noise (EN). However, the principles governing how EN modulates KCs occurrence remain poorly understood. To address this gap, we develop a stochastic neural dynamic model incorporating EN (SNDM-KCs) and explore the modulation effects of EN on KCs from the perspective of stochastic dynamics. The Gaussian colored noise (GCN) is first applied to model EN and introduced into the deterministic Costa neural mass model to build the SNDM-KCs. Next, bifurcation analysis is conducted to demonstrate that the prerequisite for occurrence of KCs corresponds to a large-amplitude departure from a stable equilibrium induced by GCN in the dynamic system. Subsequently, we study the impact of GCN on KCs by integrating SNDM-KCs with defined two metrics to quantitatively measure the elicitation variation of KCs. Numerical simulations suggest that both KCs occurrence probability and rate increase with noise intensity D and correlation rate [Formula: see text] of GCN. Meanwhile, building on stochastic escape theory, we establish the relationship between model behaviour and stochastic escape metrics: first escape probability (FEP) and the mean first exit time (MFET), to investigate how EN modulates KCs through the lens of stochastic dynamics. The results demonstrate that as the escape probability of the system rises, the occurrence probability of KC increases accordingly. Meanwhile, a shorter time to escape from the safe domain indicates a faster occurrence rate of KCs. Our work provides a novel dynamical insight for investigating the principles governing how EN modulates KCs occurrence. SUPPLEMENTARY INFORMATION: The online version contains supplementary material available at 10.1007/s11571-026-10440-4.",
+    "sections": {
+      "abstract": "UNLABELLED: K-complexes (KCs), sleep-specific neuroprotective waveforms, demonstrate significant modulation by environmental noise (EN). However, the principles governing how EN modulates KCs occurrence remain poorly understood. To address this gap, we develop a stochastic neural dynamic model incorporating EN (SNDM-KCs) and explore the modulation effects of EN on KCs from the perspective of stochastic dynamics. The Gaussian colored noise (GCN) is first applied to model EN and introduced into the deterministic Costa neural mass model to build the SNDM-KCs. Next, bifurcation analysis is conducted to demonstrate that the prerequisite for occurrence of KCs corresponds to a large-amplitude departure from a stable equilibrium induced by GCN in the dynamic system. Subsequently, we study the impact of GCN on KCs by integrating SNDM-KCs with defined two metrics to quantitatively measure the elicitation variation of KCs. Numerical simulations suggest that both KCs occurrence probability and rate increase with noise intensity D and correlation rate [Formula: see text] of GCN. Meanwhile, building on stochastic escape theory, we establish the relationship between model behaviour and stochastic escape metrics: first escape probability (FEP) and the mean first exit time (MFET), to investigate how EN modulates KCs through the lens of stochastic dynamics. The results demonstrate that as the escape probability of the system rises, the occurrence probability of KC increases accordingly. Meanwhile, a shorter time to escape from the safe domain indicates a faster occurrence rate of KCs. Our work provides a novel dynamical insight for investigating the principles governing how EN modulates KCs occurrence. SUPPLEMENTARY INFORMATION: The online version contains supplementary material available at 10.1007/s11571-026-10440-4."
+    }
   }
 ]

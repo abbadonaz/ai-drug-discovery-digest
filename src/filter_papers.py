@@ -1,63 +1,52 @@
-from sentence_transformers import SentenceTransformer
-import numpy as np
-
-from topics import score_topics
-
-
-model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
+from topics import classify_topic, score_topics
+from functools import lru_cache
+from embeddings import cosine_similarity, encode_texts
 
 
 INTEREST_TEXT = """
-machine learning for drug discovery, cheminformatics, molecular docking,
-virtual screening, structure-based drug design, protein-ligand modeling,
-binding affinity prediction, QSAR, QSPR, ADMET prediction,
-computational chemistry for lead optimization, uncertainty quantification,
-Bayesian optimization, active learning for molecular design,
-generative chemistry, de novo molecular design, synthesis-aware generative models,
-REINVENT, molecular representation learning, graph neural networks for molecules
+drug discovery, cheminformatics, computer-aided drug design,
+computational chemistry, molecular dynamics, quantum chemistry,
+uncertainty quantification, uncertainty-aware molecular modeling,
+bayesian optimization, active learning, molecular representation learning,
+graph neural networks for molecules, molecular embeddings, qsar, admet,
+virtual screening, structure-based drug design, binding affinity prediction
 """
 
 
-# Positive signals we want to reward
-POSITIVE_KEYWORDS = {
-    "drug discovery": 3,
-    "cheminformatics": 3,
-    "docking": 3,
-    "molecular docking": 4,
+FIELD_KEYWORDS = {
+    "drug discovery": 4,
+    "cheminformatics": 4,
+    "computer-aided drug design": 4,
+    "cadd": 3,
     "virtual screening": 4,
-    "protein-ligand": 4,
-    "ligand binding": 3,
-    "binding affinity": 4,
     "structure-based drug design": 4,
+    "binding affinity": 4,
+    "protein-ligand": 3,
+    "molecular docking": 3,
+    "computational chemistry": 4,
+    "quantum chemistry": 3,
+    "molecular dynamics": 3,
+    "free energy": 3,
+    "free energy perturbation": 4,
+    "fep": 4,
     "qsar": 4,
     "qspr": 4,
     "admet": 4,
-    "property prediction": 2,
-    "bayesian optimization": 4,
-    "active learning": 4,
+    "property prediction": 3,
     "uncertainty quantification": 4,
     "uncertainty estimation": 3,
-    "calibration": 2,
     "conformal prediction": 3,
-    "generative model": 2,
-    "generative chemistry": 4,
-    "molecular generation": 4,
-    "de novo design": 4,
-    "reinvent": 5,
-    "retrosynthesis": 4,
-    "reaction prediction": 3,
-    "synthetic accessibility": 3,
-    "synthesis-aware": 4,
-    "computational chemistry": 3,
-    "quantum chemistry": 2,
-    "molecular dynamics": 2,
-    "free energy": 3,
-    "fep": 3,
-    "graph neural network": 2,
-    "molecular representation": 3,
+    "calibration": 2,
+    "bayesian optimization": 4,
+    "active learning": 4,
+    "molecular representation": 4,
+    "representation learning": 3,
+    "graph neural network": 3,
+    "graph transformer": 3,
+    "molecular embedding": 3,
+    "molecular fingerprint": 2,
 }
 
-# Negative signals that often produce irrelevant papers for your use case
 NEGATIVE_KEYWORDS = {
     "polymer": 4,
     "polymers": 4,
@@ -80,9 +69,49 @@ NEGATIVE_KEYWORDS = {
     "polymeric": 4,
 }
 
+COMPUTATIONAL_CONTEXT_TERMS = [
+    "drug discovery",
+    "computer-aided drug design",
+    "cadd",
+    "virtual screening",
+    "structure-based drug design",
+    "binding affinity",
+    "protein-ligand",
+    "cheminformatics",
+    "computational",
+    "in silico",
+    "molecular dynamics",
+    "free energy",
+    "fep",
+    "qsar",
+    "admet",
+    "representation learning",
+    "graph neural network",
+    "bayesian optimization",
+    "active learning",
+    "uncertainty",
+]
 
-def cosine_similarity(a, b):
-    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+GENERIC_BIOMEDICAL_TERMS = [
+    "bioinformatics analysis",
+    "network pharmacology",
+    "single-cell",
+    "transcriptome",
+    "transcriptomics",
+    "gene expression",
+    "immune infiltration",
+    "immune microenvironment",
+    "mendelian randomization",
+    "prognostic",
+    "prognosis",
+    "biomarker",
+    "gut microbiota",
+]
+
+
+@lru_cache(maxsize=1)
+def get_interest_embedding():
+    return encode_texts([INTEREST_TEXT])[0]
 
 
 def weighted_keyword_score(text, keywords):
@@ -96,64 +125,132 @@ def weighted_keyword_score(text, keywords):
     return score
 
 
+def field_signal_score(paper):
+    title = paper.get("title", "")
+    abstract = paper.get("abstract", "")
+    return (
+        1.8 * weighted_keyword_score(title, FIELD_KEYWORDS)
+        + weighted_keyword_score(abstract, FIELD_KEYWORDS)
+    )
+
+
+def is_weak_docking_match(text):
+    lowered = text.lower()
+    if "docking" not in lowered:
+        return False
+    return not any(term in lowered for term in COMPUTATIONAL_CONTEXT_TERMS)
+
+
+def is_generic_biomedical_match(text):
+    lowered = text.lower()
+    has_biomedical_pattern = any(term in lowered for term in GENERIC_BIOMEDICAL_TERMS)
+    has_computational_context = any(term in lowered for term in COMPUTATIONAL_CONTEXT_TERMS)
+    return has_biomedical_pattern and not has_computational_context
+
+
 def filter_relevant_papers(
     papers,
-    threshold=0.60,
-    strong_semantic_threshold=0.52,
+    threshold=0.22,
+    strong_semantic_threshold=0.30,
+    fallback_min_results=12,
 ):
     """
-    Rank papers by:
-    1. semantic similarity
-    2. pharma-positive keyword score
-    3. topic match strength
-    4. negative keyword penalty
-
-    Keeps papers that are both semantically relevant and operationally useful
-    for a pharma R&D reader.
+    Filter for field relevance rather than scientific merit.
+    The goal is to keep papers that clearly belong to the target domains:
+    drug discovery, cheminformatics, computational chemistry,
+    uncertainty quantification, active learning, bayesian optimization,
+    and molecular representation learning.
     """
 
-    interest_embedding = model.encode(INTEREST_TEXT)
+    interest_embedding = get_interest_embedding()
+    texts = [f"{paper['title']} {paper['abstract']}" for paper in papers]
+    embeddings = encode_texts(texts)
     filtered = []
 
-    for paper in papers:
-        text = f"{paper['title']} {paper['abstract']}"
+    candidates = []
 
-        emb = model.encode(text)
+    for paper, text, emb in zip(papers, texts, embeddings):
         semantic_score = float(cosine_similarity(emb, interest_embedding))
 
-        positive_score = weighted_keyword_score(text, POSITIVE_KEYWORDS)
+        positive_score = field_signal_score(paper)
         negative_score = weighted_keyword_score(text, NEGATIVE_KEYWORDS)
 
         topic_scores = score_topics(paper)
         max_topic_hits = max(topic_scores.values()) if topic_scores else 0
-        best_topic = max(topic_scores, key=topic_scores.get) if topic_scores else "Other"
+        topic_total = sum(topic_scores.values()) if topic_scores else 0
+        best_topic = classify_topic(paper) if topic_scores else "Other"
 
         combined_score = (
-            semantic_score
-            + 0.015 * positive_score
-            + 0.040 * max_topic_hits
+            0.30 * semantic_score
+            + 0.030 * positive_score
+            + 0.060 * topic_total
             - 0.020 * negative_score
         )
 
-        # Gate: require clear domain evidence
         has_domain_signal = (
             positive_score >= 4
-            or max_topic_hits >= 2
-            or (semantic_score >= strong_semantic_threshold and positive_score >= 2)
+            or topic_total >= 3
+            or (
+                semantic_score >= strong_semantic_threshold
+                and positive_score >= 2
+                and topic_total >= 1
+            )
         )
 
-        # Hard reject clearly off-domain papers
-        clearly_irrelevant = negative_score >= 6 and positive_score <= 2
+        weak_match = is_weak_docking_match(text)
+        generic_biomedical_match = is_generic_biomedical_match(text)
+        clearly_irrelevant = negative_score >= 8 and topic_total == 0 and positive_score < 3
 
-        if has_domain_signal and not clearly_irrelevant and combined_score >= threshold:
-            enriched = dict(paper)
-            enriched["semantic_score"] = semantic_score
-            enriched["positive_score"] = positive_score
-            enriched["negative_score"] = negative_score
-            enriched["topic_match_score"] = max_topic_hits
-            enriched["topic"] = best_topic if max_topic_hits > 0 else "Other"
-            enriched["relevance_score"] = float(combined_score)
+        enriched = dict(paper)
+        enriched["semantic_score"] = semantic_score
+        enriched["positive_score"] = positive_score
+        enriched["negative_score"] = negative_score
+        enriched["topic_match_score"] = max_topic_hits
+        enriched["topic_total_score"] = topic_total
+        enriched["topic"] = best_topic if topic_total > 0 else "Other"
+        enriched["relevance_score"] = float(combined_score)
+        enriched["has_domain_signal"] = has_domain_signal
+        enriched["clearly_irrelevant"] = clearly_irrelevant
+        enriched["weak_match"] = weak_match
+        enriched["generic_biomedical_match"] = generic_biomedical_match
+        candidates.append(enriched)
+
+        if (
+            has_domain_signal
+            and not clearly_irrelevant
+            and not weak_match
+            and not generic_biomedical_match
+            and combined_score >= threshold
+        ):
             filtered.append(enriched)
 
     filtered.sort(key=lambda x: x["relevance_score"], reverse=True)
-    return filtered
+
+    if filtered:
+        return filtered
+
+    fallback = [
+        paper for paper in candidates
+        if not paper["clearly_irrelevant"]
+        and not paper["weak_match"]
+        and not paper["generic_biomedical_match"]
+        and (
+            paper["has_domain_signal"]
+            or paper["positive_score"] >= 2
+            or paper["topic_total_score"] > 0
+            or paper["semantic_score"] >= 0.18
+        )
+    ]
+
+    if not fallback:
+        fallback = [paper for paper in candidates if not paper["clearly_irrelevant"]]
+
+    fallback.sort(key=lambda x: x["relevance_score"], reverse=True)
+    fallback = fallback[:fallback_min_results]
+
+    if fallback:
+        print(
+            f"Filter fallback activated: no papers met the strict threshold, keeping top {len(fallback)} candidates."
+        )
+
+    return fallback

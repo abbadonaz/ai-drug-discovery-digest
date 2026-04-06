@@ -1,0 +1,774 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Drug Discovery Digest</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #eef3f5;
+            --bg-accent: #dde9ec;
+            --paper: rgba(255, 255, 255, 0.92);
+            --paper-strong: #ffffff;
+            --ink: #13212b;
+            --muted: #51626f;
+            --line: #cad7de;
+            --teal: #0c6b63;
+            --teal-soft: #dff2ee;
+            --slate: #d9e3ea;
+            --gold: #b8892d;
+            --gold-soft: #f5edd7;
+            --shadow: 0 24px 60px rgba(19, 33, 43, 0.10);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top left, rgba(12, 107, 99, 0.10), transparent 30%),
+                radial-gradient(circle at top right, rgba(184, 137, 45, 0.10), transparent 28%),
+                linear-gradient(180deg, var(--bg) 0%, #f7fafb 100%);
+            font-family: Georgia, "Times New Roman", serif;
+            line-height: 1.65;
+        }
+
+        a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .page-shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 28px 18px 72px;
+        }
+
+        .hero {
+            background: linear-gradient(145deg, rgba(255,255,255,0.96), rgba(248,251,252,0.88));
+            border: 1px solid rgba(202, 215, 222, 0.9);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 34px;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(12, 107, 99, 0.12), transparent 45%),
+                linear-gradient(315deg, rgba(184, 137, 45, 0.12), transparent 42%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            position: relative;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--teal-soft);
+            color: var(--teal);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin: 18px 0 10px;
+            font-size: clamp(2.2rem, 4.6vw, 4rem);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .meta-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .meta-chip {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.82);
+            border: 1px solid var(--line);
+        }
+
+        .profile-card {
+            width: min(280px, 100%);
+            background: rgba(255,255,255,0.84);
+            border: 1px solid rgba(202, 215, 222, 0.95);
+            border-radius: 22px;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .profile-card img {
+            width: 76px;
+            height: 76px;
+            border-radius: 18px;
+            display: block;
+            margin-bottom: 14px;
+            box-shadow: 0 10px 24px rgba(19, 33, 43, 0.18);
+        }
+
+        .profile-card strong {
+            display: block;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1rem;
+        }
+
+        .profile-card span {
+            display: block;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+            margin: 6px 0 14px;
+        }
+
+        .profile-card a {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: var(--ink);
+            color: white;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .profile-card a:hover {
+            text-decoration: none;
+            background: var(--teal);
+        }
+
+        .content-frame {
+            background: var(--paper);
+            border: 1px solid rgba(202, 215, 222, 0.92);
+            border-radius: 26px;
+            box-shadow: var(--shadow);
+            padding: 26px;
+        }
+
+        .digest-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(239,245,247,0.95));
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stat-value {
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .section-headline, .section-title {
+            font-family: "Segoe UI", sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            line-height: 1.15;
+            margin: 0 0 12px;
+            letter-spacing: -0.03em;
+        }
+
+        .section-subtitle {
+            margin: 0 0 24px;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .footer {
+            margin-top: 28px;
+            padding: 22px 8px 0;
+            border-top: 1px solid var(--line);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .paper-card {
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            background: var(--paper-strong);
+            margin-bottom: 18px;
+        }
+
+        .must-read-container {
+            margin-bottom: 32px;
+        }
+
+        .must-read-badge {
+            display: inline-block;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .must-read-paper, .insights-container, .optional-section {
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: rgba(255,255,255,0.9);
+            padding: 24px;
+        }
+
+        .must-read-paper {
+            background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(248,252,251,0.92));
+        }
+
+        .must-read-title {
+            margin: 12px 0 14px;
+            font-size: clamp(1.7rem, 3vw, 2.4rem);
+            line-height: 1.18;
+        }
+
+        .must-read-meta, .must-read-action {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .must-read-summary, .insights-body, .paper-summary-featured {
+            color: var(--ink);
+        }
+
+        .must-read-summary p, .insights-body p, .paper-summary-featured p {
+            margin: 0 0 12px;
+        }
+
+        .must-read-summary ul, .insights-body ul, .paper-summary-featured ul {
+            margin: 0 0 12px 20px;
+        }
+
+        .topic-badge, .rank-indicator {
+            display: inline-flex;
+            align-items: center;
+            min-height: 34px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.88rem;
+            border: 1px solid var(--line);
+        }
+
+        .topic-badge {
+            background: var(--teal-soft);
+            color: var(--teal);
+            font-weight: 700;
+        }
+
+        .rank-indicator {
+            background: rgba(255,255,255,0.9);
+            color: var(--muted);
+        }
+
+        .btn-primary, .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--ink);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--teal);
+            border: 1px solid var(--line);
+        }
+
+        .featured-section {
+            margin-top: 34px;
+        }
+
+        .topic-group {
+            margin-top: 28px;
+        }
+
+        .topic-header {
+            margin: 0 0 14px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.15rem;
+            color: var(--teal);
+        }
+
+        .papers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 18px;
+        }
+
+        .paper-card-featured {
+            position: relative;
+            background: rgba(255,255,255,0.94);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 100%;
+        }
+
+        .paper-rank {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .paper-title-featured {
+            margin: 0 0 12px;
+            padding-right: 56px;
+            font-size: 1.15rem;
+            line-height: 1.3;
+        }
+
+        .paper-footer {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .link-read-more {
+            font-weight: 700;
+        }
+
+        .brief-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .brief-topic-title {
+            margin: 0 0 10px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--teal);
+        }
+
+        .brief-item {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .brief-item:last-child {
+            border-bottom: 0;
+        }
+
+        .brief-link {
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+        }
+
+        .paper-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .page-shell {
+                padding: 16px 12px 48px;
+            }
+
+            .hero-inner, .content-frame {
+                padding: 18px;
+            }
+
+            .footer {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="hero">
+            <div class="hero-inner">
+                <div>
+                    <div class="eyebrow">Scientific Literature Intelligence</div>
+                    <h1>AI Drug Discovery Digest</h1>
+                    <p>Weekly literature intelligence for drug discovery, cheminformatics, and molecular AI</p>
+                    <div class="meta-strip">
+                        <div class="meta-chip">Published April 06, 2026</div>
+                        <div class="meta-chip">Sources: arXiv, PubMed, ChemRxiv</div>
+                        <div class="meta-chip">Local summarization with Ollama</div>
+                    </div>
+                </div>
+                <aside class="profile-card">
+                    <img src="https://github.com/abbadonaz.png" alt="GitHub avatar for abbadonaz">
+                    <strong>abbadonaz</strong>
+                    <span>Maintainer of this automated digest for drug discovery and molecular AI.</span>
+                    <a href="https://github.com/abbadonaz">View GitHub Profile</a>
+                </aside>
+            </div>
+        </header>
+
+        <main class="content-frame">
+            
+    <div class="digest-stats">
+        <div class="stat-card">
+            <span class="stat-value">9</span>
+            <span class="stat-label">Featured papers</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">0</span>
+            <span class="stat-label">Additional references</span>
+        </div>
+    </div>
+    
+        <section class="must-read-container">
+            <div class="must-read-badge">Editor's pick</div>
+            <article class="must-read-paper">
+                <div class="must-read-meta">
+                    <span class="topic-badge">Drug Discovery &amp; Cheminformatics</span>
+                    <span class="rank-indicator">Highest ranked paper this week</span>
+                </div>
+                <h2 class="must-read-title">Pan-Mitochondrial Privileged Scaffolds: Adenine, Pyridine, and a 7H-Purine Bioisostere as Multi-Target Fragments in the MitoCoreX Drug Discovery Campaign</h2>
+                <div class="must-read-summary">
+                    <h3>Problem</h3>
+<p>The study aims to identify multi-target fragments for drug discovery campaigns focused on mitochondrial proteins (MitoCoreX), which are involved in various diseases such as neurodegenerative disorders and cancer.</p>
+<h3>Method</h3>
+<p>The researchers employed a fragment-based drug design approach, utilizing molecular machine learning techniques to screen a library of small molecules for their affinity towards multiple mitochondrial targets.</p>
+<h3>Dataset / Benchmark</h3>
+<p>The study used a dataset consisting of 1500 diverse small molecules and evaluated the performance of the model against known mitochondrial ligands.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>Adenine, pyridine, and a 7H-purine bioisostere were identified as privileged scaffolds with high affinity for multiple mitochondrial targets.</li>
+<li>The machine learning model demonstrated robust performance in predicting the binding affinity of these fragments towards various mitochondrial proteins.</li>
+<li>The top-ranked fragments showed potential for further optimization and development into drug candidates.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>This work provides valuable insights into the design of multi-target drugs for mitochondrial diseases, bridging the gap between computational chemistry and drug discovery. The identified privileged scaffolds can serve as starting points for the synthesis of novel drug candidates, potentially leading to more effective treatments for various debilitating conditions.</p>
+                </div>
+                <div class="must-read-action">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001671/v1" class="btn-primary">Read the paper</a>
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001671/v1" class="btn-secondary">Open source record</a>
+                </div>
+            </article>
+        </section>
+        
+    <section class="insights-container">
+        <h2 class="section-headline">Weekly research themes</h2>
+        <p class="section-subtitle">A short editorial synthesis of the strongest scientific directions in this batch.</p>
+        <div class="insights-body">
+            <p>In this week's digest, several studies have highlighted advancements in molecular AI and computational chemistry that hold immense potential for industrial R&amp;D across drug discovery, cheminformatics, and materials science.</p>
+<p>Firstly, researchers have employed machine learning techniques to identify multi-target fragments for drug discovery campaigns focused on mitochondrial proteins (MitoCoreX), bridging the gap between computational and experimental approaches. The findings suggest promising leads for developing treatments for various diseases such as neurodegenerative disorders and cancer.</p>
+<p>Secondly, a guided active learning approach, STING, has been proposed to improve the accuracy of Machine Learned Interatomic Potentials (MLIPs) in predicting structural properties of Lithium Thiophosphate solid state electrolytes, crucial materials for lithium-ion batteries. This work advances computational models for optimizing materials and demonstrates the effectiveness of handling limited data, making it a valuable tool for materials with scarce experimental data.</p>
+<p>Lastly, machine learning models have been applied to predict ADMET properties (Absorption, Distribution, Metabolism, Excretion, and Toxicity) of mitochondria-focused compound libraries. The findings reveal promising results in terms of physicochemical baselines, membrane permeability, and efficiency improvements for AI-driven drug discovery.</p>
+<p>These developments underscore the increasing importance of molecular machine learning and computational chemistry in accelerating industrial R&amp;D by providing more accurate predictions, reducing experimental requirements, and enabling the optimization of materials properties. By leveraging these advancements, researchers can expedite the drug discovery process, optimize materials for energy storage, and improve product quality in various industries.</p>
+        </div>
+    </section>
+    
+        <section class="featured-section">
+            <h2 class="section-headline">Featured papers</h2>
+            <p class="section-subtitle">Structured summaries for the most relevant papers after retrieval, filtering, and evidence selection.</p>
+        
+            <div class="topic-group">
+                <h3 class="topic-header">Bayesian Optimization &amp; Active Learning</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured">
+                    <div class="paper-rank">#2</div>
+                    <h4 class="paper-title-featured">STING, guided active learning for Machine Learned Interatomic Potentials examined on Lithium Thiophosphate solid state electrolytes</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>The study investigates the application of Machine Learned Interatomic Potentials (MLIPs) in predicting the structural properties of Lithium Thiophosphate solid state electrolytes, a crucial material for lithium-ion batteries.</p>
+<h3>Method</h3>
+<p>The authors propose STING, a guided active learning approach that selectively trains MLIPs using a small dataset and subsequently refines them with additional data points.</p>
+<h3>Dataset / Benchmark</h3>
+<p>The research utilizes experimental data from density functional theory calculations as the initial training set, and further refines the models using ab initio molecular dynamics simulations.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>STING significantly improves the accuracy of MLIPs in predicting structural properties compared to traditional methods.</li>
+<li>The approach demonstrates its effectiveness in handling limited data, making it a promising tool for materials with scarce experimental data.</li>
+<li>The refined MLIPs show good transferability to other lithium-based electrolytes.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>This work advances the development of computational models for predicting structural properties of solid state electrolytes, which is essential for optimizing materials for lithium-ion batteries and accelerating drug discovery in related fields.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001544/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured">
+                    <div class="paper-rank">#3</div>
+                    <h4 class="paper-title-featured">Large Language Model-Guided Bayesian Optimization of Ag+ Doping in CdSe Nanoplatelets Enables Deterministic Optical Prediction across the Gamut</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>This research focuses on optimizing the properties of CdSe nanoplatelets (NPLs) doped with silver (Ag+), particularly their optical properties, to enable deterministic predictions.</p>
+<h3>Method</h3>
+<p>The authors propose a large language model-guided Bayesian optimization approach for the systematic exploration of Ag+ doping levels in CdSe NPLs.</p>
+<h3>Dataset / Benchmark</h3>
+<p>The study utilizes experimental data from various sources as a benchmark for the proposed method.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>The proposed method successfully optimized Ag+ doping levels, leading to improved optical properties of CdSe NPLs.</li>
+<li>The approach allows for deterministic predictions across a wide range of doping concentrations.</li>
+<li>The optimization process was found to be efficient, reducing the number of required experiments.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>This work provides a valuable computational tool for drug discovery and computational chemistry by offering an efficient method for optimizing the properties of nanomaterials like CdSe NPLs. Furthermore, it advances molecular machine learning by demonstrating the potential of integrating large language models into optimization processes.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001652/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">Computational Chemistry</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured">
+                    <div class="paper-rank">#4</div>
+                    <h4 class="paper-title-featured">A Continuous-Space Analytical Framework for Committor Functions from Molecular Dynamics</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>The study presents a method to compute committor functions from molecular dynamics simulations, addressing the challenge of accurately predicting reaction pathways and transition states in complex chemical systems.</p>
+<h3>Method</h3>
+<p>Proposed is a continuous-space analytical framework that extracts committor functions directly from molecular dynamics trajectories, bypassing the need for explicit identification of collective variables or reactive events.</p>
+<h3>Dataset / Benchmark</h3>
+<p>The method's performance is evaluated on several benchmark systems, including the Sinclair model and a series of peptide unfolding reactions.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>The continuous-space analytical framework shows improved accuracy in predicting committor functions compared to traditional methods.</li>
+<li>The approach can handle complex chemical systems with multiple reaction pathways, offering a scalable solution for drug discovery and computational chemistry.</li>
+<li>The method demonstrates robustness across various benchmark systems, suggesting its potential for broad applicability.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>This work offers an advancement in the field of molecular machine learning by providing a more accurate and scalable approach to predicting reaction pathways and transition states. This could significantly aid drug discovery efforts by enabling the exploration of larger chemical spaces and improving our understanding of complex biochemical processes.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001632/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured">
+                    <div class="paper-rank">#5</div>
+                    <h4 class="paper-title-featured">Water molecular dynamics during dough heating by Fast Field Cycling Nuclear Magnetic Resonance</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>This research investigates the dynamic behavior of water molecules during dough heating, a crucial factor in understanding baking processes and improving product quality.</p>
+<h3>Method</h3>
+<p>The study employs Fast Field Cycling Nuclear Magnetic Resonance (FFC-NMR) to monitor water molecular dynamics during dough heating.</p>
+<h3>Dataset / Benchmark</h3>
+<p>Data collected from FFC-NMR experiments on dough samples heated at various temperatures.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>The study reveals that the mobility of water molecules increases with temperature, suggesting a more active state during baking.</li>
+<li>It identifies two distinct relaxation processes in water dynamics, providing insights into the structural changes occurring during dough heating.</li>
+<li>The research demonstrates that FFC-NMR can effectively track these dynamic changes, offering a valuable tool for understanding and optimizing baking processes.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Understanding water molecular dynamics during dough heating is essential for improving product quality in the food industry. This study provides new insights into the structural changes occurring during baking, which can be leveraged to develop improved baking processes and products. Furthermore, the use of FFC-NMR as a tool for monitoring these dynamics offers potential applications in other fields such as drug discovery, computational chemistry, and molecular machine learning.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001606/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured">
+                    <div class="paper-rank">#6</div>
+                    <h4 class="paper-title-featured">Stochastic neural dynamic modeling and analysis under environmental noise for exploring the production of K-complexes.</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>The principles governing how environmental noise (EN) modulates the occurrence of K-complexes (KCs), sleep-specific neuroprotective waveforms, remain poorly understood.</p>
+<h3>Method</h3>
+<p>A stochastic neural dynamic model incorporating EN (SNDM-KCs) is developed to explore the modulation effects of EN on KCs from the perspective of stochastic dynamics. The Gaussian colored noise (GCN) is first applied to model EN and introduced into the deterministic Costa neural mass model to build the SNDM-KCs.</p>
+<h3>Dataset / Benchmark</h3>
+<p>The study does not specify a particular dataset or benchmark for evaluation. Instead, it relies on numerical simulations to investigate the relationship between model behavior and stochastic escape metrics: first escape probability (FEP) and the mean first exit time (MFET).</p>
+<h3>Key Findings</h3>
+<ul>
+<li>The results demonstrate that as the escape probability of the system rises, the occurrence probability of KC increases accordingly.</li>
+<li>Numerical simulations suggest that both KCs occurrence probability and rate increase with noise intensity D and correlation rate [Formula: see text] of GCN.</li>
+<li>Bifurcation analysis is conducted to demonstrate that the prerequisite for occurrence of KCs corresponds to a large-amplitude departure from a stable equilibrium induced by GCN in the dynamic system.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>This work provides a novel dynamical insight into understanding how EN</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/41940263/" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured">
+                    <div class="paper-rank">#7</div>
+                    <h4 class="paper-title-featured">Molecular-Level Insights into Alkali-Metal Cation–CO2 Interactions at Electrified Copper Interfaces by Molecular Dynamics Simulations</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>This research focuses on understanding the interactions between alkali metal cations (Li+, Na+, K+) and carbon dioxide (CO2) at electrified copper interfaces, which is crucial for developing efficient electrochemical CO2 reduction reactions.</p>
+<h3>Method</h3>
+<p>The study employs molecular dynamics simulations to investigate the structural, energetic, and dynamical properties of these interactions.</p>
+<h3>Dataset / Benchmark</h3>
+<p>The research utilizes classical force fields to model the systems under investigation.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>The findings suggest that the strength of the interactions between alkali metal cations and CO2 increases with the size of the cation.</li>
+<li>The study reveals that the presence of water molecules significantly affects the interaction dynamics.</li>
+<li>It is observed that the reduction of CO2 to formates is facilitated by the alkali metal cations, with Li+ showing the highest activity.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Understanding these interactions can aid in the design of more efficient electrocatalysts for CO2 reduction reactions, contributing significantly to the development of green and sustainable energy technologies. Furthermore, this work provides valuable insights into the role of alkali metal cations in molecular-level processes at electrified interfaces, which is essential for advancing our understanding of electrochemistry and computational chemistry.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001527/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">QSAR &amp; ADMET</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured">
+                    <div class="paper-rank">#8</div>
+                    <h4 class="paper-title-featured">ADMET Profiling of a Mitochondria-Focused Compound Library: Physicochemical Baselines, Membrane Permeability Classification, and Tier-Based Filtering for AI-Driven Drug Discovery</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>This research focuses on the ADMET (Absorption, Distribution, Metabolism, Excretion, and Toxicity) profiling of a compound library with a mitochondria focus. The goal is to establish physicochemical baselines, classify membrane permeability, and implement tier-based filtering for enhancing AI-driven drug discovery.</p>
+<h3>Method</h3>
+<p>The study proposes the use of machine learning models to predict ADMET properties of the mitochondria-focused compound library. The models are trained and validated on a dataset of known compounds with their corresponding ADMET profiles.</p>
+<h3>Dataset / Benchmark</h3>
+<p>The evaluation setup involves a dataset of 1500 known compounds, each with its ADMET properties.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>The study demonstrates the effectiveness of machine learning models in predicting physicochemical properties and membrane permeability for the mitochondria-focused compound library.</li>
+<li>Tier-based filtering significantly reduces the number of compounds requiring experimental validation, thereby expediting the drug discovery process.</li>
+<li>The proposed approach shows promise in improving the efficiency and accuracy of AI-driven drug discovery.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>This work matters for drug discovery, computational chemistry, and molecular machine learning as it provides a methodology to predict ADMET properties of mitochondria-focused compounds, streamlines the drug discovery process by reducing experimental validation requirements</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001519/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured">
+                    <div class="paper-rank">#9</div>
+                    <h4 class="paper-title-featured">In Silico Pharmacological Profiling of MitoCorex Candidate Molecules: ADMET, Target Engagement, Selectivity, and Stability Analysis</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>This research focuses on the in silico pharmacological profiling of MitoCorex candidate molecules for drug discovery. The aim is to evaluate their ADMET (Absorption, Distribution, Metabolism, Excretion, and Toxicity) properties, target engagement, selectivity, and stability.</p>
+<h3>Method</h3>
+<p>The study employs a combination of computational methods and molecular machine learning techniques to predict the pharmacological properties of the MitoCorex candidate molecules.</p>
+<h3>Dataset / Benchmark</h3>
+<p>The evaluation is based on a dataset of known drugs with similar properties as the MitoCorex candidates.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>The study reveals that most MitoCorex candidate molecules exhibit favorable ADMET profiles, suggesting potential drug-likeness.</li>
+<li>Target engagement analysis indicates specific interactions with desired targets, demonstrating the potential of these molecules for therapeutic applications.</li>
+<li>Stability assessments show promising results, suggesting that the MitoCorex candidates are resistant to degradation, which is crucial for maintaining efficacy in a biological system.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>These findings provide valuable insights into the pharmacological properties of MitoCorex candidate molecules, contributing to their potential as drug candidates. The results underscore the importance of computational chemistry and molecular machine learning in drug discovery processes, enabling efficient and cost-effective identification of promising compounds for further experimental validation.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001670/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            </section>
+            <footer class="footer">
+                <div>Curated pipeline for recent literature triage, evidence extraction, and scientific summarization.</div>
+                <div>Built for GitHub Pages and local LLM workflows.</div>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,27 +1,22 @@
 import os
 from datetime import date
 
-from fetch_arxiv import fetch_arxiv_papers
-from fetch_pubmed import fetch_pubmed_papers
-from fetch_chemrxiv import fetch_chemrxiv_papers
-
-from filter_papers import filter_relevant_papers
-from deduplicate_papers import filter_new_papers
-
-from download_pdfs import download_pdf
-from pdf_extract import extract_pdf_text, split_sentences
-from pdf_sections import extract_sections, build_paper_context
-
-from sentence_ranker import rank_sentences
+from blog_template import render_blog
 from clean_sentences import clean_sentences
-
+from config import MAX_BRIEF_PAPERS, MAX_FEATURED_PAPERS, PROCESS_ALL_WHEN_NO_NEW
+from deduplicate_papers import mark_papers_seen, split_new_and_seen_papers
+from download_pdfs import download_pdf
+from fetch_arxiv import fetch_arxiv_papers
+from fetch_chemrxiv import fetch_chemrxiv_papers
+from fetch_pubmed import fetch_pubmed_papers
+from filter_papers import filter_relevant_papers
+from generate_digest import generate_digest_html
+from generate_narrative import generate_weekly_narrative
 from llm_summarizer import summarize_papers
 from paper_scoring import rank_papers
-from generate_narrative import generate_weekly_narrative
-
-from generate_digest import generate_digest_html
-from blog_template import render_blog
-
+from pdf_extract import extract_pdf_text, split_sentences
+from pdf_sections import build_paper_context, extract_sections
+from sentence_ranker import rank_sentences
 from utils import save_json
 
 
@@ -35,15 +30,12 @@ INDEX_PATH = "docs/index.html"
 
 
 def ensure_dirs():
-
     os.makedirs("data", exist_ok=True)
     os.makedirs(POSTS_DIR, exist_ok=True)
 
 
 def save_weekly_post(html):
-
     today = date.today().isoformat()
-
     filename = f"{POSTS_DIR}/{today}.html"
 
     with open(filename, "w", encoding="utf-8") as f:
@@ -53,131 +45,159 @@ def save_weekly_post(html):
 
 
 def rebuild_index():
-
     posts = sorted(os.listdir(POSTS_DIR), reverse=True)
-
     links = ""
 
-    for p in posts:
-
-        if not p.endswith(".html"):
+    for post_name in posts:
+        if not post_name.endswith(".html"):
             continue
 
-        date_str = p.replace(".html", "")
-
+        date_str = post_name.replace(".html", "")
         links += f"""
         <div class="paper-card">
             <div class="paper-title">
-                Weekly Digest — {date_str}
+                Weekly Digest - {date_str}
             </div>
 
-            <a href="posts/{p}">Read digest →</a>
+            <a href="posts/{post_name}">Read digest -></a>
         </div>
         """
 
     page = render_blog(
         f"""
         <div class="section-title">
-        AI Drug Discovery Weekly
+        Digest Archive
         </div>
 
         {links}
-        """
+        """,
+        page_title="AI Drug Discovery Digest Archive",
+        page_tagline="An index of weekly digests focused on drug discovery, computational chemistry, and molecular machine learning.",
     )
 
     with open(INDEX_PATH, "w", encoding="utf-8") as f:
         f.write(page)
 
 
-def main():
+def build_featured_paper_record(paper):
+    pdf_path = download_pdf(paper)
+    if not pdf_path:
+        abstract = (paper.get("abstract") or "").strip()
+        if not abstract:
+            return None
 
+        abstract_sentences = clean_sentences(split_sentences(abstract))
+        if not abstract_sentences:
+            abstract_sentences = [abstract]
+
+        return {
+            "title": paper["title"],
+            "url": paper["url"],
+            "topic": paper.get("topic", "Other"),
+            "sentences": abstract_sentences[:10],
+            "context": abstract,
+            "sections": {"abstract": abstract},
+        }
+
+    text = extract_pdf_text(pdf_path)
+    if not text:
+        abstract = (paper.get("abstract") or "").strip()
+        if not abstract:
+            return None
+
+        abstract_sentences = clean_sentences(split_sentences(abstract))
+        if not abstract_sentences:
+            abstract_sentences = [abstract]
+
+        return {
+            "title": paper["title"],
+            "url": paper["url"],
+            "topic": paper.get("topic", "Other"),
+            "sentences": abstract_sentences[:10],
+            "context": abstract,
+            "sections": {"abstract": abstract},
+        }
+
+    sections = extract_sections(text)
+    combined_text = build_paper_context(sections)
+    sentences = clean_sentences(split_sentences(combined_text))
+    ranked = rank_sentences(sentences, top_k=25)
+
+    return {
+        "title": paper["title"],
+        "url": paper["url"],
+        "topic": paper.get("topic", "Other"),
+        "sentences": ranked,
+        "context": combined_text,
+        "sections": sections,
+    }
+
+
+def main():
     ensure_dirs()
 
     print("\n--- AI & Cheminformatics Literature Pipeline ---\n")
 
-    # --------------------------------------------------
-    # 1 Fetch papers
-    # --------------------------------------------------
-
     print("Fetching papers from arXiv...")
-    arxiv_papers = fetch_arxiv_papers(days_back=14, max_results=500)
+    try:
+        arxiv_papers = fetch_arxiv_papers(days_back=7, max_results=75)
+        print(f"  Got {len(arxiv_papers)} arXiv papers")
+    except Exception as e:
+        print(f"  arXiv fetch failed: {e}")
+        arxiv_papers = []
 
     print("Fetching papers from PubMed...")
-    pubmed_papers = fetch_pubmed_papers(days_back=14, max_results=200)
+    try:
+        pubmed_papers = fetch_pubmed_papers(days_back=7, max_results=100)
+        print(f"  Got {len(pubmed_papers)} PubMed papers")
+    except Exception as e:
+        print(f"  PubMed fetch failed: {e}")
+        pubmed_papers = []
 
     print("Fetching papers from ChemRxiv...")
-    chemrxiv_papers = fetch_chemrxiv_papers(days_back=14)
+    try:
+        chemrxiv_papers = fetch_chemrxiv_papers(days_back=7)
+        print(f"  Got {len(chemrxiv_papers)} ChemRxiv papers")
+    except Exception as e:
+        print(f"  ChemRxiv fetch failed: {e}")
+        chemrxiv_papers = []
 
-    papers = arxiv_papers + pubmed_papers + chemrxiv_papers
+    fetched_papers = arxiv_papers + pubmed_papers + chemrxiv_papers
+    print(f"\nFetched {len(fetched_papers)} total papers")
 
-    print(f"Fetched {len(papers)} papers")
+    new_papers, seen_papers = split_new_and_seen_papers(fetched_papers)
+    print(f"{len(new_papers)} new papers after deduplication")
 
-    # remove duplicates across runs
-    papers = filter_new_papers(papers)
+    if new_papers:
+        mark_papers_seen(new_papers)
 
-    print(f"{len(papers)} new papers after deduplication")
+    papers_to_process = new_papers
+    if not papers_to_process and PROCESS_ALL_WHEN_NO_NEW:
+        papers_to_process = seen_papers
+        print("No new papers found; rebuilding digest from the current fetched set.")
 
-    save_json(papers, RAW_PATH)
+    save_json(papers_to_process, RAW_PATH)
 
-    if not papers:
-        print("No new papers found.")
+    if not papers_to_process:
+        print("\nNo papers available for processing. Pipeline halting.")
         return
 
-    # --------------------------------------------------
-    # 2 Relevance filtering
-    # --------------------------------------------------
-
     print("\nFiltering relevant papers...")
-
-    filtered = filter_relevant_papers(papers)
-
+    filtered = filter_relevant_papers(papers_to_process)
     print(f"{len(filtered)} papers passed filtering")
-
     save_json(filtered, FILTERED_PATH)
 
-    # --------------------------------------------------
-    # 3 Download and process PDFs
-    # --------------------------------------------------
-
-    print("\nDownloading PDFs and extracting key sentences...")
-
+    print("\nDownloading PDFs and extracting key evidence...")
     paper_sentences = []
     brief_papers = []
 
-    # Top 12 get full two-stage summarization
-    for paper in filtered[:12]:
+    for paper in filtered[:MAX_FEATURED_PAPERS]:
+        featured_paper = build_featured_paper_record(paper)
+        if featured_paper:
+            paper_sentences.append(featured_paper)
 
-        pdf_path = download_pdf(paper)
-
-        if not pdf_path:
-            continue
-
-        text = extract_pdf_text(pdf_path)
-
-        if not text:
-            continue
-
-        sections = extract_sections(text)
-
-        combined_text = build_paper_context(sections)
-
-        sentences = split_sentences(combined_text)
-
-        sentences = clean_sentences(sentences)
-
-        ranked = rank_sentences(sentences, top_k=25)
-
-        paper_sentences.append({
-            "title": paper["title"],
-            "url": paper["url"],
-            "topic": paper.get("topic", "Other"),
-            "sentences": ranked,
-            "context": combined_text,
-            "sections": sections,
-        })
-
-    # Remaining papers get brief entries (title, URL, topic only)
-    for paper in filtered[12:25]:  # up to 25 total
+    upper_bound = MAX_FEATURED_PAPERS + MAX_BRIEF_PAPERS
+    for paper in filtered[MAX_FEATURED_PAPERS:upper_bound]:
         brief_papers.append({
             "title": paper["title"],
             "url": paper["url"],
@@ -194,17 +214,27 @@ def main():
         print("No papers processed.")
         return
 
-    # --------------------------------------------------
-    # 4 Generate summaries
-    # --------------------------------------------------
-
     print("\nGenerating structured summaries for featured papers...")
-
-    summaries = summarize_papers(paper_sentences)
-
+    try:
+        summaries = summarize_papers(paper_sentences)
+    except Exception as error:
+        print(f"Structured summarization failed at pipeline level: {error}")
+        summaries = []
+        for paper in paper_sentences:
+            summaries.append({
+                "title": paper["title"],
+                "url": paper["url"],
+                "topic": paper.get("topic", "Other"),
+                "tldr": (
+                    "### Problem\nAutomatic summarization failed.\n\n"
+                    "### Method\nThe pipeline preserved this paper entry without a model-generated summary.\n\n"
+                    "### Dataset / Benchmark\nNot available.\n\n"
+                    "### Key Findings\n- Review the original paper for details.\n\n"
+                    "### Why It Matters\nThis item stayed in the weekly digest despite a local summarization failure."
+                ),
+            })
     summaries = rank_papers(summaries)
 
-    # Add brief papers (without full summaries)
     for brief in brief_papers:
         summaries.append({
             "title": brief["title"],
@@ -216,38 +246,21 @@ def main():
         })
 
     print(f"Generated {len(summaries)} total entries ({len(paper_sentences)} featured + {len(brief_papers)} brief)")
-
     save_json(summaries, SUMMARIES_PATH)
 
-    # --------------------------------------------------
-    # 5 Weekly narrative
-    # --------------------------------------------------
-
     print("\nGenerating weekly narrative...")
-
     narrative = generate_weekly_narrative(summaries)
 
-    # --------------------------------------------------
-    # 6 Generate blog page
-    # --------------------------------------------------
-
     print("\nGenerating blog HTML...")
-
     content_html = generate_digest_html(summaries, narrative)
-
-    page = render_blog(content_html)
-
+    page = render_blog(content_html, publication_date=date.today())
     filename = save_weekly_post(page)
 
     print(f"\nWeekly post saved: {filename}")
 
-    # rebuild homepage
-
     rebuild_index()
-
     print("\nHomepage updated")
-
-    print("\nPipeline finished successfully 🚀")
+    print("\nPipeline finished successfully")
 
 
 if __name__ == "__main__":

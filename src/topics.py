@@ -1,14 +1,23 @@
 TOPICS = {
-    "Docking & Structure-Based Design": [
-        "docking",
-        "molecular docking",
+    "Drug Discovery & Cheminformatics": [
+        "drug discovery",
+        "cheminformatics",
+        "computer-aided drug design",
+        "cadd",
         "virtual screening",
+        "structure-based drug design",
+        "ligand-based drug design",
+        "molecular docking",
         "binding affinity",
         "protein-ligand",
-        "ligand binding",
-        "scoring function",
-        "pose prediction",
-        "structure-based drug design",
+        "hit identification",
+        "hit-to-lead",
+        "lead optimization",
+        "pharmacophore",
+        "scaffold hopping",
+        "molecular design",
+        "computational design",
+        "dna-encoded library",
     ],
     "Computational Chemistry": [
         "computational chemistry",
@@ -22,16 +31,19 @@ TOPICS = {
         "force field",
         "ab initio",
         "electronic structure",
+        "conformer",
+        "reaction mechanism",
+        "simulation",
     ],
-    "QSAR & Property Prediction": [
+    "QSAR & ADMET": [
         "qsar",
         "qspr",
-        "property prediction",
         "admet",
+        "property prediction",
         "solubility",
-        "toxicity",
-        "clearance",
         "permeability",
+        "clearance",
+        "toxicity",
         "bioactivity prediction",
         "molecular property",
     ],
@@ -39,58 +51,52 @@ TOPICS = {
         "uncertainty quantification",
         "uncertainty estimation",
         "calibration",
-        "bayesian neural network",
+        "confidence estimation",
+        "conformal prediction",
         "epistemic uncertainty",
         "aleatoric uncertainty",
-        "conformal prediction",
-        "confidence estimation",
+        "uncertainty-aware",
     ],
     "Bayesian Optimization & Active Learning": [
         "bayesian optimization",
         "active learning",
         "closed-loop",
         "adaptive sampling",
-        "sequential design",
         "acquisition function",
+        "sequential design",
         "experiment selection",
         "multi-fidelity optimization",
     ],
-    "Generative Chemistry": [
-        "molecular generation",
-        "de novo design",
-        "generative model",
-        "diffusion model",
-        "generative chemistry",
-        "molecule design",
-        "smiles generation",
-        "selfies",
-        "reinvent",
-        "molecular optimization",
-    ],
-    "Synthesis-Aware Design": [
-        "retrosynthesis",
-        "reaction prediction",
-        "synthesis planning",
-        "synthetic accessibility",
-        "synthesizability",
-        "synthesis-aware",
-        "reaction route",
-        "reaction generation",
+    "Molecular Representation Learning": [
+        "molecular representation",
+        "representation learning",
+        "molecular embedding",
+        "molecular fingerprint",
+        "graph neural network",
+        "graph transformer",
+        "message passing neural network",
+        "molecular graph",
+        "self-supervised",
+        "foundation model for molecules",
     ],
 }
 
 
 def score_topics(paper):
     """
-    Return a dict of topic -> keyword hit count.
+    Return a dict of topic -> weighted keyword hit count.
+    Title hits matter more than abstract hits because they are stronger field signals.
     """
-    text = f"{paper.get('title', '')} {paper.get('abstract', '')}".lower()
+    title = paper.get("title", "").lower()
+    abstract = paper.get("abstract", "").lower()
     scores = {}
 
     for topic, keywords in TOPICS.items():
         score = 0
-        for kw in keywords:
-            if kw in text:
+        for keyword in keywords:
+            if keyword in title:
+                score += 2
+            elif keyword in abstract:
                 score += 1
         scores[topic] = score
 
@@ -98,9 +104,6 @@ def score_topics(paper):
 
 
 def classify_topic(paper):
-    """
-    Assign the best-matching topic to a paper.
-    """
     scores = score_topics(paper)
     best_topic = max(scores, key=scores.get)
 

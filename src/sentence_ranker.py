@@ -1,8 +1,6 @@
-from sentence_transformers import SentenceTransformer
-import numpy as np
+from functools import lru_cache
 
-
-model = SentenceTransformer("all-MiniLM-L6-v2")
+from embeddings import cosine_similarity, encode_texts
 
 
 INTEREST_TEXT = """
@@ -12,22 +10,20 @@ computational chemistry
 """
 
 
-interest_vec = model.encode(INTEREST_TEXT)
-
-
-def cosine_similarity(a, b):
-
-    return np.dot(a, b) / (np.linalg.norm(a) * np.linalg.norm(b))
+@lru_cache(maxsize=1)
+def get_interest_vector():
+    return encode_texts([INTEREST_TEXT])[0]
 
 
 def rank_sentences(sentences, top_k=15):
+    if not sentences:
+        return []
 
+    sentence_vectors = encode_texts(sentences)
+    interest_vec = get_interest_vector()
     ranked = []
 
-    for s in sentences:
-
-        vec = model.encode(s)
-
+    for s, vec in zip(sentences, sentence_vectors):
         score = cosine_similarity(vec, interest_vec)
 
         ranked.append((score, s))

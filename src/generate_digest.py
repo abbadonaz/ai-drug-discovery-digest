@@ -1,178 +1,161 @@
-﻿from collections import defaultdict
-import markdown
+from collections import defaultdict
+from html import escape
 import re
+
+import markdown
 
 
 def clean_llm_output(text):
-    """Fix common LLM formatting issues before rendering markdown."""
     if not text:
         return ""
 
-    text = re.sub(r"\s*-\s*", "\n- ", text)
+    text = text.replace("\r\n", "\n")
+    text = re.sub(r"\n{3,}", "\n\n", text)
 
-    sections = [
+    headings = [
         "Problem",
         "Method",
         "Dataset / Benchmark",
         "Key Findings",
-        "Why It Matters"
+        "Why It Matters",
     ]
-
-    for s in sections:
-        text = re.sub(rf"\s*{s}\s*", f"\n\n**{s}**\n", text)
+    for heading in headings:
+        text = re.sub(
+            rf"(?:^|\n)\s*#+\s*{re.escape(heading)}\s*",
+            f"\n\n### {heading}\n",
+            text,
+            flags=re.IGNORECASE,
+        )
 
     return text.strip()
 
 
 def render_markdown(text):
-    """Convert LLM markdown to HTML."""
-    text = clean_llm_output(text)
-    return markdown.markdown(text, extensions=["extra", "sane_lists"])
+    cleaned = clean_llm_output(text)
+    if not cleaned:
+        return "<p>No summary available.</p>"
+    return markdown.markdown(cleaned, extensions=["extra", "sane_lists"])
+
+
+def _render_topic_badges(summary_count, brief_count):
+    return f"""
+    <div class="digest-stats">
+        <div class="stat-card">
+            <span class="stat-value">{summary_count}</span>
+            <span class="stat-label">Featured papers</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">{brief_count}</span>
+            <span class="stat-label">Additional references</span>
+        </div>
+    </div>
+    """
 
 
 def generate_digest_html(summaries, narrative):
-    """Render digest with 1 'Must Read' + 11 featured + optionals."""
-    html = ""
+    featured = [paper for paper in summaries if not paper.get("brief", False)]
+    brief = [paper for paper in summaries if paper.get("brief", False)]
 
-    # Separate featured from brief articles
-    featured = [s for s in summaries if not s.get("brief", False)]
-    brief = [s for s in summaries if s.get("brief", False)]
-
-    # ----------------------------
-    # MUST READ (Top paper, highly prominent)
-    # ----------------------------
-    
-    must_read_badge = """
-    <div class="must-read-badge">
-        <span class="badge-icon">🎯</span>
-        <span class="badge-text">MUST READ THIS WEEK</span>
-    </div>
-    """
+    html = _render_topic_badges(len(featured), len(brief))
 
     if featured:
         top = featured[0]
-        summary_html = render_markdown(top["tldr"])
-
         html += f"""
-        <div class="must-read-container">
-            {must_read_badge}
-            <div class="must-read-paper">
-                <h1 class="must-read-title">{top['title']}</h1>
-                
+        <section class="must-read-container">
+            <div class="must-read-badge">Editor's pick</div>
+            <article class="must-read-paper">
                 <div class="must-read-meta">
-                    <span class="topic-badge">{top['topic']}</span>
-                    <span class="rank-indicator">Ranked #1 this week</span>
+                    <span class="topic-badge">{escape(top.get('topic', 'Other'))}</span>
+                    <span class="rank-indicator">Highest ranked paper this week</span>
                 </div>
-                
+                <h2 class="must-read-title">{escape(top['title'])}</h2>
                 <div class="must-read-summary">
-                    {summary_html}
+                    {render_markdown(top.get("tldr", ""))}
                 </div>
-                
                 <div class="must-read-action">
-                    <a href="{top['url']}" class="btn-primary">Read Full Paper</a>
-                    <a href="{top['url']}" class="btn-secondary">Open in arXiv/PubMed</a>
+                    <a href="{escape(top['url'])}" class="btn-primary">Read the paper</a>
+                    <a href="{escape(top['url'])}" class="btn-secondary">Open source record</a>
                 </div>
-            </div>
-        </div>
+            </article>
+        </section>
         """
 
-    # ----------------------------
-    # Weekly Insights (Trend Narrative)
-    # ----------------------------
-
-    narrative_html = render_markdown(narrative)
-
     html += f"""
-    <div class="insights-container">
-        <h2 class="section-headline">📊 This Week's Insights</h2>
+    <section class="insights-container">
+        <h2 class="section-headline">Weekly research themes</h2>
+        <p class="section-subtitle">A short editorial synthesis of the strongest scientific directions in this batch.</p>
         <div class="insights-body">
-            {narrative_html}
+            {render_markdown(narrative)}
         </div>
-    </div>
+    </section>
     """
 
-    # ----------------------------
-    # 11 Additional Featured Summaries (organized by topic)
-    # ----------------------------
-
     if len(featured) > 1:
-        featured_rest = featured[1:12]  # 11 additional papers
-        
         html += """
-        <div class="featured-section">
-            <h2 class="section-headline">📖 Featured This Week</h2>
-            <p class="section-subtitle">11 carefully selected papers advancing drug discovery and computational chemistry</p>
+        <section class="featured-section">
+            <h2 class="section-headline">Featured papers</h2>
+            <p class="section-subtitle">Structured summaries for the most relevant papers after retrieval, filtering, and evidence selection.</p>
         """
 
         groups = defaultdict(list)
-        for paper in featured_rest:
-            groups[paper["topic"]].append(paper)
+        for paper in featured[1:]:
+            groups[paper.get("topic", "Other")].append(paper)
 
+        global_rank = 2
         for topic, papers in sorted(groups.items()):
             html += f"""
             <div class="topic-group">
-                <h3 class="topic-header">{topic}</h3>
+                <h3 class="topic-header">{escape(topic)}</h3>
                 <div class="papers-grid">
             """
 
-            for idx, paper in enumerate(papers, 1):
-                summary_html = render_markdown(paper["tldr"])
-                
+            for paper in papers:
                 html += f"""
-                <div class="paper-card-featured">
-                    <div class="paper-rank">#{idx + 1}</div>
-                    
-                    <h4 class="paper-title-featured">{paper['title']}</h4>
-                    
+                <article class="paper-card-featured">
+                    <div class="paper-rank">#{global_rank}</div>
+                    <h4 class="paper-title-featured">{escape(paper['title'])}</h4>
                     <div class="paper-summary-featured">
-                        {summary_html}
+                        {render_markdown(paper.get("tldr", ""))}
                     </div>
-                    
                     <div class="paper-footer">
-                        <a href="{paper['url']}" class="link-read-more">Read paper</a>
+                        <a href="{escape(paper['url'])}" class="link-read-more">Read paper</a>
                     </div>
-                </div>
+                </article>
                 """
+                global_rank += 1
 
             html += """
                 </div>
             </div>
             """
 
-        html += "</div>"
-
-    # ----------------------------
-    # Optional Brief References
-    # ----------------------------
+        html += "</section>"
 
     if brief:
         html += f"""
-        <div class="optional-section">
-            <h2 class="section-headline">🔗 Other Relevant Papers</h2>
-            <p class="section-subtitle">Quick references to {len(brief)} additional papers that may be of interest</p>
-            
+        <section class="optional-section">
+            <h2 class="section-headline">Additional references</h2>
+            <p class="section-subtitle">{len(brief)} papers passed the filter but were not expanded into full summaries.</p>
             <div class="brief-list">
         """
 
         brief_groups = defaultdict(list)
         for paper in brief:
-            brief_groups[paper["topic"]].append(paper)
+            brief_groups[paper.get("topic", "Other")].append(paper)
 
         for topic, papers in sorted(brief_groups.items()):
-            html += f"<div class='brief-topic'><h4 class='brief-topic-title'>{topic}</h4>"
-
+            html += f"<div class='brief-topic'><h4 class='brief-topic-title'>{escape(topic)}</h4>"
             for paper in papers:
                 html += f"""
                 <div class="brief-item">
-                    <a href="{paper['url']}" class="brief-link">{paper['title']}</a>
+                    <a href="{escape(paper['url'])}" class="brief-link">{escape(paper['title'])}</a>
                 </div>
                 """
-
             html += "</div>"
 
         html += """
             </div>
-        </div>
+        </section>
         """
 
     return html
