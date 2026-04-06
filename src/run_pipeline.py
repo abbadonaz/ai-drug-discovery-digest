@@ -10,7 +10,7 @@ from fetch_arxiv import fetch_arxiv_papers
 from fetch_chemrxiv import fetch_chemrxiv_papers
 from fetch_pubmed import fetch_pubmed_papers
 from filter_papers import filter_relevant_papers
-from generate_digest import generate_digest_html
+from generate_digest import generate_digest_html, slugify_title
 from generate_narrative import generate_weekly_narrative
 from llm_summarizer import summarize_papers
 from paper_scoring import rank_papers
@@ -27,6 +27,7 @@ SUMMARIES_PATH = "data/summaries.json"
 
 POSTS_DIR = "docs/posts"
 INDEX_PATH = "docs/index.html"
+ARCHIVE_PATH = "docs/archive.html"
 
 
 def ensure_dirs():
@@ -44,7 +45,85 @@ def save_weekly_post(html):
     return filename
 
 
-def rebuild_index():
+def save_latest_post(html):
+    with open(INDEX_PATH, "w", encoding="utf-8") as f:
+        f.write(html)
+
+
+def build_navigation_index(summaries, latest_post_filename):
+    featured = [paper for paper in summaries if not paper.get("brief", False)]
+    brief = [paper for paper in summaries if paper.get("brief", False)]
+    latest_post_name = os.path.basename(latest_post_filename)
+
+    featured_links = ""
+    for idx, paper in enumerate(featured[:12], start=1):
+        anchor = slugify_title(paper["title"])
+        featured_links += f"""
+        <div class="paper-card">
+            <div class="paper-title">#{idx} {paper["title"]}</div>
+            <div class="section-subtitle">{paper.get("topic", "Other")}</div>
+            <a href="posts/{latest_post_name}#{anchor}">Open summary</a>
+        </div>
+        """
+
+    brief_links = ""
+    for paper in brief[:20]:
+        brief_links += f"""
+        <div class="paper-card">
+            <div class="paper-title">{paper["title"]}</div>
+            <div class="section-subtitle">{paper.get("topic", "Other")}</div>
+            <a href="{paper["url"]}">Open source paper</a>
+        </div>
+        """
+
+    return render_blog(
+        f"""
+        <div class="digest-stats">
+            <div class="stat-card">
+                <span class="stat-value">{len(featured)}</span>
+                <span class="stat-label">Featured summaries</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-value">{len(brief)}</span>
+                <span class="stat-label">Additional references</span>
+            </div>
+        </div>
+
+        <section class="must-read-container">
+            <div class="must-read-badge">Navigation Hub</div>
+            <article class="must-read-paper">
+                <h2 class="must-read-title">Choose where to start</h2>
+                <p class="section-subtitle">Use this homepage as the mother index for the current weekly batch. Open the full digest, jump to a featured paper summary, or browse the archive.</p>
+                <div class="must-read-action">
+                    <a href="posts/{latest_post_name}" class="btn-primary">Open latest digest</a>
+                    <a href="archive.html" class="btn-secondary">Browse archive</a>
+                </div>
+            </article>
+        </section>
+
+        <section class="featured-section">
+            <h2 class="section-headline">Featured summaries</h2>
+            <p class="section-subtitle">Direct links into the latest digest for the current featured papers.</p>
+            <div class="papers-grid">
+                {featured_links or '<p>No featured summaries are available for this run.</p>'}
+            </div>
+        </section>
+
+        <section class="optional-section">
+            <h2 class="section-headline">Additional references</h2>
+            <p class="section-subtitle">Relevant papers kept as lightweight references in the current run.</p>
+            <div class="papers-grid">
+                {brief_links or '<p>No additional references were included in this run.</p>'}
+            </div>
+        </section>
+        """,
+        publication_date=date.today(),
+        page_title="AI Drug Discovery Digest",
+        page_tagline="A navigation hub for the latest weekly summaries, paper links, and archive pages.",
+    )
+
+
+def rebuild_archive():
     posts = sorted(os.listdir(POSTS_DIR), reverse=True)
     links = ""
 
@@ -75,7 +154,7 @@ def rebuild_index():
         page_tagline="An index of weekly digests focused on drug discovery, computational chemistry, and molecular machine learning.",
     )
 
-    with open(INDEX_PATH, "w", encoding="utf-8") as f:
+    with open(ARCHIVE_PATH, "w", encoding="utf-8") as f:
         f.write(page)
 
 
@@ -255,11 +334,13 @@ def main():
     content_html = generate_digest_html(summaries, narrative)
     page = render_blog(content_html, publication_date=date.today())
     filename = save_weekly_post(page)
+    save_latest_post(build_navigation_index(summaries, filename))
 
     print(f"\nWeekly post saved: {filename}")
+    print(f"Homepage updated with navigation hub: {INDEX_PATH}")
 
-    rebuild_index()
-    print("\nHomepage updated")
+    rebuild_archive()
+    print(f"Archive updated: {ARCHIVE_PATH}")
     print("\nPipeline finished successfully")
 
 

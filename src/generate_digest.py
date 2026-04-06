@@ -37,6 +37,11 @@ def render_markdown(text):
     return markdown.markdown(cleaned, extensions=["extra", "sane_lists"])
 
 
+def slugify_title(title):
+    slug = re.sub(r"[^a-z0-9]+", "-", (title or "").lower()).strip("-")
+    return slug or "paper"
+
+
 def _render_topic_badges(summary_count, brief_count):
     return f"""
     <div class="digest-stats">
@@ -60,10 +65,11 @@ def generate_digest_html(summaries, narrative):
 
     if featured:
         top = featured[0]
+        top_slug = slugify_title(top["title"])
         html += f"""
         <section class="must-read-container">
             <div class="must-read-badge">Editor's pick</div>
-            <article class="must-read-paper">
+            <article class="must-read-paper" id="{top_slug}">
                 <div class="must-read-meta">
                     <span class="topic-badge">{escape(top.get('topic', 'Other'))}</span>
                     <span class="rank-indicator">Highest ranked paper this week</span>
@@ -110,8 +116,9 @@ def generate_digest_html(summaries, narrative):
             """
 
             for paper in papers:
+                paper_slug = slugify_title(paper["title"])
                 html += f"""
-                <article class="paper-card-featured">
+                <article class="paper-card-featured" id="{paper_slug}">
                     <div class="paper-rank">#{global_rank}</div>
                     <h4 class="paper-title-featured">{escape(paper['title'])}</h4>
                     <div class="paper-summary-featured">
