@@ -1,10 +1,10 @@
 TOPIC_SCORES = {
-    "Drug Discovery & Cheminformatics": 4,
-    "QSAR & ADMET": 4,
-    "Computational Chemistry": 2,
-    "Bayesian Optimization & Active Learning": 7,
-    "Uncertainty Quantification": 7,
-    "Molecular Representation Learning": 7,
+    "Drug Discovery & Cheminformatics": 5,
+    "QSAR & ADMET": 5,
+    "Computational Chemistry": 4,
+    "Bayesian Optimization & Active Learning": 6,
+    "Uncertainty Quantification": 6,
+    "Molecular Representation Learning": 6,
 }
 
 KEYWORDS = [

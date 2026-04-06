@@ -1,6 +1,12 @@
 import ollama
 
-from config import ENABLE_SUMMARY_QA, MODEL_NAME
+from config import (
+    ENABLE_SUMMARY_QA,
+    FALLBACK_MODEL_NAME,
+    MODEL_NAME,
+    OLLAMA_FALLBACK_NUM_PREDICT,
+    OLLAMA_NUM_PREDICT,
+)
 from evidence_selector import build_summary_payload
 from security import safe_source_block
 
@@ -87,17 +93,26 @@ def truncate_text(text, max_chars=8000):
     return text
 
 
-def _ollama_chat(prompt, max_retries=2):
+def _is_memory_error(error):
+    message = str(error).lower()
+    return (
+        "requires more system memory" in message
+        or "not enough memory" in message
+        or "insufficient memory" in message
+    )
+
+
+def _chat_with_model(prompt, model_name, num_predict, max_retries):
     last_error = None
 
     for attempt in range(max_retries + 1):
         try:
             response = ollama.chat(
-                model=MODEL_NAME,
+                model=model_name,
                 messages=[{"role": "user", "content": prompt}],
                 options={
                     "temperature": 0.2,
-                    "num_predict": 320,
+                    "num_predict": num_predict,
                 },
             )
             return response["message"]["content"].strip()
@@ -107,6 +122,28 @@ def _ollama_chat(prompt, max_retries=2):
                 raise
 
     raise last_error
+
+
+def _ollama_chat(prompt, max_retries=2):
+    try:
+        return _chat_with_model(
+            prompt,
+            model_name=MODEL_NAME,
+            num_predict=OLLAMA_NUM_PREDICT,
+            max_retries=max_retries,
+        )
+    except Exception as error:
+        if FALLBACK_MODEL_NAME and FALLBACK_MODEL_NAME != MODEL_NAME and _is_memory_error(error):
+            print(
+                f"Primary Ollama model '{MODEL_NAME}' exceeded available memory; retrying with fallback model '{FALLBACK_MODEL_NAME}'."
+            )
+            return _chat_with_model(
+                prompt,
+                model_name=FALLBACK_MODEL_NAME,
+                num_predict=OLLAMA_FALLBACK_NUM_PREDICT,
+                max_retries=0,
+            )
+        raise
 
 
 def _extractive_fallback_summary(paper):
@@ -164,7 +201,11 @@ Provide only the number (1-10), no explanation.
 """
 
     try:
-        response = ollama.generate(model=MODEL_NAME, prompt=prompt)
+        response = ollama.generate(
+            model=MODEL_NAME,
+            prompt=prompt,
+            options={"num_predict": 8, "temperature": 0.0},
+        )
         score = int(response["response"].strip())
         return min(max(score, 1), 10)
     except Exception:

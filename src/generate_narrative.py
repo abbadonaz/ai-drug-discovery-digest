@@ -1,6 +1,11 @@
 import ollama
 
-from config import MODEL_NAME
+from config import (
+    FALLBACK_MODEL_NAME,
+    MODEL_NAME,
+    OLLAMA_FALLBACK_NUM_PREDICT,
+    OLLAMA_NUM_PREDICT,
+)
 from security import safe_source_block
 
 
@@ -49,6 +54,15 @@ def build_trend_input(summaries):
     return "\n---\n".join(chunks)
 
 
+def _is_memory_error(error):
+    message = str(error).lower()
+    return (
+        "requires more system memory" in message
+        or "not enough memory" in message
+        or "insufficient memory" in message
+    )
+
+
 def generate_weekly_narrative(summaries):
     featured = [paper for paper in summaries if not paper.get("brief", False)]
     if not featured:
@@ -64,8 +78,22 @@ def generate_weekly_narrative(summaries):
         response = ollama.chat(
             model=MODEL_NAME,
             messages=[{"role": "user", "content": prompt}],
+            options={"temperature": 0.2, "num_predict": OLLAMA_NUM_PREDICT},
         )
         return response["message"]["content"].strip()
     except Exception as error:
+        if FALLBACK_MODEL_NAME and FALLBACK_MODEL_NAME != MODEL_NAME and _is_memory_error(error):
+            print(
+                f"Weekly narrative retrying with fallback Ollama model '{FALLBACK_MODEL_NAME}' due to memory pressure."
+            )
+            try:
+                response = ollama.chat(
+                    model=FALLBACK_MODEL_NAME,
+                    messages=[{"role": "user", "content": prompt}],
+                    options={"temperature": 0.2, "num_predict": OLLAMA_FALLBACK_NUM_PREDICT},
+                )
+                return response["message"]["content"].strip()
+            except Exception as fallback_error:
+                print(f"Weekly narrative fallback model failed: {fallback_error}")
         print(f"Weekly narrative generation failed: {error}")
         return "This week's featured papers emphasize practical model evaluation, better scientific evidence selection, and methods that may improve decision-making in drug discovery workflows."

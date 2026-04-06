@@ -6,12 +6,14 @@ from embeddings import cosine_similarity, encode_texts
 INTEREST_TEXT = """
 ai for drug discovery, ai for cheminformatics, molecular machine learning,
 drug discovery, cheminformatics, computer-aided drug design,
+computational chemistry, molecular dynamics, quantum chemistry,
 uncertainty quantification, uncertainty-aware molecular modeling,
 bayesian optimization, active learning, closed-loop molecular design,
 molecular representation learning, graph neural networks for molecules,
 graph transformers for molecules, molecular embeddings, molecular language models,
 self-supervised learning for molecules, qsar, admet,
-virtual screening, structure-based drug design, binding affinity prediction
+virtual screening, structure-based drug design, binding affinity prediction,
+free energy perturbation, protein-ligand modeling
 """
 
 
@@ -25,10 +27,10 @@ FIELD_KEYWORDS = {
     "binding affinity": 4,
     "protein-ligand": 3,
     "molecular docking": 3,
-    "computational chemistry": 2,
-    "quantum chemistry": 1,
-    "molecular dynamics": 1,
-    "free energy": 2,
+    "computational chemistry": 3,
+    "quantum chemistry": 2,
+    "molecular dynamics": 2,
+    "free energy": 3,
     "free energy perturbation": 4,
     "fep": 4,
     "qsar": 4,
@@ -36,35 +38,35 @@ FIELD_KEYWORDS = {
     "admet": 4,
     "property prediction": 4,
     "molecular property prediction": 4,
-    "uncertainty quantification": 7,
-    "uncertainty estimation": 6,
-    "uncertainty-aware": 6,
-    "conformal prediction": 7,
-    "calibration": 5,
-    "confidence estimation": 5,
-    "predictive uncertainty": 6,
-    "out-of-distribution": 5,
-    "distribution shift": 5,
-    "bayesian optimization": 7,
-    "active learning": 7,
-    "closed-loop": 5,
-    "acquisition function": 5,
-    "multi-fidelity optimization": 5,
-    "molecular representation": 7,
-    "representation learning": 6,
-    "graph neural network": 6,
-    "graph transformer": 6,
-    "message passing neural network": 6,
-    "equivariant graph neural network": 6,
-    "molecular embedding": 6,
+    "uncertainty quantification": 6,
+    "uncertainty estimation": 5,
+    "uncertainty-aware": 5,
+    "conformal prediction": 6,
+    "calibration": 4,
+    "confidence estimation": 4,
+    "predictive uncertainty": 5,
+    "out-of-distribution": 4,
+    "distribution shift": 4,
+    "bayesian optimization": 6,
+    "active learning": 6,
+    "closed-loop": 4,
+    "acquisition function": 4,
+    "multi-fidelity optimization": 4,
+    "molecular representation": 6,
+    "representation learning": 5,
+    "graph neural network": 5,
+    "graph transformer": 5,
+    "message passing neural network": 5,
+    "equivariant graph neural network": 5,
+    "molecular embedding": 5,
     "molecular fingerprint": 2,
-    "molecular machine learning": 7,
-    "molecular language model": 7,
-    "foundation model for molecules": 7,
-    "pretrained molecular model": 6,
-    "self-supervised": 5,
-    "contrastive learning": 5,
-    "smiles encoder": 5,
+    "molecular machine learning": 6,
+    "molecular language model": 6,
+    "foundation model for molecules": 6,
+    "pretrained molecular model": 5,
+    "self-supervised": 4,
+    "contrastive learning": 4,
+    "smiles encoder": 4,
 }
 
 NEGATIVE_KEYWORDS = {
@@ -169,7 +171,7 @@ def field_signal_score(paper):
         "foundation model for molecules",
         "self-supervised",
     ]
-    ai_bonus = sum(1 for term in ai_core_terms if term in title_lower) * 3
+    ai_bonus = sum(1 for term in ai_core_terms if term in title_lower) * 2
 
     return (
         1.8 * weighted_keyword_score(title, FIELD_KEYWORDS)
@@ -194,7 +196,7 @@ def is_generic_biomedical_match(text):
 
 def filter_relevant_papers(
     papers,
-    threshold=0.24,
+    threshold=0.23,
     strong_semantic_threshold=0.30,
     fallback_min_results=12,
 ):
@@ -225,9 +227,9 @@ def filter_relevant_papers(
         best_topic = classify_topic(paper) if topic_scores else "Other"
 
         combined_score = (
-            0.20 * semantic_score
-            + 0.038 * positive_score
-            + 0.075 * topic_total
+            0.24 * semantic_score
+            + 0.034 * positive_score
+            + 0.068 * topic_total
             - 0.020 * negative_score
         )
 
