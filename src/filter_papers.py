@@ -4,18 +4,20 @@ from embeddings import cosine_similarity, encode_texts
 
 
 INTEREST_TEXT = """
+ai for drug discovery, ai for cheminformatics, molecular machine learning,
 drug discovery, cheminformatics, computer-aided drug design,
-computational chemistry, molecular dynamics, quantum chemistry,
 uncertainty quantification, uncertainty-aware molecular modeling,
-bayesian optimization, active learning, molecular representation learning,
-graph neural networks for molecules, molecular embeddings, qsar, admet,
+bayesian optimization, active learning, closed-loop molecular design,
+molecular representation learning, graph neural networks for molecules,
+graph transformers for molecules, molecular embeddings, molecular language models,
+self-supervised learning for molecules, qsar, admet,
 virtual screening, structure-based drug design, binding affinity prediction
 """
 
 
 FIELD_KEYWORDS = {
     "drug discovery": 4,
-    "cheminformatics": 4,
+    "cheminformatics": 5,
     "computer-aided drug design": 4,
     "cadd": 3,
     "virtual screening": 4,
@@ -23,28 +25,46 @@ FIELD_KEYWORDS = {
     "binding affinity": 4,
     "protein-ligand": 3,
     "molecular docking": 3,
-    "computational chemistry": 4,
-    "quantum chemistry": 3,
-    "molecular dynamics": 3,
-    "free energy": 3,
+    "computational chemistry": 2,
+    "quantum chemistry": 1,
+    "molecular dynamics": 1,
+    "free energy": 2,
     "free energy perturbation": 4,
     "fep": 4,
     "qsar": 4,
     "qspr": 4,
     "admet": 4,
-    "property prediction": 3,
-    "uncertainty quantification": 4,
-    "uncertainty estimation": 3,
-    "conformal prediction": 3,
-    "calibration": 2,
-    "bayesian optimization": 4,
-    "active learning": 4,
-    "molecular representation": 4,
-    "representation learning": 3,
-    "graph neural network": 3,
-    "graph transformer": 3,
-    "molecular embedding": 3,
+    "property prediction": 4,
+    "molecular property prediction": 4,
+    "uncertainty quantification": 7,
+    "uncertainty estimation": 6,
+    "uncertainty-aware": 6,
+    "conformal prediction": 7,
+    "calibration": 5,
+    "confidence estimation": 5,
+    "predictive uncertainty": 6,
+    "out-of-distribution": 5,
+    "distribution shift": 5,
+    "bayesian optimization": 7,
+    "active learning": 7,
+    "closed-loop": 5,
+    "acquisition function": 5,
+    "multi-fidelity optimization": 5,
+    "molecular representation": 7,
+    "representation learning": 6,
+    "graph neural network": 6,
+    "graph transformer": 6,
+    "message passing neural network": 6,
+    "equivariant graph neural network": 6,
+    "molecular embedding": 6,
     "molecular fingerprint": 2,
+    "molecular machine learning": 7,
+    "molecular language model": 7,
+    "foundation model for molecules": 7,
+    "pretrained molecular model": 6,
+    "self-supervised": 5,
+    "contrastive learning": 5,
+    "smiles encoder": 5,
 }
 
 NEGATIVE_KEYWORDS = {
@@ -87,9 +107,12 @@ COMPUTATIONAL_CONTEXT_TERMS = [
     "admet",
     "representation learning",
     "graph neural network",
+    "graph transformer",
+    "molecular machine learning",
     "bayesian optimization",
     "active learning",
     "uncertainty",
+    "conformal prediction",
 ]
 
 GENERIC_BIOMEDICAL_TERMS = [
@@ -128,9 +151,30 @@ def weighted_keyword_score(text, keywords):
 def field_signal_score(paper):
     title = paper.get("title", "")
     abstract = paper.get("abstract", "")
+    title_lower = title.lower()
+
+    ai_core_terms = [
+        "active learning",
+        "bayesian optimization",
+        "uncertainty quantification",
+        "uncertainty estimation",
+        "conformal prediction",
+        "molecular representation",
+        "representation learning",
+        "molecular machine learning",
+        "graph neural network",
+        "graph transformer",
+        "molecular embedding",
+        "molecular language model",
+        "foundation model for molecules",
+        "self-supervised",
+    ]
+    ai_bonus = sum(1 for term in ai_core_terms if term in title_lower) * 3
+
     return (
         1.8 * weighted_keyword_score(title, FIELD_KEYWORDS)
         + weighted_keyword_score(abstract, FIELD_KEYWORDS)
+        + ai_bonus
     )
 
 
@@ -150,7 +194,7 @@ def is_generic_biomedical_match(text):
 
 def filter_relevant_papers(
     papers,
-    threshold=0.22,
+    threshold=0.24,
     strong_semantic_threshold=0.30,
     fallback_min_results=12,
 ):
@@ -181,9 +225,9 @@ def filter_relevant_papers(
         best_topic = classify_topic(paper) if topic_scores else "Other"
 
         combined_score = (
-            0.30 * semantic_score
-            + 0.030 * positive_score
-            + 0.060 * topic_total
+            0.20 * semantic_score
+            + 0.038 * positive_score
+            + 0.075 * topic_total
             - 0.020 * negative_score
         )
 

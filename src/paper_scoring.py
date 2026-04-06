@@ -1,25 +1,32 @@
 TOPIC_SCORES = {
-    "QSAR & Property Prediction": 3,
-    "Docking & Structure-Based Design": 3,
+    "Drug Discovery & Cheminformatics": 4,
+    "QSAR & ADMET": 4,
     "Computational Chemistry": 2,
-    "Bayesian Optimization & Active Learning": 2,
-    "Uncertainty Quantification": 1,
-    "Generative Chemistry": 2,
-    "Synthesis-Aware Design": 2,
+    "Bayesian Optimization & Active Learning": 7,
+    "Uncertainty Quantification": 7,
+    "Molecular Representation Learning": 7,
 }
 
 KEYWORDS = [
     "drug discovery",
-    "docking",
+    "cheminformatics",
     "binding affinity",
     "protein-ligand",
     "lead optimization",
     "qsar",
     "admet",
-    "molecular generation",
-    "generative",
-    "synthesis",
     "active learning",
+    "bayesian optimization",
+    "uncertainty quantification",
+    "conformal prediction",
+    "calibration",
+    "molecular representation",
+    "representation learning",
+    "molecular machine learning",
+    "graph neural network",
+    "graph transformer",
+    "molecular embedding",
+    "molecular language model",
     "fep",
     "fep calculation",
     "free energy perturbation",
@@ -38,13 +45,18 @@ NOVELTY = [
 def score_paper(paper):
     score = TOPIC_SCORES.get(paper.get("topic", "Other"), 0)
     text = (paper.get("tldr") or "").lower()
+    title = (paper.get("title") or "").lower()
 
     for keyword in KEYWORDS:
         if keyword in text:
             score += 2
+        if keyword in title:
+            score += 3
 
     for keyword in NOVELTY:
         if keyword in text:
+            score += 1
+        if keyword in title:
             score += 1
 
     return score

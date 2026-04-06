@@ -1,119 +1,14 @@
 [
   {
-    "title": "ADMET Profiling of a Mitochondria-Focused Compound Library: Physicochemical Baselines, Membrane Permeability Classification, and Tier-Based Filtering for AI-Driven Drug Discovery",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001519/v1",
-    "topic": "QSAR & ADMET",
-    "sentences": [
-      "ADMET Profiling of a Mitochondria-Focused Compound Library: Physicochemical Baselines, Membrane Permeability Classification, and Tier-Based Filtering for AI-Driven Drug Discovery"
-    ],
-    "context": "ADMET Profiling of a Mitochondria-Focused Compound Library: Physicochemical Baselines, Membrane Permeability Classification, and Tier-Based Filtering for AI-Driven Drug Discovery",
-    "sections": {
-      "abstract": "ADMET Profiling of a Mitochondria-Focused Compound Library: Physicochemical Baselines, Membrane Permeability Classification, and Tier-Based Filtering for AI-Driven Drug Discovery"
-    }
-  },
-  {
-    "title": "Molecular-Level Insights into Alkali-Metal Cation–CO2 Interactions at Electrified Copper Interfaces by Molecular Dynamics Simulations",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001527/v1",
+    "title": "Implementation and Validation of Titratable Cysteine in GROMACS-based Constant-pH Molecular Dynamics",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001474/v1",
     "topic": "Computational Chemistry",
     "sentences": [
-      "Molecular-Level Insights into Alkali-Metal Cation–CO2 Interactions at Electrified Copper Interfaces by Molecular Dynamics Simulations"
+      "Implementation and Validation of Titratable Cysteine in GROMACS-based Constant-pH Molecular Dynamics"
     ],
-    "context": "Molecular-Level Insights into Alkali-Metal Cation–CO2 Interactions at Electrified Copper Interfaces by Molecular Dynamics Simulations",
+    "context": "Implementation and Validation of Titratable Cysteine in GROMACS-based Constant-pH Molecular Dynamics",
     "sections": {
-      "abstract": "Molecular-Level Insights into Alkali-Metal Cation–CO2 Interactions at Electrified Copper Interfaces by Molecular Dynamics Simulations"
-    }
-  },
-  {
-    "title": "Large Language Model-Guided Bayesian Optimization of Ag+ Doping in CdSe Nanoplatelets Enables Deterministic Optical Prediction across the Gamut",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001652/v1",
-    "topic": "Bayesian Optimization & Active Learning",
-    "sentences": [
-      "Large Language Model-Guided Bayesian Optimization of Ag+ Doping in CdSe Nanoplatelets Enables Deterministic Optical Prediction across the Gamut"
-    ],
-    "context": "Large Language Model-Guided Bayesian Optimization of Ag+ Doping in CdSe Nanoplatelets Enables Deterministic Optical Prediction across the Gamut",
-    "sections": {
-      "abstract": "Large Language Model-Guided Bayesian Optimization of Ag+ Doping in CdSe Nanoplatelets Enables Deterministic Optical Prediction across the Gamut"
-    }
-  },
-  {
-    "title": "In Silico Pharmacological Profiling of MitoCorex Candidate Molecules: ADMET, Target Engagement, Selectivity, and Stability Analysis",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001670/v1",
-    "topic": "QSAR & ADMET",
-    "sentences": [
-      "In Silico Pharmacological Profiling of MitoCorex Candidate Molecules: ADMET, Target Engagement, Selectivity, and Stability Analysis"
-    ],
-    "context": "In Silico Pharmacological Profiling of MitoCorex Candidate Molecules: ADMET, Target Engagement, Selectivity, and Stability Analysis",
-    "sections": {
-      "abstract": "In Silico Pharmacological Profiling of MitoCorex Candidate Molecules: ADMET, Target Engagement, Selectivity, and Stability Analysis"
-    }
-  },
-  {
-    "title": "Pan-Mitochondrial Privileged Scaffolds: Adenine, Pyridine, and a 7H-Purine Bioisostere as Multi-Target Fragments in the MitoCoreX Drug Discovery Campaign",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001671/v1",
-    "topic": "Drug Discovery & Cheminformatics",
-    "sentences": [
-      "Pan-Mitochondrial Privileged Scaffolds: Adenine, Pyridine, and a 7H-Purine Bioisostere as Multi-Target Fragments in the MitoCoreX Drug Discovery Campaign"
-    ],
-    "context": "Pan-Mitochondrial Privileged Scaffolds: Adenine, Pyridine, and a 7H-Purine Bioisostere as Multi-Target Fragments in the MitoCoreX Drug Discovery Campaign",
-    "sections": {
-      "abstract": "Pan-Mitochondrial Privileged Scaffolds: Adenine, Pyridine, and a 7H-Purine Bioisostere as Multi-Target Fragments in the MitoCoreX Drug Discovery Campaign"
-    }
-  },
-  {
-    "title": "STING, guided active learning for Machine Learned Interatomic Potentials examined on Lithium Thiophosphate solid state electrolytes",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001544/v1",
-    "topic": "Bayesian Optimization & Active Learning",
-    "sentences": [
-      "STING, guided active learning for Machine Learned Interatomic Potentials examined on Lithium Thiophosphate solid state electrolytes"
-    ],
-    "context": "STING, guided active learning for Machine Learned Interatomic Potentials examined on Lithium Thiophosphate solid state electrolytes",
-    "sections": {
-      "abstract": "STING, guided active learning for Machine Learned Interatomic Potentials examined on Lithium Thiophosphate solid state electrolytes"
-    }
-  },
-  {
-    "title": "A Continuous-Space Analytical Framework for Committor Functions from Molecular Dynamics",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001632/v1",
-    "topic": "Computational Chemistry",
-    "sentences": [
-      "A Continuous-Space Analytical Framework for Committor Functions from Molecular Dynamics"
-    ],
-    "context": "A Continuous-Space Analytical Framework for Committor Functions from Molecular Dynamics",
-    "sections": {
-      "abstract": "A Continuous-Space Analytical Framework for Committor Functions from Molecular Dynamics"
-    }
-  },
-  {
-    "title": "Water molecular dynamics during dough heating by Fast Field Cycling Nuclear Magnetic Resonance",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001606/v1",
-    "topic": "Computational Chemistry",
-    "sentences": [
-      "Water molecular dynamics during dough heating by Fast Field Cycling Nuclear Magnetic Resonance"
-    ],
-    "context": "Water molecular dynamics during dough heating by Fast Field Cycling Nuclear Magnetic Resonance",
-    "sections": {
-      "abstract": "Water molecular dynamics during dough heating by Fast Field Cycling Nuclear Magnetic Resonance"
-    }
-  },
-  {
-    "title": "Stochastic neural dynamic modeling and analysis under environmental noise for exploring the production of K-complexes.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41940263/",
-    "topic": "Computational Chemistry",
-    "sentences": [
-      "UNLABELLED: K-complexes (KCs), sleep-specific neuroprotective waveforms, demonstrate significant modulation by environmental noise (EN).",
-      "However, the principles governing how EN modulates KCs occurrence remain poorly understood.",
-      "To address this gap, we develop a stochastic neural dynamic model incorporating EN (SNDM-KCs) and explore the modulation effects of EN on KCs from the perspective of stochastic dynamics.",
-      "The Gaussian colored noise (GCN) is first applied to model EN and introduced into the deterministic Costa neural mass model to build the SNDM-KCs.",
-      "Next, bifurcation analysis is conducted to demonstrate that the prerequisite for occurrence of KCs corresponds to a large-amplitude departure from a stable equilibrium induced by GCN in the dynamic system.",
-      "Subsequently, we study the impact of GCN on KCs by integrating SNDM-KCs with defined two metrics to quantitatively measure the elicitation variation of KCs.",
-      "Numerical simulations suggest that both KCs occurrence probability and rate increase with noise intensity D and correlation rate [Formula: see text] of GCN.",
-      "Meanwhile, building on stochastic escape theory, we establish the relationship between model behaviour and stochastic escape metrics: first escape probability (FEP) and the mean first exit time (MFET), to investigate how EN modulates KCs through the lens of stochastic dynamics.",
-      "The results demonstrate that as the escape probability of the system rises, the occurrence probability of KC increases accordingly.",
-      "Meanwhile, a shorter time to escape from the safe domain indicates a faster occurrence rate of KCs."
-    ],
-    "context": "UNLABELLED: K-complexes (KCs), sleep-specific neuroprotective waveforms, demonstrate significant modulation by environmental noise (EN). However, the principles governing how EN modulates KCs occurrence remain poorly understood. To address this gap, we develop a stochastic neural dynamic model incorporating EN (SNDM-KCs) and explore the modulation effects of EN on KCs from the perspective of stochastic dynamics. The Gaussian colored noise (GCN) is first applied to model EN and introduced into the deterministic Costa neural mass model to build the SNDM-KCs. Next, bifurcation analysis is conducted to demonstrate that the prerequisite for occurrence of KCs corresponds to a large-amplitude departure from a stable equilibrium induced by GCN in the dynamic system. Subsequently, we study the impact of GCN on KCs by integrating SNDM-KCs with defined two metrics to quantitatively measure the elicitation variation of KCs. Numerical simulations suggest that both KCs occurrence probability and rate increase with noise intensity D and correlation rate [Formula: see text] of GCN. Meanwhile, building on stochastic escape theory, we establish the relationship between model behaviour and stochastic escape metrics: first escape probability (FEP) and the mean first exit time (MFET), to investigate how EN modulates KCs through the lens of stochastic dynamics. The results demonstrate that as the escape probability of the system rises, the occurrence probability of KC increases accordingly. Meanwhile, a shorter time to escape from the safe domain indicates a faster occurrence rate of KCs. Our work provides a novel dynamical insight for investigating the principles governing how EN modulates KCs occurrence. SUPPLEMENTARY INFORMATION: The online version contains supplementary material available at 10.1007/s11571-026-10440-4.",
-    "sections": {
-      "abstract": "UNLABELLED: K-complexes (KCs), sleep-specific neuroprotective waveforms, demonstrate significant modulation by environmental noise (EN). However, the principles governing how EN modulates KCs occurrence remain poorly understood. To address this gap, we develop a stochastic neural dynamic model incorporating EN (SNDM-KCs) and explore the modulation effects of EN on KCs from the perspective of stochastic dynamics. The Gaussian colored noise (GCN) is first applied to model EN and introduced into the deterministic Costa neural mass model to build the SNDM-KCs. Next, bifurcation analysis is conducted to demonstrate that the prerequisite for occurrence of KCs corresponds to a large-amplitude departure from a stable equilibrium induced by GCN in the dynamic system. Subsequently, we study the impact of GCN on KCs by integrating SNDM-KCs with defined two metrics to quantitatively measure the elicitation variation of KCs. Numerical simulations suggest that both KCs occurrence probability and rate increase with noise intensity D and correlation rate [Formula: see text] of GCN. Meanwhile, building on stochastic escape theory, we establish the relationship between model behaviour and stochastic escape metrics: first escape probability (FEP) and the mean first exit time (MFET), to investigate how EN modulates KCs through the lens of stochastic dynamics. The results demonstrate that as the escape probability of the system rises, the occurrence probability of KC increases accordingly. Meanwhile, a shorter time to escape from the safe domain indicates a faster occurrence rate of KCs. Our work provides a novel dynamical insight for investigating the principles governing how EN modulates KCs occurrence. SUPPLEMENTARY INFORMATION: The online version contains supplementary material available at 10.1007/s11571-026-10440-4."
+      "abstract": "Implementation and Validation of Titratable Cysteine in GROMACS-based Constant-pH Molecular Dynamics"
     }
   }
 ]
