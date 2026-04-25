@@ -13,6 +13,28 @@ SECTION_PATTERNS = {
 }
 
 
+def _trim_section(text):
+    snippet = (text or "").strip()
+    if len(snippet) <= MAX_SECTION_CHARS:
+        return snippet
+
+    trimmed = snippet[:MAX_SECTION_CHARS]
+    boundaries = [
+        trimmed.rfind(". "),
+        trimmed.rfind("? "),
+        trimmed.rfind("! "),
+        trimmed.rfind(".\n"),
+        trimmed.rfind("?\n"),
+        trimmed.rfind("!\n"),
+    ]
+    boundary = max(boundaries)
+
+    if boundary >= int(MAX_SECTION_CHARS * 0.6):
+        trimmed = trimmed[: boundary + 1]
+
+    return trimmed.strip()
+
+
 def extract_sections(text):
     if not text:
         return {}
@@ -32,7 +54,7 @@ def extract_sections(text):
         end = matches[index + 1][0] if index + 1 < len(matches) else len(text)
         snippet = text[start:end].strip()
         if snippet:
-            sections[name] = snippet[:MAX_SECTION_CHARS]
+            sections[name] = _trim_section(snippet)
 
     return sections
 

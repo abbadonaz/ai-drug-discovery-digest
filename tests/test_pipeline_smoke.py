@@ -20,6 +20,7 @@ MODULES = [
     "pdf_extract",
     "pdf_sections",
     "run_pipeline",
+    "research_taxonomy",
     "security",
     "sentence_ranker",
     "topics",

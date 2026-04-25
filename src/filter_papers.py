@@ -1,137 +1,18 @@
-from topics import classify_topic, score_topics
 from functools import lru_cache
+
 from embeddings import cosine_similarity, encode_texts
+from research_taxonomy import (
+    AI_CORE_TITLE_TERMS,
+    COMPUTATIONAL_CONTEXT_TERMS,
+    FIELD_KEYWORDS,
+    GENERIC_BIOMEDICAL_TERMS,
+    NEGATIVE_KEYWORDS,
+    build_interest_text,
+)
+from topics import classify_topic, score_topics
 
 
-INTEREST_TEXT = """
-ai for drug discovery, ai for cheminformatics, molecular machine learning,
-drug discovery, cheminformatics, computer-aided drug design,
-computational chemistry, molecular dynamics, quantum chemistry,
-uncertainty quantification, uncertainty-aware molecular modeling,
-bayesian optimization, active learning, closed-loop molecular design,
-molecular representation learning, graph neural networks for molecules,
-graph transformers for molecules, molecular embeddings, molecular language models,
-self-supervised learning for molecules, qsar, admet,
-virtual screening, structure-based drug design, binding affinity prediction,
-free energy perturbation, protein-ligand modeling
-"""
-
-
-FIELD_KEYWORDS = {
-    "drug discovery": 4,
-    "cheminformatics": 5,
-    "computer-aided drug design": 4,
-    "cadd": 3,
-    "virtual screening": 4,
-    "structure-based drug design": 4,
-    "binding affinity": 4,
-    "protein-ligand": 3,
-    "molecular docking": 3,
-    "computational chemistry": 3,
-    "quantum chemistry": 2,
-    "molecular dynamics": 2,
-    "free energy": 3,
-    "free energy perturbation": 4,
-    "fep": 4,
-    "qsar": 4,
-    "qspr": 4,
-    "admet": 4,
-    "property prediction": 4,
-    "molecular property prediction": 4,
-    "uncertainty quantification": 6,
-    "uncertainty estimation": 5,
-    "uncertainty-aware": 5,
-    "conformal prediction": 6,
-    "calibration": 4,
-    "confidence estimation": 4,
-    "predictive uncertainty": 5,
-    "out-of-distribution": 4,
-    "distribution shift": 4,
-    "bayesian optimization": 6,
-    "active learning": 6,
-    "closed-loop": 4,
-    "acquisition function": 4,
-    "multi-fidelity optimization": 4,
-    "molecular representation": 6,
-    "representation learning": 5,
-    "graph neural network": 5,
-    "graph transformer": 5,
-    "message passing neural network": 5,
-    "equivariant graph neural network": 5,
-    "molecular embedding": 5,
-    "molecular fingerprint": 2,
-    "molecular machine learning": 6,
-    "molecular language model": 6,
-    "foundation model for molecules": 6,
-    "pretrained molecular model": 5,
-    "self-supervised": 4,
-    "contrastive learning": 4,
-    "smiles encoder": 4,
-}
-
-NEGATIVE_KEYWORDS = {
-    "polymer": 4,
-    "polymers": 4,
-    "battery": 5,
-    "catalyst": 4,
-    "catalysis": 4,
-    "surface analysis": 4,
-    "xps": 6,
-    "spectra": 3,
-    "spectroscopy": 4,
-    "interatomic potential": 4,
-    "defect": 4,
-    "strong coupling": 4,
-    "photonic": 3,
-    "reaction kinetics": 3,
-    "materials": 4,
-    "semiconductor": 5,
-    "gas-phase": 3,
-    "solvent angular": 5,
-    "polymeric": 4,
-}
-
-COMPUTATIONAL_CONTEXT_TERMS = [
-    "drug discovery",
-    "computer-aided drug design",
-    "cadd",
-    "virtual screening",
-    "structure-based drug design",
-    "binding affinity",
-    "protein-ligand",
-    "cheminformatics",
-    "computational",
-    "in silico",
-    "molecular dynamics",
-    "free energy",
-    "fep",
-    "qsar",
-    "admet",
-    "representation learning",
-    "graph neural network",
-    "graph transformer",
-    "molecular machine learning",
-    "bayesian optimization",
-    "active learning",
-    "uncertainty",
-    "conformal prediction",
-]
-
-GENERIC_BIOMEDICAL_TERMS = [
-    "bioinformatics analysis",
-    "network pharmacology",
-    "single-cell",
-    "transcriptome",
-    "transcriptomics",
-    "gene expression",
-    "immune infiltration",
-    "immune microenvironment",
-    "mendelian randomization",
-    "prognostic",
-    "prognosis",
-    "biomarker",
-    "gut microbiota",
-]
+INTEREST_TEXT = build_interest_text()
 
 
 @lru_cache(maxsize=1)
@@ -155,23 +36,7 @@ def field_signal_score(paper):
     abstract = paper.get("abstract", "")
     title_lower = title.lower()
 
-    ai_core_terms = [
-        "active learning",
-        "bayesian optimization",
-        "uncertainty quantification",
-        "uncertainty estimation",
-        "conformal prediction",
-        "molecular representation",
-        "representation learning",
-        "molecular machine learning",
-        "graph neural network",
-        "graph transformer",
-        "molecular embedding",
-        "molecular language model",
-        "foundation model for molecules",
-        "self-supervised",
-    ]
-    ai_bonus = sum(1 for term in ai_core_terms if term in title_lower) * 2
+    ai_bonus = sum(1 for term in AI_CORE_TITLE_TERMS if term in title_lower) * 2
 
     return (
         1.8 * weighted_keyword_score(title, FIELD_KEYWORDS)
@@ -203,16 +68,15 @@ def filter_relevant_papers(
     """
     Filter for field relevance rather than scientific merit.
     The goal is to keep papers that clearly belong to the target domains:
-    drug discovery, cheminformatics, computational chemistry,
-    uncertainty quantification, active learning, bayesian optimization,
-    and molecular representation learning.
+    computational drug discovery, cheminformatics, QSAR/ADMET,
+    generative chemistry, uncertainty quantification,
+    bayesian optimization, and molecular representation learning.
     """
 
     interest_embedding = get_interest_embedding()
     texts = [f"{paper['title']} {paper['abstract']}" for paper in papers]
     embeddings = encode_texts(texts)
     filtered = []
-
     candidates = []
 
     for paper, text, emb in zip(papers, texts, embeddings):

@@ -8,10 +8,16 @@ from fetch_pubmed import fetch_pubmed_papers
 from generate_digest import generate_digest_html, render_markdown
 from generate_narrative import build_trend_input
 from pdf_sections import build_paper_context, extract_sections
+from topics import classify_topic
 
 
 def test_keyword_match_identifies_domain_language():
     assert keyword_match("A study of virtual screening and ADMET modeling")
+
+
+def test_keyword_match_requires_molecular_context_for_generic_ml_terms():
+    assert keyword_match("Conformal prediction for molecular property prediction in drug discovery")
+    assert not keyword_match("Conformal prediction for medical image segmentation")
 
 
 def test_fetch_chemrxiv_papers_handles_html_and_missing_entries(monkeypatch):
@@ -104,6 +110,19 @@ def test_extract_sections_uses_section_boundaries():
     assert "Conclusion" in context
 
 
+def test_extract_sections_trim_long_sections_at_sentence_boundary():
+    text = (
+        "Abstract "
+        + ("This is a complete scientific sentence with enough detail to stay in the extracted section. " * 120)
+        + "Introduction This introduces the problem. "
+        + "Conclusion This closes the paper."
+    )
+
+    sections = extract_sections(text)
+
+    assert sections["abstract"].endswith(".")
+
+
 def test_generate_digest_html_and_blog_template_render_scientific_layout():
     summaries = [
         {
@@ -148,6 +167,15 @@ def test_build_trend_input_filters_empty_summaries():
 
     assert "Topic: Docking" in context
     assert "Topic: Other" not in context
+
+
+def test_classify_topic_captures_generative_chemistry():
+    topic = classify_topic({
+        "title": "Diffusion models for de novo molecular design",
+        "abstract": "A generative chemistry workflow for molecule optimization and compound design.",
+    })
+
+    assert topic == "Generative Chemistry & Molecular Design"
 
 
 def test_get_pdf_filename_sanitizes_urls():

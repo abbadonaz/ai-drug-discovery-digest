@@ -1,0 +1,921 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Drug Discovery Digest</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #eef3f5;
+            --bg-accent: #dde9ec;
+            --paper: rgba(255, 255, 255, 0.92);
+            --paper-strong: #ffffff;
+            --ink: #13212b;
+            --muted: #51626f;
+            --line: #cad7de;
+            --teal: #0c6b63;
+            --teal-soft: #dff2ee;
+            --slate: #d9e3ea;
+            --gold: #b8892d;
+            --gold-soft: #f5edd7;
+            --shadow: 0 24px 60px rgba(19, 33, 43, 0.10);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top left, rgba(12, 107, 99, 0.10), transparent 30%),
+                radial-gradient(circle at top right, rgba(184, 137, 45, 0.10), transparent 28%),
+                linear-gradient(180deg, var(--bg) 0%, #f7fafb 100%);
+            font-family: Georgia, "Times New Roman", serif;
+            line-height: 1.65;
+        }
+
+        a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .page-shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 28px 18px 72px;
+        }
+
+        .hero {
+            background: linear-gradient(145deg, rgba(255,255,255,0.96), rgba(248,251,252,0.88));
+            border: 1px solid rgba(202, 215, 222, 0.9);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 34px;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(12, 107, 99, 0.12), transparent 45%),
+                linear-gradient(315deg, rgba(184, 137, 45, 0.12), transparent 42%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            position: relative;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--teal-soft);
+            color: var(--teal);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin: 18px 0 10px;
+            font-size: clamp(2.2rem, 4.6vw, 4rem);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .meta-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .meta-chip {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.82);
+            border: 1px solid var(--line);
+        }
+
+        .profile-card {
+            width: min(280px, 100%);
+            background: rgba(255,255,255,0.84);
+            border: 1px solid rgba(202, 215, 222, 0.95);
+            border-radius: 22px;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .profile-card img {
+            width: 76px;
+            height: 76px;
+            border-radius: 18px;
+            display: block;
+            margin-bottom: 14px;
+            box-shadow: 0 10px 24px rgba(19, 33, 43, 0.18);
+        }
+
+        .profile-card strong {
+            display: block;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1rem;
+        }
+
+        .profile-card span {
+            display: block;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+            margin: 6px 0 14px;
+        }
+
+        .profile-card a {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: var(--ink);
+            color: white;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .profile-card a:hover {
+            text-decoration: none;
+            background: var(--teal);
+        }
+
+        .content-frame {
+            background: var(--paper);
+            border: 1px solid rgba(202, 215, 222, 0.92);
+            border-radius: 26px;
+            box-shadow: var(--shadow);
+            padding: 26px;
+        }
+
+        .digest-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(239,245,247,0.95));
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stat-value {
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .section-headline, .section-title {
+            font-family: "Segoe UI", sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            line-height: 1.15;
+            margin: 0 0 12px;
+            letter-spacing: -0.03em;
+        }
+
+        .section-subtitle {
+            margin: 0 0 24px;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .footer {
+            margin-top: 28px;
+            padding: 22px 8px 0;
+            border-top: 1px solid var(--line);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .paper-card {
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            background: var(--paper-strong);
+            margin-bottom: 18px;
+        }
+
+        .must-read-container {
+            margin-bottom: 32px;
+        }
+
+        .must-read-badge {
+            display: inline-block;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .must-read-paper, .insights-container, .optional-section {
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: rgba(255,255,255,0.9);
+            padding: 24px;
+        }
+
+        .must-read-paper {
+            background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(248,252,251,0.92));
+        }
+
+        .must-read-title {
+            margin: 12px 0 14px;
+            font-size: clamp(1.7rem, 3vw, 2.4rem);
+            line-height: 1.18;
+        }
+
+        .must-read-meta, .must-read-action {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .must-read-summary, .insights-body, .paper-summary-featured {
+            color: var(--ink);
+        }
+
+        .must-read-summary p, .insights-body p, .paper-summary-featured p {
+            margin: 0 0 12px;
+        }
+
+        .must-read-summary ul, .insights-body ul, .paper-summary-featured ul {
+            margin: 0 0 12px 20px;
+        }
+
+        .topic-badge, .rank-indicator {
+            display: inline-flex;
+            align-items: center;
+            min-height: 34px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.88rem;
+            border: 1px solid var(--line);
+        }
+
+        .topic-badge {
+            background: var(--teal-soft);
+            color: var(--teal);
+            font-weight: 700;
+        }
+
+        .rank-indicator {
+            background: rgba(255,255,255,0.9);
+            color: var(--muted);
+        }
+
+        .btn-primary, .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--ink);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--teal);
+            border: 1px solid var(--line);
+        }
+
+        .featured-section {
+            margin-top: 34px;
+        }
+
+        .topic-group {
+            margin-top: 28px;
+        }
+
+        .topic-header {
+            margin: 0 0 14px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.15rem;
+            color: var(--teal);
+        }
+
+        .papers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 18px;
+        }
+
+        .paper-card-featured {
+            position: relative;
+            background: rgba(255,255,255,0.94);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 100%;
+        }
+
+        .paper-rank {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .paper-title-featured {
+            margin: 0 0 12px;
+            padding-right: 56px;
+            font-size: 1.15rem;
+            line-height: 1.3;
+        }
+
+        .paper-footer {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .link-read-more {
+            font-weight: 700;
+        }
+
+        .brief-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .brief-topic-title {
+            margin: 0 0 10px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--teal);
+        }
+
+        .brief-item {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .brief-item:last-child {
+            border-bottom: 0;
+        }
+
+        .brief-link {
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+        }
+
+        .paper-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .page-shell {
+                padding: 16px 12px 48px;
+            }
+
+            .hero-inner, .content-frame {
+                padding: 18px;
+            }
+
+            .footer {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="hero">
+            <div class="hero-inner">
+                <div>
+                    <div class="eyebrow">Scientific Literature Intelligence</div>
+                    <h1>AI Drug Discovery Digest</h1>
+                    <p>Weekly literature intelligence for drug discovery, cheminformatics, and molecular AI</p>
+                    <div class="meta-strip">
+                        <div class="meta-chip">Published April 18, 2026</div>
+                        <div class="meta-chip">Sources: arXiv, PubMed, ChemRxiv</div>
+                        <div class="meta-chip">Local summarization with Ollama</div>
+                    </div>
+                </div>
+                <aside class="profile-card">
+                    <img src="https://github.com/abbadonaz.png" alt="GitHub avatar for abbadonaz">
+                    <strong>abbadonaz</strong>
+                    <span>Maintainer of this automated digest for drug discovery and molecular AI.</span>
+                    <a href="https://github.com/abbadonaz">View GitHub Profile</a>
+                </aside>
+            </div>
+        </header>
+
+        <main class="content-frame">
+            
+    <div class="digest-stats">
+        <div class="stat-card">
+            <span class="stat-value">12</span>
+            <span class="stat-label">Featured papers</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">9</span>
+            <span class="stat-label">Additional references</span>
+        </div>
+    </div>
+    
+        <section class="must-read-container">
+            <div class="must-read-badge">Editor's pick</div>
+            <article class="must-read-paper" id="improving-qsar-model-predictions-using-ensembled-heterogenous-features">
+                <div class="must-read-meta">
+                    <span class="topic-badge">QSAR &amp; ADMET</span>
+                    <span class="rank-indicator">Highest ranked paper this week</span>
+                </div>
+                <h2 class="must-read-title">Improving QSAR model predictions using ensembled heterogenous features</h2>
+                <div class="must-read-summary">
+                    <h3>Problem</h3>
+<p>Improving QSAR model predictions using ensembled heterogenous features</p>
+<h3>Method</h3>
+<p>Improving QSAR model predictions using ensembled heterogenous features</p>
+<h3>Dataset / Benchmark</h3>
+<p>Not clearly stated in the extracted evidence.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>Improving QSAR model predictions using ensembled heterogenous features</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Improving QSAR model predictions using ensembled heterogenous features</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                </div>
+                <div class="must-read-action">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001898/v1" class="btn-primary">Read the paper</a>
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001898/v1" class="btn-secondary">Open source record</a>
+                </div>
+            </article>
+        </section>
+        
+    <section class="insights-container">
+        <h2 class="section-headline">Weekly research themes</h2>
+        <p class="section-subtitle">A short editorial synthesis of the strongest scientific directions in this batch.</p>
+        <div class="insights-body">
+            <p>This week's featured papers emphasize practical model evaluation, better scientific evidence selection, and methods that may improve decision-making in drug discovery workflows.</p>
+        </div>
+    </section>
+    
+        <section class="featured-section">
+            <h2 class="section-headline">Featured papers</h2>
+            <p class="section-subtitle">Structured summaries for the most relevant papers after retrieval, filtering, and evidence selection.</p>
+        
+            <div class="topic-group">
+                <h3 class="topic-header">Computational Chemistry</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="lessons-learned-on-obtaining-reliable-conductivity-estimates-from-molecular-dynamics-simulations">
+                    <div class="paper-rank">#2</div>
+                    <h4 class="paper-title-featured">Lessons Learned on Obtaining Reliable Conductivity Estimates from Molecular Dynamics Simulations</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>Lessons Learned on Obtaining Reliable Conductivity Estimates from Molecular Dynamics Simulations</p>
+<h3>Method</h3>
+<p>Lessons Learned on Obtaining Reliable Conductivity Estimates from Molecular Dynamics Simulations</p>
+<h3>Dataset / Benchmark</h3>
+<p>Not clearly stated in the extracted evidence.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>Lessons Learned on Obtaining Reliable Conductivity Estimates from Molecular Dynamics Simulations</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Lessons Learned on Obtaining Reliable Conductivity Estimates from Molecular Dynamics Simulations</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002026/v2" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="lessons-learned-on-obtaining-reliable-conductivity-estimates-from-molecular-dynamics-simulations">
+                    <div class="paper-rank">#3</div>
+                    <h4 class="paper-title-featured">Lessons learned on obtaining reliable conductivity estimates from molecular dynamics simulations</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>Lessons learned on obtaining reliable conductivity estimates from molecular dynamics simulations</p>
+<h3>Method</h3>
+<p>Lessons learned on obtaining reliable conductivity estimates from molecular dynamics simulations</p>
+<h3>Dataset / Benchmark</h3>
+<p>Not clearly stated in the extracted evidence.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>Lessons learned on obtaining reliable conductivity estimates from molecular dynamics simulations</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Lessons learned on obtaining reliable conductivity estimates from molecular dynamics simulations</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002026/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">Drug Discovery &amp; Cheminformatics</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="virtual-screening-and-cellular-validation-of-dolutegravir-as-a-brd9-inhibitor-for-attenuating-pyroptosis-in-peritoneal-mesothelial-cells">
+                    <div class="paper-rank">#4</div>
+                    <h4 class="paper-title-featured">Virtual screening and cellular validation of dolutegravir as a BRD9 inhibitor for attenuating pyroptosis in peritoneal mesothelial cells.</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>Direct binding and inhibitory activity were validated using cellular thermal shift assays, IC50 determination, and molecular docking.</p>
+<h3>Method</h3>
+<p>METHODS: Structure-based virtual screening of 3,447 FDA-approved drugs from the ZINC database identified dolutegravir as a candidate BRD9 inhibitor.</p>
+<h3>Dataset / Benchmark</h3>
+<p>These findings suggest a new therapeutic strategy for preventing peritoneal fibrosis and highlight the potential of computational drug repurposing.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>METHODS: Structure-based virtual screening of 3,447 FDA-approved drugs from the ZINC database identified dolutegravir as a candidate BRD9 inhibitor.</li>
+<li>These findings suggest a new therapeutic strategy for preventing peritoneal fibrosis and highlight the potential of computational drug repurposing.</li>
+<li>Under high-glucose conditions, the effects of dolutegravir on pyroptosis-related signaling and fibrosis markers in human mesothelial cells were assessed by Western blotting, ELISA, RT-qPCR, and flow cytometry.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Under high-glucose conditions, the effects of dolutegravir on pyroptosis-related signaling and fibrosis markers in human mesothelial cells were assessed by Western blotting, ELISA, RT-qPCR, and flow cytometry.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/41943612/" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="modeling-the-sensitivity-of-large-scale-virtual-screening-to-scoring-function-accuracy-artifacts-and-library-composition">
+                    <div class="paper-rank">#5</div>
+                    <h4 class="paper-title-featured">Modeling the sensitivity of large-scale virtual screening to scoring function accuracy, artifacts, and library composition</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>Modeling the sensitivity of large-scale virtual screening to scoring function accuracy, artifacts, and library composition</p>
+<h3>Method</h3>
+<p>Modeling the sensitivity of large-scale virtual screening to scoring function accuracy, artifacts, and library composition</p>
+<h3>Dataset / Benchmark</h3>
+<p>Not clearly stated in the extracted evidence.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>Modeling the sensitivity of large-scale virtual screening to scoring function accuracy, artifacts, and library composition</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Modeling the sensitivity of large-scale virtual screening to scoring function accuracy, artifacts, and library composition</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv-2025-rn75p/v2" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">Molecular Representation Learning</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="beyond-the-laplacian-doubly-stochastic-matrices-for-graph-neural-networks">
+                    <div class="paper-rank">#6</div>
+                    <h4 class="paper-title-featured">Beyond the Laplacian: Doubly Stochastic Matrices for Graph Neural Networks</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>Extensive theoretical and empirical analyses demonstrate that our decoupled architectures operate efficiently in O(K|E|) time and effectively mitigate over-smoothing by bounding Dirichlet energy decay, providing robust empirical validation on homophilic benchmarks.</p>
+<h3>Method</h3>
+<p>For large-scale graphs commonly used in data mining and deep learning, this direct matrix inversion A PREPRINT is computationally impossible and requires too much memory.</p>
+<h3>Dataset / Benchmark</h3>
+<p>Furthermore, because algebraic truncation inherently causes probability mass leakage, we introduce DsmNet-compensate.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>For large-scale graphs commonly used in data mining and deep learning, this direct matrix inversion A PREPRINT is computationally impossible and requires too much memory.</li>
+<li>Furthermore, because algebraic truncation inherently causes probability mass leakage, we introduce DsmNet-compensate.</li>
+<li>To overcome the intractable O(n3) complexity of exact matrix inversion, we first utilize a truncated Neumann series to scalably approximate the DSM, which serves as the foundation for our proposed DsmNet.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>To overcome the intractable O(n3) complexity of exact matrix inversion, we first utilize a truncated Neumann series to scalably approximate the DSM, which serves as the foundation for our proposed DsmNet.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2604.15069v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="how-embeddings-shape-graph-neural-networks-classical-vs-quantum-oriented-node-representations">
+                    <div class="paper-rank">#7</div>
+                    <h4 class="paper-title-featured">How Embeddings Shape Graph Neural Networks: Classical vs Quantum-Oriented Node Representations</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>Experiments on five different TU datasets and on QM9 converted to classification via target binning show clear dataset dependence: quantum-oriented embeddings yield the most consistent gains on structure-driven benchmarks, while social graphs with limited node attributes remain well served by classical baselines.</p>
+<h3>Method</h3>
+<p>This paper provides a controlled benchmark of embedding choices for graph classification, comparing classical baselines with quantumoriented node representations under a unified pipeline.</p>
+<h3>Dataset / Benchmark</h3>
+<p>In practical benchmarks, node attributes may be rich (molecular graphs) or entirely absent (social-network TU datasets such as IMDB variants).</p>
+<h3>Key Findings</h3>
+<ul>
+<li>This paper provides a controlled benchmark of embedding choices for graph classification, comparing classical baselines with quantumoriented node representations under a unified pipeline.</li>
+<li>In practical benchmarks, node attributes may be rich (molecular graphs) or entirely absent (social-network TU datasets such as IMDB variants).</li>
+<li>Our benchmark includes three representative quantum-inspired methods from recent literature: QuOp , QWalkVec , and QPE .</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Our benchmark includes three representative quantum-inspired methods from recent literature: QuOp , QWalkVec , and QPE .</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2604.15273v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">Uncertainty Quantification</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="xfode-explainable-type-2-fuzzy-additive-odes-for-uncertainty-quantification">
+                    <div class="paper-rank">#8</div>
+                    <h4 class="paper-title-featured">xFODE+: Explainable Type-2 Fuzzy Additive ODEs for Uncertainty Quantification</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>on benchmark SysID datasets show that xFODE+ matches FODE in PI quality and achieves comparable accuracy, while providing interpretability.</p>
+<h3>Method</h3>
+<p>Ljung, “Deep learning of dynamic systems using system identification toolbox™,” IFAC-PapersOnLine, vol.</p>
+<h3>Dataset / Benchmark</h3>
+<p>Future work will focus on analyzing the interpretability of the rule consequents and extending the evaluation of xFODE+ to a broader range of datasets.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>Ljung, “Deep learning of dynamic systems using system identification toolbox™,” IFAC-PapersOnLine, vol.</li>
+<li>Future work will focus on analyzing the interpretability of the rule consequents and extending the evaluation of xFODE+ to a broader range of datasets.</li>
+<li>Additive modeling structures can improve interpretability by isolating each dimension’s effect without This work was supported by MathWorks® in part by a Research Grant.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Additive modeling structures can improve interpretability by isolating each dimension’s effect without This work was supported by MathWorks® in part by a Research Grant.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2604.14880v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="iuq-interrogative-uncertainty-quantification-for-long-form-large-language-model-generation">
+                    <div class="paper-rank">#9</div>
+                    <h4 class="paper-title-featured">IUQ: Interrogative Uncertainty Quantification for Long-Form Large Language Model Generation</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>9 AI Assistance Statement The use of AI tools was solely to assist with the linguistic polishing of this manuscript, such as improving grammar, clarity, and readability.</p>
+<h3>Method</h3>
+<p>All conceptual contributions, technical methods, experimental designs, and analyses were developed entirely by the authors without the use of AI.</p>
+<h3>Dataset / Benchmark</h3>
+<p>results across diverse model families and model sizes demonstrate the superior performance of IUQ over two widely used long-form generation datasets.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>All conceptual contributions, technical methods, experimental designs, and analyses were developed entirely by the authors without the use of AI.</li>
+<li>results across diverse model families and model sizes demonstrate the superior performance of IUQ over two widely used long-form generation datasets.</li>
+<li>No attempt is made to acquire information from sources other than publicly available websites and datasets.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>No attempt is made to acquire information from sources other than publicly available websites and datasets.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2604.15109v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="diagnosing-llm-judge-reliability-conformal-prediction-sets-and-transitivity-violations">
+                    <div class="paper-rank">#10</div>
+                    <h4 class="paper-title-featured">Diagnosing LLM Judge Reliability: Conformal Prediction Sets and Transitivity Violations</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>Coherence and relevance show lower violation rates and narrower prediction sets (avg.</p>
+<h3>Method</h3>
+<p>+0.12 +0.22† +0.45‡ +0.28‡ GPT / LLaMA +0.27‡ +0.38‡ +0.23† +0.70‡ GPT / Qwen +0.31‡ +0.32‡ +0.81‡ +0.29‡ GPT / Mistral +0.17 +0.21† +0.20† −0.08 LLaMA / Qwen LLaMA / Mistral +0.08 +0.56‡ +0.23† +0.25† −0.09 +0.24‡ +0.33‡ +0.44‡ Qwen / Mistral +0.36 +0.10 Mean † p&lt;.05 ‡ p&lt;.01 or better bold r&gt;0.50 +0.38 +0.32 Table 4: Inter-judge agreement on prediction set width (Spearman r, α=0.10).</p>
+<h3>Dataset / Benchmark</h3>
+<p>Our conformal results have an immediate practical implication: before accepting an LLM judge score, compute the prediction set.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>+0.12 +0.22† +0.45‡ +0.28‡ GPT / LLaMA +0.27‡ +0.38‡ +0.23† +0.70‡ GPT / Qwen +0.31‡ +0.32‡ +0.81‡ +0.29‡ GPT / Mistral +0.17 +0.21† +0.20† −0.08 LLaMA / Qwen LLaMA / Mistral +0.08 +0.56‡ +0.23† +0.25† −0.09 +0.24‡ +0.33‡ +0.44‡ Qwen / Mistral +0.36 +0.10 Mean † p&lt;.05 ‡ p&lt;.01 or better bold r&gt;0.50 +0.38 +0.32 Table 4: Inter-judge agreement on prediction set width (Spearman r, α=0.10).</li>
+<li>Our conformal results have an immediate practical implication: before accepting an LLM judge score, compute the prediction set.</li>
+<li>The pairwise protocol (40, calls) feeds the transitivity diagnostic, which measures directed 3-cycle violation rates ρ(x) per input and tests whether MFAS ranking repair improves agreement with human rankings.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>The pairwise protocol (40, calls) feeds the transitivity diagnostic, which measures directed 3-cycle violation rates ρ(x) per input and tests whether MFAS ranking repair improves agreement with human rankings.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2604.15302v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="calibration-gated-llm-pseudo-observations-for-online-contextual-bandits">
+                    <div class="paper-rank">#11</div>
+                    <h4 class="paper-title-featured">Calibration-Gated LLM Pseudo-Observations for Online Contextual Bandits</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>In Proceedings of the 42nd International Conference on Machine Learning (ICML), volume 267 of PMLR, 2025.</p>
+<h3>Method</h3>
+<p>In Proceedings of the 34th International Conference on Machine Learning (ICML), pages 1321–1330, 2017.</p>
+<h3>Dataset / Benchmark</h3>
+<p>8.4 Future Work Several extensions follow naturally: • Longer horizons and multiple seeds to establish statistical significance and crossover dynamics.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>In Proceedings of the 34th International Conference on Machine Learning (ICML), pages 1321–1330, 2017.</li>
+<li>8.4 Future Work Several extensions follow naturally: • Longer horizons and multiple seeds to establish statistical significance and crossover dynamics.</li>
+<li>Mushroom experiments use K = 2 arms with one-hot encoded categorical features (d = 117 after bias augmentation).</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Mushroom experiments use K = 2 arms with one-hot encoded categorical features (d = 117 after bias augmentation).</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2604.14961v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="segwithu-uncertainty-as-perturbation-energy-for-single-forward-pass-risk-aware-medical-image-segmentation">
+                    <div class="paper-rank">#12</div>
+                    <h4 class="paper-title-featured">SegWithU: Uncertainty as Perturbation Energy for Single-Forward-Pass Risk-Aware Medical Image Segmentation</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>The next-best method, DUE, is significantly outperformed in six cells over the same range, and every other method is outperformed in at least eleven.</p>
+<h3>Method</h3>
+<p>Aggregating across the two datasets with sufficient statistical power, SegWithU is the only method of the eight that is never significantly outperformed on any metric: no competitor achieves a Holmcorrected win over SegWithU in any cell of the ACDC or BraTS2024 matrices, and SegWithU attains the largest column sum on both datasets.</p>
+<h3>Dataset / Benchmark</h3>
+<p>It is widely used because it is simple, architectureagnostic, and often improves probabilistic calibration without changing the underlying classifier or segmentor.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>Aggregating across the two datasets with sufficient statistical power, SegWithU is the only method of the eight that is never significantly outperformed on any metric: no competitor achieves a Holmcorrected win over SegWithU in any cell of the ACDC or BraTS2024 matrices, and SegWithU attains the largest column sum on both datasets.</li>
+<li>It is widely used because it is simple, architectureagnostic, and often improves probabilistic calibration without changing the underlying classifier or segmentor.</li>
+<li>These drawbacks are especially relevant in medical segmentation, where 3D backbones are already computationally heavy.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>These drawbacks are especially relevant in medical segmentation, where 3D backbones are already computationally heavy.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM request failed.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2604.15271v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            </section>
+        <section class="optional-section">
+            <h2 class="section-headline">Additional references</h2>
+            <p class="section-subtitle">9 papers passed the filter but were not expanded into full summaries.</p>
+            <div class="brief-list">
+        <div class='brief-topic'><h4 class='brief-topic-title'>Computational Chemistry</h4>
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.14873v1" class="brief-link">Highly coarse-grained polarisable water models for mesoscopic simulations</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.14784v1" class="brief-link">Interfacial Electric Fields in Water Nanodroplets are Weakly Dependent on Curvature and pH</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.15126v1" class="brief-link">Toward Accurate RIXS Spectra at Heavy Element Edges: A Relativistic Four-Component and Exact Two-Component TDDFT Approach</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Molecular Representation Learning</h4>
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.14796v1" class="brief-link">PUFFIN: Protein Unit Discovery with Functional Supervision</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.15169v1" class="brief-link">Assessing the Potential of Masked Autoencoder Foundation Models in Predicting Downhole Metrics from Surface Drilling Data</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>QSAR &amp; ADMET</h4>
+                <div class="brief-item">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/41948008/" class="brief-link">Toxicity of nanostructures in drug delivery applications.</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Uncertainty Quantification</h4>
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.15167v1" class="brief-link">When Flat Minima Fail: Characterizing INT4 Quantization Collapse After FP32 Convergence</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.14892v1" class="brief-link">Can LLMs Score Medical Diagnoses and Clinical Reasoning as well as Expert Panels?</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.14787v1" class="brief-link">Towards Trustworthy 6G Network Digital Twins: A Framework for Validating Counterfactual What-If Analysis in Edge Computing Resources</a>
+                </div>
+                </div>
+            </div>
+        </section>
+        
+            <footer class="footer">
+                <div>Curated pipeline for recent literature triage, evidence extraction, and scientific summarization.</div>
+                <div>Built for GitHub Pages and local LLM workflows.</div>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>

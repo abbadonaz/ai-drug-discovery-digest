@@ -29,7 +29,7 @@ The project is designed for people who want a scientist-friendly weekly briefing
 Modern molecular AI literature moves too quickly for manual review alone. This repository helps solve that by automating the most repetitive parts of literature surveillance:
 
 - finding new papers across preprint and biomedical sources
-- ranking them for field relevance in drug discovery, cheminformatics, computational chemistry, uncertainty quantification, active learning, Bayesian optimization, and molecular representation learning
+- ranking them for field relevance in computational drug discovery, cheminformatics, generative chemistry, QSAR/ADMET, uncertainty quantification, Bayesian optimization, active learning, and molecular representation learning
 - extracting evidence-rich snippets instead of feeding whole papers to an LLM
 - generating short structured summaries locally
 - turning the result into a publishable research digest
@@ -74,6 +74,7 @@ Typical output includes:
 
 ### Relevance filtering
 - [filter_papers.py](src/filter_papers.py) scores field relevance rather than scientific merit
+- [research_taxonomy.py](src/research_taxonomy.py) centralizes the keyword taxonomy used across fetching, topic mapping, and ranking
 - [topics.py](src/topics.py) maps papers into the target research areas such as drug discovery, computational chemistry, uncertainty, and molecular representation learning
 - [paper_scoring.py](src/paper_scoring.py) ranks the final digest entries
 
@@ -198,6 +199,7 @@ docs/
 - Python `3.10+`
 - A local `Ollama` installation
 - An Ollama model such as `mistral`
+- Optional fallback models such as `llama3.2:3b` and `tinyllama`
 
 ### Installation
 
@@ -206,16 +208,21 @@ python -m venv .venv
 .venv\Scripts\Activate.ps1
 python -m pip install -r requirements.txt
 ollama pull mistral
+ollama pull llama3.2:3b
 ```
 
 Optional environment variables:
 
 ```powershell
 $env:OLLAMA_MODEL="mistral"
+$env:OLLAMA_FALLBACK_MODEL="llama3.2:3b"
+$env:OLLAMA_SECONDARY_FALLBACK_MODEL="tinyllama"
 $env:ENABLE_SUMMARY_QA="false"
 $env:ENTREZ_EMAIL="you@example.com"
 $env:PROCESS_ALL_WHEN_NO_NEW="true"
 ```
+
+The runtime now keeps `mistral` as the primary local model by default and will step down to installed fallback models if Ollama reports a memory-pressure error or a configured fallback model is missing. You can override the full ladder with `OLLAMA_MODEL_CANDIDATES`, for example `mistral,llama3.2:3b,tinyllama`.
 
 ## Running The Pipeline
 

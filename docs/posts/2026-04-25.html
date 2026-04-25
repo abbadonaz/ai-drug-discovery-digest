@@ -1,0 +1,794 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Drug Discovery Digest</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #eef3f5;
+            --bg-accent: #dde9ec;
+            --paper: rgba(255, 255, 255, 0.92);
+            --paper-strong: #ffffff;
+            --ink: #13212b;
+            --muted: #51626f;
+            --line: #cad7de;
+            --teal: #0c6b63;
+            --teal-soft: #dff2ee;
+            --slate: #d9e3ea;
+            --gold: #b8892d;
+            --gold-soft: #f5edd7;
+            --shadow: 0 24px 60px rgba(19, 33, 43, 0.10);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top left, rgba(12, 107, 99, 0.10), transparent 30%),
+                radial-gradient(circle at top right, rgba(184, 137, 45, 0.10), transparent 28%),
+                linear-gradient(180deg, var(--bg) 0%, #f7fafb 100%);
+            font-family: Georgia, "Times New Roman", serif;
+            line-height: 1.65;
+        }
+
+        a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .page-shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 28px 18px 72px;
+        }
+
+        .hero {
+            background: linear-gradient(145deg, rgba(255,255,255,0.96), rgba(248,251,252,0.88));
+            border: 1px solid rgba(202, 215, 222, 0.9);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 34px;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(12, 107, 99, 0.12), transparent 45%),
+                linear-gradient(315deg, rgba(184, 137, 45, 0.12), transparent 42%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            position: relative;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--teal-soft);
+            color: var(--teal);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin: 18px 0 10px;
+            font-size: clamp(2.2rem, 4.6vw, 4rem);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .meta-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .meta-chip {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.82);
+            border: 1px solid var(--line);
+        }
+
+        .profile-card {
+            width: min(280px, 100%);
+            background: rgba(255,255,255,0.84);
+            border: 1px solid rgba(202, 215, 222, 0.95);
+            border-radius: 22px;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .profile-card img {
+            width: 76px;
+            height: 76px;
+            border-radius: 18px;
+            display: block;
+            margin-bottom: 14px;
+            box-shadow: 0 10px 24px rgba(19, 33, 43, 0.18);
+        }
+
+        .profile-card strong {
+            display: block;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1rem;
+        }
+
+        .profile-card span {
+            display: block;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+            margin: 6px 0 14px;
+        }
+
+        .profile-card a {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: var(--ink);
+            color: white;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .profile-card a:hover {
+            text-decoration: none;
+            background: var(--teal);
+        }
+
+        .content-frame {
+            background: var(--paper);
+            border: 1px solid rgba(202, 215, 222, 0.92);
+            border-radius: 26px;
+            box-shadow: var(--shadow);
+            padding: 26px;
+        }
+
+        .digest-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(239,245,247,0.95));
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stat-value {
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .section-headline, .section-title {
+            font-family: "Segoe UI", sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            line-height: 1.15;
+            margin: 0 0 12px;
+            letter-spacing: -0.03em;
+        }
+
+        .section-subtitle {
+            margin: 0 0 24px;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .footer {
+            margin-top: 28px;
+            padding: 22px 8px 0;
+            border-top: 1px solid var(--line);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .paper-card {
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            background: var(--paper-strong);
+            margin-bottom: 18px;
+        }
+
+        .must-read-container {
+            margin-bottom: 32px;
+        }
+
+        .must-read-badge {
+            display: inline-block;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .must-read-paper, .insights-container, .optional-section {
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: rgba(255,255,255,0.9);
+            padding: 24px;
+        }
+
+        .must-read-paper {
+            background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(248,252,251,0.92));
+        }
+
+        .must-read-title {
+            margin: 12px 0 14px;
+            font-size: clamp(1.7rem, 3vw, 2.4rem);
+            line-height: 1.18;
+        }
+
+        .must-read-meta, .must-read-action {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .must-read-summary, .insights-body, .paper-summary-featured {
+            color: var(--ink);
+        }
+
+        .must-read-summary p, .insights-body p, .paper-summary-featured p {
+            margin: 0 0 12px;
+        }
+
+        .must-read-summary ul, .insights-body ul, .paper-summary-featured ul {
+            margin: 0 0 12px 20px;
+        }
+
+        .topic-badge, .rank-indicator {
+            display: inline-flex;
+            align-items: center;
+            min-height: 34px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.88rem;
+            border: 1px solid var(--line);
+        }
+
+        .topic-badge {
+            background: var(--teal-soft);
+            color: var(--teal);
+            font-weight: 700;
+        }
+
+        .rank-indicator {
+            background: rgba(255,255,255,0.9);
+            color: var(--muted);
+        }
+
+        .btn-primary, .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--ink);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--teal);
+            border: 1px solid var(--line);
+        }
+
+        .featured-section {
+            margin-top: 34px;
+        }
+
+        .topic-group {
+            margin-top: 28px;
+        }
+
+        .topic-header {
+            margin: 0 0 14px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.15rem;
+            color: var(--teal);
+        }
+
+        .papers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 18px;
+        }
+
+        .paper-card-featured {
+            position: relative;
+            background: rgba(255,255,255,0.94);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 100%;
+        }
+
+        .paper-rank {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .paper-title-featured {
+            margin: 0 0 12px;
+            padding-right: 56px;
+            font-size: 1.15rem;
+            line-height: 1.3;
+        }
+
+        .paper-footer {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .link-read-more {
+            font-weight: 700;
+        }
+
+        .brief-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .brief-topic-title {
+            margin: 0 0 10px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--teal);
+        }
+
+        .brief-item {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .brief-item:last-child {
+            border-bottom: 0;
+        }
+
+        .brief-link {
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+        }
+
+        .paper-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .page-shell {
+                padding: 16px 12px 48px;
+            }
+
+            .hero-inner, .content-frame {
+                padding: 18px;
+            }
+
+            .footer {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="hero">
+            <div class="hero-inner">
+                <div>
+                    <div class="eyebrow">Scientific Literature Intelligence</div>
+                    <h1>AI Drug Discovery Digest</h1>
+                    <p>Weekly literature intelligence for drug discovery, cheminformatics, and molecular AI</p>
+                    <div class="meta-strip">
+                        <div class="meta-chip">Published April 25, 2026</div>
+                        <div class="meta-chip">Sources: arXiv, PubMed, ChemRxiv</div>
+                        <div class="meta-chip">Local summarization with Ollama</div>
+                    </div>
+                </div>
+                <aside class="profile-card">
+                    <img src="https://github.com/abbadonaz.png" alt="GitHub avatar for abbadonaz">
+                    <strong>abbadonaz</strong>
+                    <span>Maintainer of this automated digest for drug discovery and molecular AI.</span>
+                    <a href="https://github.com/abbadonaz">View GitHub Profile</a>
+                </aside>
+            </div>
+        </header>
+
+        <main class="content-frame">
+            
+    <div class="digest-stats">
+        <div class="stat-card">
+            <span class="stat-value">7</span>
+            <span class="stat-label">Featured papers</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">13</span>
+            <span class="stat-label">Additional references</span>
+        </div>
+    </div>
+    
+        <section class="must-read-container">
+            <div class="must-read-badge">Editor's pick</div>
+            <article class="must-read-paper" id="structure-guided-molecular-design-with-contrastive-3d-protein-ligand-learning">
+                <div class="must-read-meta">
+                    <span class="topic-badge">Generative Chemistry &amp; Molecular Design</span>
+                    <span class="rank-indicator">Highest ranked paper this week</span>
+                </div>
+                <h2 class="must-read-title">Structure-guided molecular design with contrastive 3D protein-ligand learning</h2>
+                <div class="must-read-summary">
+                    <h3>Problem</h3>
+<p>Virtual screening, a critical step in drug discovery, is often described as a ”needle in a haystack” problem: identifying biologically active small molecules against a specific protein target from astronomically large chemical spaces.</p>
+<h3>Method</h3>
+<p>In this work, we present a unified framework that overcomes these scale and applicability limitations by combining contrastive 3D protein-ligand encodings with a multimodal Chemical Language Model (MCLM).</p>
+<h3>Dataset / Benchmark</h3>
+<p>The model generates target-specific molecules conditioned on either pocket or ligand structures, with a learned dataset token that steers the output toward targeted chemical spaces, yielding candidates with favorable predicted binding properties across diverse targets.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>This produces compact representations that effectively capture the geometric and chemical features relevant to binding compatibility, the quality of which we demonstrate through zero-shot virtual screening on the challenging LIT-PCBA benchmark.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>The core objective is to identify molecules from an explicit or implicit chemical space that are likely to bind to a protein target and form a stable complex.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM output was incomplete or unavailable.</p>
+</blockquote>
+                </div>
+                <div class="must-read-action">
+                    <a href="http://arxiv.org/abs/2604.19562v1" class="btn-primary">Read the paper</a>
+                    <a href="http://arxiv.org/abs/2604.19562v1" class="btn-secondary">Open source record</a>
+                </div>
+            </article>
+        </section>
+        
+    <section class="insights-container">
+        <h2 class="section-headline">Weekly research themes</h2>
+        <p class="section-subtitle">A short editorial synthesis of the strongest scientific directions in this batch.</p>
+        <div class="insights-body">
+            <p>This week's digest showcases significant advancements in molecular AI and computational chemistry, particularly in drug discovery, cheminformatics, generative chemistry, QSAR, ADMET, and molecular machine learning.</p>
+<p>A recurring theme is the application of machine learning models to streamline the process of identifying promising natural compounds or generating novel molecules, making it less costly and time-consuming than traditional experimental methods. The use of contrastive 3D protein-ligand encodings and multimodal Chemical Language Models (MCLMs) is highlighted for their ability to generate target-specific molecules under various physicochemical, ADMET, and biological activity tasks.</p>
+<p>Another key trend is the integration of synthetic chemistry strategies with computational methodologies, such as molecular docking, molecular dynamics simulations, QM</p>
+        </div>
+    </section>
+    
+        <section class="featured-section">
+            <h2 class="section-headline">Featured papers</h2>
+            <p class="section-subtitle">Structured summaries for the most relevant papers after retrieval, filtering, and evidence selection.</p>
+        
+            <div class="topic-group">
+                <h3 class="topic-header">Drug Discovery &amp; Cheminformatics</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="predictive-modeling-of-natural-medicinal-compounds-for-alzheimer-disease-using-cheminformatics">
+                    <div class="paper-rank">#2</div>
+                    <h4 class="paper-title-featured">Predictive Modeling of Natural Medicinal Compounds for Alzheimer Disease Using Cheminformatics</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>Grigorev, "HT_PREDICT: a machine learning-based computational open-source tool for screening HDAC6 inhibitors," SAR and QSAR in Environmental Research, vol.</p>
+<h3>Method</h3>
+<p>to identify promising natural compounds are QSAR modeling, molecular similarity and analysis, and virtual screening, which are less cost and time-consuming than the traditional method of experimental procedures .</p>
+<h3>Dataset / Benchmark</h3>
+<p>Virtual screening using QSAR makes it possible to predict biological activity on the basis of the molecular structure and to efficiently identify promising compounds provided by large chemical libraries .</p>
+<h3>Key Findings</h3>
+<ul>
+<li>The current developments in computational modeling, biomarker identification, and artificial intelligence are still advancing to improve the study of neurodegenerative diseases and speed up the process of identifying safe and effective therapeutic candidates in the case of Alzheimer disease .</li>
+<li>Figure 1 shows the general cheminformatics workflow that was used in the present study that includes data collection, preprocessing, calculating descriptors, model development, and predicting activities.</li>
+<li>A classifier based on FDA-approved treatments trained as a Random Forest yielded some level of precision (5970) and recall (6590), and identified 73 promising compounds.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>The development of cheminformatics and quantitative structure activity relationship (QSAR) modeling has become a meaningful contribution to drug discovery at an early stage.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM output was incomplete or unavailable.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2604.18316v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="drug-likeness-prioritised-selection-identifies-anti-escherichia-coli-candidates-confirmed-by-molecular-docking-dynamics-simulations-and-antibacterial-assays">
+                    <div class="paper-rank">#3</div>
+                    <h4 class="paper-title-featured">Drug-likeness prioritised selection identifies anti-Escherichia coli candidates confirmed by molecular docking, dynamics simulations, and antibacterial assays.</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>Application of this strategy to the eMolecules library yielded 15 high-potential candidates.</p>
+<h3>Method</h3>
+<p>An integrated evaluation framework was established, consisting of 33 independent predictive submodels across five dimensions: physicochemical properties, pharmacokinetics, safety, efficacy, and stability.</p>
+<h3>Dataset / Benchmark</h3>
+<p>Not clearly stated in the provided evidence.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>Molecular analyses further demonstrated that M3 achieved superior binding stability relative to the reference drug Cefaclor through a multimodal, high-affinity interaction network with the target protein.</li>
+<li>Experimental results showed compound M3 as the lead molecule, exhibiting notable antibacterial activity against E.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>This strategy reduces late-stage attrition risk and provides a robust paradigm for rational antibacterial drug discovery.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM output was incomplete or unavailable.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/41840942/" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="next-generation-janus-kinase-inhibitors-integrating-synthetic-innovation-structural-biology-and-computational-design-for-precision-drug-discovery">
+                    <div class="paper-rank">#4</div>
+                    <h4 class="paper-title-featured">Next-generation Janus kinase inhibitors: Integrating synthetic innovation, structural biology, and computational design for precision drug discovery.</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>However, limitations related to safety, isoform selectivity, long-term tolerability, and off-target kinase interactions continue to restrict their broader application and highlight the need for next-generation molecules.</p>
+<h3>Method</h3>
+<p>We integrate recent advances in synthetic chemistry, including hinge-binding optimization, heterocyclic diversification, multicomponent reactions, and scaffold-hopping strategies, with computational methodologies such as molecular docking, molecular dynamics simulations, QM/MM calculations, and machine-learning-based predictive modelling.</p>
+<h3>Dataset / Benchmark</h3>
+<p>Not clearly stated in the provided evidence.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>In this review, we provide a comprehensive and strategic assessment of the molecular features underpinning JAK2 and JAK3 selectivity, including signaling features directly relevant to inhibitor design, mutational landscapes, and structural determinants such as the uniquely targetable Cys909 residue in JAK3.</li>
+<li>Over the past two decades, the field has progressed from the identification of early JAK2 inhibitors to the approval of several first-generation agents, including ruxolitinib, tofacitinib, baricitinib, and fedratinib, which validated the clinical feasibility of JAK blockade.</li>
+<li>Janus kinase (JAK) dysregulation plays a central role in the pathogenesis of inflammatory, autoimmune, and malignant disorders, making the JAK family an essential therapeutic target across multiple disease domains.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Over the past two decades, the field has progressed from the identification of early JAK2 inhibitors to the approval of several first-generation agents, including ruxolitinib, tofacitinib, baricitinib, and fedratinib, which validated the clinical feasibility of JAK blockade.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM output was incomplete or unavailable.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/41907306/" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="discovery-of-novel-and-highly-potent-xiap-targeted-peptide-inhibitors-using-virtual-screening">
+                    <div class="paper-rank">#5</div>
+                    <h4 class="paper-title-featured">Discovery of novel and highly potent XIAP-targeted peptide inhibitors using virtual screening.</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>Lung cancer, a globally prevalent fatal malignancy, remains a major therapeutic challenge.</p>
+<h3>Method</h3>
+<p>In summary, our study confirms that Peptide-5 is a highly potent and promising XIAP-targeted inhibitor for the treatment of cancer.</p>
+<h3>Dataset / Benchmark</h3>
+<p>Not clearly stated in the provided evidence.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>Through virtual screening, we identified five novel candidate peptides (Peptides 1-5) with picomolar-level inhibitory activity.</li>
+<li>Peptide-5 showed the highest binding affinity (Kd = 10.2 ± 0.5 pM), and FP assay indicated that Peptide-5 competitively binds the BIR3 domain of XIAP against caspase-9.</li>
+<li>Meanwhile, Peptide-5 showed good serum and metabolic stability, as well as favourable cellular permeability.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>X-linked inhibitor of apoptosis protein (XIAP) is overexpressed in various cancers, driving uncontrolled proliferation, while its specific inhibition suppresses tumour growth.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM output was incomplete or unavailable.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/41566873/" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="integrating-virtual-screening-and-molecular-dynamics-simulations-to-identify-emodin-as-a-pycr1-inhibitor-modulating-docetaxel-sensitivity-in-prostate-cancer">
+                    <div class="paper-rank">#6</div>
+                    <h4 class="paper-title-featured">Integrating virtual screening and molecular dynamics simulations to identify emodin as a PYCR1 inhibitor modulating docetaxel sensitivity in prostate cancer.</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>It is highly expressed in various cancers and promotes malignant progression, yet its role in DTX resistance in prostate cancer remains unclear.</p>
+<h3>Method</h3>
+<p>Finally, its functions and safety were also verified through in vitro experiments.</p>
+<h3>Dataset / Benchmark</h3>
+<p>Not clearly stated in the provided evidence.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>Subsequently, via structure-based virtual screening, molecular dynamics simulations, and cellular thermal shift assay (CETSA), emodin-an anthraquinone compound-was identified as a PYCR1-targeting agent.</li>
+<li>In this study, bioinformatics analyses and in vitro/vivo experiments demonstrated that interfering with PYCR1 expression modulates the sensitivity of prostate cancer cells to DTX.</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Docetaxel (DTX) resistance is the main cause of treatment failure in castration-resistant prostate cancer (CRPC).</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM output was incomplete or unavailable.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://pubmed.ncbi.nlm.nih.gov/41665114/" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">Generative Chemistry &amp; Molecular Design</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="how-creative-are-large-language-models-in-generating-molecules">
+                    <div class="paper-rank">#7</div>
+                    <h4 class="paper-title-featured">How Creative Are Large Language Models in Generating Molecules?</h4>
+                    <div class="paper-summary-featured">
+                        <h3>Problem</h3>
+<p>In this work, we study the creative behavior of LLMs in molecular generation through a systematic empirical evaluation across physicochemical, ADMET, and biological activity tasks.</p>
+<h3>Method</h3>
+<p>Operationalizing Creativity in Molecule Generation We propose a framework for evaluating creativity in LLMbased molecular generation.</p>
+<h3>Dataset / Benchmark</h3>
+<p>Therapeutics data commons: Machine learning datasets and tasks for drug discovery and development.</p>
+<h3>Key Findings</h3>
+<ul>
+<li>This makes it a non-binary problem, where effective models must identify non-obvious solutions under constraints while maintaining exploration to improve success by escaping local optima.</li>
+<li>Our findings indicate that LLMs show distinct patterns of creative behavior in molecule generation.</li>
+<li>Through extensive experiments across physicochemical, ADMET, and biological activity tasks, we showed that LLMs exhibit 0.500.751.001.251.50Temperature0.00.20.40.60.81.01.2PerformanceValiditySRNoveltyUniquenessDiversity How Creative Are Large Language Models in Generating Molecules?</li>
+</ul>
+<h3>Why It Matters</h3>
+<p>Molecular sets (moses): a benchmarking platform for molecular generation models.</p>
+<blockquote>
+<p><strong>Fallback note</strong>: generated from extracted evidence because the local LLM output was incomplete or unavailable.</p>
+</blockquote>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2604.18031v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            </section>
+        <section class="optional-section">
+            <h2 class="section-headline">Additional references</h2>
+            <p class="section-subtitle">13 papers passed the filter but were not expanded into full summaries.</p>
+            <div class="brief-list">
+        <div class='brief-topic'><h4 class='brief-topic-title'>Bayesian Optimization &amp; Active Learning</h4>
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.19335v1" class="brief-link">When Active Learning Falls Short: An Empirical Study on Chemical Reaction Extraction</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Drug Discovery &amp; Cheminformatics</h4>
+                <div class="brief-item">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/41568436/" class="brief-link">Identification of a peptide inhibitor disrupting the PCSK9-LDLR interaction via pharmacophore-based virtual screening, molecular dynamics simulations and in vitro/vivo evaluation.</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/41907305/" class="brief-link">Unleashing the power of DNA-encoded libraries for challenging targets in drug discovery.</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/41493169/" class="brief-link">Identification of novel HIF2α inhibitors: a structure-based virtual screening approach.</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Generative Chemistry &amp; Molecular Design</h4>
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.17838v1" class="brief-link">Efficient Diffusion Models under Nonconvex Equality and Inequality constraints via Landing</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001278/v3" class="brief-link">The Syntax of Matter: Synthesis Planning as the Foundation of Generative Chemistry</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.20254v1" class="brief-link">Mol-Debate: Multi-Agent Debate Improves Structural Reasoning in Molecular Design</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002261/v1" class="brief-link">Multimodal Iterative Reasoning for Molecular Generation with Contribution-Aware Dynamic Modality Balancing</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Molecular Representation Learning</h4>
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2604.20308v1" class="brief-link">Sheaf Neural Networks on SPD Manifolds: Second-Order Geometric Representation Learning</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>QSAR &amp; ADMET</h4>
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002302/v1" class="brief-link">Chemically Interpretable Explanations for Molecular Property Prediction via Fragment-Level Shapley Values</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001253/v3" class="brief-link">When Do Models Win? A Learning Curve Benchmark for Molecular Property Prediction in Low-Data Regimes</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002276/v1" class="brief-link">FlowKAN-Chem: A Unified Framework Integrating Invertible Flow Networks with KAN Hybrid Architectures for Molecular Property Prediction and Chemical Time Series Analysis</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002208/v1" class="brief-link">A Systematic Survey and Benchmark of Deep Learning for Molecular Property Prediction in the Foundation Model Era</a>
+                </div>
+                </div>
+            </div>
+        </section>
+        
+            <footer class="footer">
+                <div>Curated pipeline for recent literature triage, evidence extraction, and scientific summarization.</div>
+                <div>Built for GitHub Pages and local LLM workflows.</div>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>

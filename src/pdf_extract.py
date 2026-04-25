@@ -1,9 +1,9 @@
-from pdfminer.high_level import extract_text    
 import re
 
-
-from pdfminer.high_level import extract_text
-import re
+try:
+    from pdfminer.high_level import extract_text
+except Exception:  # pragma: no cover - dependency availability depends on local setup
+    extract_text = None
 
 
 def clean_text(text):
@@ -12,44 +12,28 @@ def clean_text(text):
     broken lines and reference numbering.
     """
 
-    # remove page numbers
-    text = re.sub(r'\n\d+\n', '\n', text)
-
-    # remove multiple spaces
-    text = re.sub(r'\s+', ' ', text)
-
-    # remove section numbering like "1 INTRODUCTION"
-    text = re.sub(r'\b\d+\s+[A-Z]{3,}\b', '', text)
-
-    # remove strange number blocks
-    text = re.sub(r'(\d+\s+){4,}', '', text)
-
+    text = re.sub(r"\n\d+\n", "\n", text)
+    text = re.sub(r"\s+", " ", text)
+    text = re.sub(r"\b\d+\s+[A-Z]{3,}\b", "", text)
+    text = re.sub(r"(\d+\s+){4,}", "", text)
     return text.strip()
 
 
 def extract_pdf_text(pdf_path):
+    if extract_text is None:
+        return ""
 
     try:
-
         raw = extract_text(pdf_path)
-
-        clean = clean_text(raw)
-
-        return clean
-
+        return clean_text(raw)
     except Exception:
-
         return ""
 
 
 def split_sentences(text):
-
-    sentences = re.split(r'(?<=[.!?])\s+', text)
-
-    sentences = [
-        s.strip()
-        for s in sentences
-        if len(s) > 80 and len(s) < 400
+    sentences = re.split(r"(?<=[.!?])\s+", text)
+    return [
+        sentence.strip()
+        for sentence in sentences
+        if len(sentence) > 80 and len(sentence) < 400
     ]
-
-    return sentences

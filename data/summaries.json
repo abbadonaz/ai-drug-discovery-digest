@@ -1,188 +1,153 @@
 [
   {
-    "title": "ADMET Profiling of a Mitochondria-Focused Compound Library: Physicochemical Baselines, Membrane Permeability Classification, and Tier-Based Filtering for AI-Driven Drug Discovery",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001519/v1",
-    "topic": "QSAR & ADMET",
-    "tldr": "### Problem\nThis research focuses on the ADMET (Absorption, Distribution, Metabolism, Excretion, and Toxicity) profiling of a mitochondria-focused compound library, aiming to establish physicochemical baselines, membrane permeability classification, and tier-based filtering for AI-driven drug discovery.\n\n### Method\nThe study employs machine learning models to predict the ADMET properties of the compound library, classifying them based on their membrane permeability, and implementing a tier-based filtration system.\n\n### Dataset / Benchmark\nThe research utilizes a mitochondria-focused compound library as its dataset for analysis.\n\n### Key Findings\n- The study presents physicochemical baselines for the mitochondria-focused compound library, providing valuable insights into their properties.\n- Machine learning models successfully classified compounds based on membrane permeability, offering a potential tool for drug discovery.\n- A",
-    "score": 16
+    "title": "Structure-guided molecular design with contrastive 3D protein-ligand learning",
+    "url": "http://arxiv.org/abs/2604.19562v1",
+    "topic": "Generative Chemistry & Molecular Design",
+    "tldr": "### Problem\nVirtual screening, a critical step in drug discovery, is often described as a ”needle in a haystack” problem: identifying biologically active small molecules against a specific protein target from astronomically large chemical spaces.\n\n### Method\nIn this work, we present a unified framework that overcomes these scale and applicability limitations by combining contrastive 3D protein-ligand encodings with a multimodal Chemical Language Model (MCLM).\n\n### Dataset / Benchmark\nThe model generates target-specific molecules conditioned on either pocket or ligand structures, with a learned dataset token that steers the output toward targeted chemical spaces, yielding candidates with favorable predicted binding properties across diverse targets.\n\n### Key Findings\n- This produces compact representations that effectively capture the geometric and chemical features relevant to binding compatibility, the quality of which we demonstrate through zero-shot virtual screening on the challenging LIT-PCBA benchmark.\n\n### Why It Matters\nThe core objective is to identify molecules from an explicit or implicit chemical space that are likely to bind to a protein target and form a stable complex.\n\n> **Fallback note**: generated from extracted evidence because the local LLM output was incomplete or unavailable.",
+    "score": 17
   },
   {
-    "title": "STING, guided active learning for Machine Learned Interatomic Potentials examined on Lithium Thiophosphate solid state electrolytes",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001544/v1",
-    "topic": "Bayesian Optimization & Active Learning",
-    "tldr": "### Problem\nThe study investigates the application of Machine Learned Interatomic Potentials (MLIPs) in predicting the structural properties of Lithium Thiophosphate (Li3PS5), a solid-state electrolyte material for lithium-ion batteries.\n\n### Method\nThe authors propose STING, a guided active learning approach, to improve the accuracy and efficiency of MLIPs training by selectively focusing on informative data points.\n\n### Dataset / Benchmark\nThe research utilizes experimental data from density functional theory calculations as the dataset for model training and validation.\n\n### Key Findings\n- STING significantly enhances the predictive performance of MLIPs, reducing mean absolute errors by 30% compared to traditional random sampling methods.\n- The improved MLIPs accurately predict structural properties such as lattice parameters and vibrational frequencies of Li3PS5.\n- The study demonstrates the potential of active learning strategies in optimizing MLIPs for drug discovery, computational chemistry, and molecular machine learning",
-    "score": 16
+    "title": "Predictive Modeling of Natural Medicinal Compounds for Alzheimer Disease Using Cheminformatics",
+    "url": "http://arxiv.org/abs/2604.18316v1",
+    "topic": "Drug Discovery & Cheminformatics",
+    "tldr": "### Problem\nGrigorev, \"HT_PREDICT: a machine learning-based computational open-source tool for screening HDAC6 inhibitors,\" SAR and QSAR in Environmental Research, vol.\n\n### Method\nto identify promising natural compounds are QSAR modeling, molecular similarity and analysis, and virtual screening, which are less cost and time-consuming than the traditional method of experimental procedures .\n\n### Dataset / Benchmark\nVirtual screening using QSAR makes it possible to predict biological activity on the basis of the molecular structure and to efficiently identify promising compounds provided by large chemical libraries .\n\n### Key Findings\n- The current developments in computational modeling, biomarker identification, and artificial intelligence are still advancing to improve the study of neurodegenerative diseases and speed up the process of identifying safe and effective therapeutic candidates in the case of Alzheimer disease .\n- Figure 1 shows the general cheminformatics workflow that was used in the present study that includes data collection, preprocessing, calculating descriptors, model development, and predicting activities.\n- A classifier based on FDA-approved treatments trained as a Random Forest yielded some level of precision (5970) and recall (6590), and identified 73 promising compounds.\n\n### Why It Matters\nThe development of cheminformatics and quantitative structure activity relationship (QSAR) modeling has become a meaningful contribution to drug discovery at an early stage.\n\n> **Fallback note**: generated from extracted evidence because the local LLM output was incomplete or unavailable.",
+    "score": 15
   },
   {
-    "title": "Tokenizing loops of antibodies.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41936024/",
-    "topic": "Molecular Representation Learning",
-    "tldr": "### Problem\nThe problem addressed in this research revolves around predicting binding affinity of heavy chain variants and identifying similar H3 loops in antibodies, which are crucial for drug discovery, computational chemistry, and molecular machine learning.\n\n### Method\nThe researchers have introduced ImmunoGlobulin LOOp Tokenizer (Igloo), a multimodal antibody loop tokenizer that encodes backbone dihedral angles and sequence. This method aims to improve protein foundation models and aid in antibody CDR design.\n\n### Dataset / Benchmark\nThe performance of Igloo is evaluated against state-of-the-art protein encoding approaches, sequence-based and multimodal protein language models, and existing inverse folding models on 8 antibody-antigen targets and a structural antibody database.\n\n### Key Findings\n- Igloo outperforms the base protein language model on 8 out of 10 antibody-antigen targets in predicting binding affinity.\n-",
-    "score": 16
-  },
-  {
-    "title": "In Silico Pharmacological Profiling of MitoCorex Candidate Molecules: ADMET, Target Engagement, Selectivity, and Stability Analysis",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001670/v1",
-    "topic": "QSAR & ADMET",
-    "tldr": "### Problem\nThis research focuses on the in silico pharmacological profiling of MitoCorex candidate molecules for drug discovery. The aim is to evaluate their Absorption, Distribution, Metabolism, Excretion, Toxicity (ADMET), target engagement, selectivity, and stability.\n\n### Method\nThe study employs molecular docking and machine learning techniques to predict the pharmacological properties of the MitoCorex candidate molecules.\n\n### Dataset / Benchmark\nThe evaluation is based on a dataset of known drug compounds and their corresponding pharmacological properties.\n\n### Key Findings\n- The study successfully predicted the ADMET, target engagement, selectivity, and stability of the MitoCorex candidate molecules with high accuracy.\n- The machine learning models developed showed promising performance in predicting the pharmacological properties of the candidate molecules.\n- The results suggest that some of the MitoCorex candidate molecules have potential as drug leads.\n\n### Why It Matters",
+    "title": "How Creative Are Large Language Models in Generating Molecules?",
+    "url": "http://arxiv.org/abs/2604.18031v1",
+    "topic": "Generative Chemistry & Molecular Design",
+    "tldr": "### Problem\nIn this work, we study the creative behavior of LLMs in molecular generation through a systematic empirical evaluation across physicochemical, ADMET, and biological activity tasks.\n\n### Method\nOperationalizing Creativity in Molecule Generation We propose a framework for evaluating creativity in LLMbased molecular generation.\n\n### Dataset / Benchmark\nTherapeutics data commons: Machine learning datasets and tasks for drug discovery and development.\n\n### Key Findings\n- This makes it a non-binary problem, where effective models must identify non-obvious solutions under constraints while maintaining exploration to improve success by escaping local optima.\n- Our findings indicate that LLMs show distinct patterns of creative behavior in molecule generation.\n- Through extensive experiments across physicochemical, ADMET, and biological activity tasks, we showed that LLMs exhibit 0.500.751.001.251.50Temperature0.00.20.40.60.81.01.2PerformanceValiditySRNoveltyUniquenessDiversity How Creative Are Large Language Models in Generating Molecules?\n\n### Why It Matters\nMolecular sets (moses): a benchmarking platform for molecular generation models.\n\n> **Fallback note**: generated from extracted evidence because the local LLM output was incomplete or unavailable.",
     "score": 13
-  },
-  {
-    "title": "Large Language Model-Guided Bayesian Optimization of Ag+ Doping in CdSe Nanoplatelets Enables Deterministic Optical Prediction across the Gamut",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001652/v1",
-    "topic": "Bayesian Optimization & Active Learning",
-    "tldr": "### Problem\nThis research focuses on optimizing the properties of Cadmium Selenide (CdSe) nanoplatelets doped with Silver (Ag+), a crucial step in enhancing their optical properties for various applications. The challenge lies in achieving deterministic predictions and control over the optical properties across diverse conditions.\n\n### Method\nThe study proposes a method combining Large Language Model (LLM)-guided Bayesian optimization to systematically explore the Ag+ doping levels in CdSe nanoplatelets, aiming to determine optimal conditions for predictable optical properties.\n\n### Dataset / Benchmark\nExperimental data from various Ag+-doped CdSe nanoplatelet samples serve as the dataset for evaluating the proposed method's performance.\n\n### Key Findings\n- The LLM-guided Bayesian optimization successfully identified optimal Ag+ doping levels, leading to improved optical properties in CdSe nanoplatelets.\n- The method demonstrated robustness across a wide range of Ag+ doping concentrations",
-    "score": 12
-  },
-  {
-    "title": "DSBD: Dual-Aligned Structural Basis Distillation for Graph Domain Adaptation",
-    "url": "http://arxiv.org/abs/2604.03154v1",
-    "topic": "Uncertainty Quantification",
-    "tldr": "### Problem\nThe research focuses on improving graph data distillation (GDA) for cross-domain generalization in drug discovery, computational chemistry, and molecular machine learning. Existing methods are primarily designed for in-domain settings and lack a differentiable structural adaptation substrate.\n\n### Method\nThe proposed method, DSBD (Decoupled Structural Basis Distillation), adopts a bi-level optimization scheme to learn a continuous probabilistic structural basis. This approach decouples source-specific bias for cross-domain generalization through geometric and spectral alignment.\n\n### Dataset / Benchmark\nExperiments were conducted on both graph and image benchmarks.\n\n### Key Findings\n- DSBD consistently outperforms state-of-the-art methods across diverse domain shifts.\n- The decoupled inference paradigm mitigates source-specific structural bias by training a fresh model on the distilled basis, thereby improving generalization under topology shift.\n- By preserving source-domain semantic discriminability",
-    "score": 12
-  },
-  {
-    "title": "Unleashing the power of DNA-encoded libraries for challenging targets in drug discovery.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41907305/",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "### Problem\nThe identification of ligands for challenging targets with featureless surfaces, high conformational plasticity, or shallow binding sites remains a significant hurdle in drug discovery.\n\n### Method\nThis review discusses the strategic evolution of DNA-encoded library (DEL) technology over the past fifteen years as a transformative platform in early-stage drug discovery, focusing on its application against intractable targets such as GTPases, epigenetic regulators, phosphatases, protein-protein interaction (PPI), membrane proteins, and RNA.\n\n### Dataset / Benchmark\nThe review provides pivotal case studies and methodological breakthroughs while critically examining aspects of DEL such as DNA-compatible chemistry, diversified library design, advanced selection strategies, and artificial intelligence (AI) integration.\n\n### Key Findings\n- The review highlights the potential of DEL in exploring ultra-large chemical spaces, enabling rapid and cost-effective drug discovery.\n- It discusses the importance of enhancing library",
-    "score": 11
-  },
-  {
-    "title": "Pan-Mitochondrial Privileged Scaffolds: Adenine, Pyridine, and a 7H-Purine Bioisostere as Multi-Target Fragments in the MitoCoreX Drug Discovery Campaign",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001671/v1",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "### Problem\nThe study aims to identify multi-target fragments for drug discovery campaigns focused on mitochondrial proteins, collectively referred to as MitoCoreX.\n\n### Method\nThe researchers propose using a bioisostere of 7H-Purine, adenine, and pyridine as privileged scaffolds to discover pan-mitochondrial fragments.\n\n### Dataset / Benchmark\nThe evaluation is based on the docking scores against a set of mitochondrial protein targets.\n\n### Key Findings\n- The study reveals that the proposed privileged scaffolds exhibit promising docking scores across various mitochondrial protein targets.\n- Adenine and pyridine derivatives show significant potential as multi-target fragments for MitoCoreX drug discovery.\n- The 7H-Purine bioisostere emerges as a valuable addition to the library of privileged scaffolds for mitochondrial drug discovery.\n\n### Why It Matters\nThis work provides",
-    "score": 11
-  },
-  {
-    "title": "Next-generation Janus kinase inhibitors: Integrating synthetic innovation, structural biology, and computational design for precision drug discovery.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41907306/",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "### Problem\nThe problem lies in the limitations of current Janus kinase (JAK) inhibitors, such as safety concerns, isoform selectivity issues, long-term tolerability problems, and off-target kinase interactions, which restrict their broader application.\n\n### Method\nThis review integrates advancements in synthetic chemistry, including hinge-binding optimization, heterocyclic diversification, multicomponent reactions, and scaffold-hopping strategies, with computational methodologies like molecular docking, molecular dynamics simulations, QM/MM calculations, and machine-learning-based predictive modelling.\n\n### Dataset / Benchmark\nThe review outlines key opportunities and remaining challenges in developing next-generation JAK inhibitors for oncology, immunology, and chronic inflammatory diseases, focusing specifically on JAK2 and JAK3.\n\n### Key Findings\n- The review highlights the molecular features underpinning JAK2 and JAK3 selectivity, including signaling features directly relevant",
-    "score": 9
   },
   {
     "title": "Drug-likeness prioritised selection identifies anti-Escherichia coli candidates confirmed by molecular docking, dynamics simulations, and antibacterial assays.",
     "url": "https://pubmed.ncbi.nlm.nih.gov/41840942/",
     "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "### Problem\nThe research focuses on reducing late-stage attrition risk in rational antibacterial drug discovery by addressing the imbalance between antibacterial potency and developability in cephalosporin discovery against Escherichia coli.\n\n### Method\nA comprehensive screening strategy guided by the principle of maximum drug-likeness was developed, combined with a five-fold property-spectrum scoring mechanism (S5F) for multidimensional and quantitative prioritization of candidates based on overall developability.\n\n### Dataset / Benchmark\nAn integrated evaluation framework was established consisting of 33 independent predictive submodels across five dimensions: physicochemical properties, pharmacokinetics, safety, efficacy, and stability.\n\n### Key Findings\n- The strategy yielded 15 high-potential candidates from the eMolecules library.\n- Molecular analyses demonstrated that the lead molecule M3 achieved superior binding stability relative to the reference drug Cefaclor through a",
+    "tldr": "### Problem\nApplication of this strategy to the eMolecules library yielded 15 high-potential candidates.\n\n### Method\nAn integrated evaluation framework was established, consisting of 33 independent predictive submodels across five dimensions: physicochemical properties, pharmacokinetics, safety, efficacy, and stability.\n\n### Dataset / Benchmark\nNot clearly stated in the provided evidence.\n\n### Key Findings\n- Molecular analyses further demonstrated that M3 achieved superior binding stability relative to the reference drug Cefaclor through a multimodal, high-affinity interaction network with the target protein.\n- Experimental results showed compound M3 as the lead molecule, exhibiting notable antibacterial activity against E.\n\n### Why It Matters\nThis strategy reduces late-stage attrition risk and provides a robust paradigm for rational antibacterial drug discovery.\n\n> **Fallback note**: generated from extracted evidence because the local LLM output was incomplete or unavailable.",
+    "score": 9
+  },
+  {
+    "title": "Next-generation Janus kinase inhibitors: Integrating synthetic innovation, structural biology, and computational design for precision drug discovery.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41907306/",
+    "topic": "Drug Discovery & Cheminformatics",
+    "tldr": "### Problem\nHowever, limitations related to safety, isoform selectivity, long-term tolerability, and off-target kinase interactions continue to restrict their broader application and highlight the need for next-generation molecules.\n\n### Method\nWe integrate recent advances in synthetic chemistry, including hinge-binding optimization, heterocyclic diversification, multicomponent reactions, and scaffold-hopping strategies, with computational methodologies such as molecular docking, molecular dynamics simulations, QM/MM calculations, and machine-learning-based predictive modelling.\n\n### Dataset / Benchmark\nNot clearly stated in the provided evidence.\n\n### Key Findings\n- In this review, we provide a comprehensive and strategic assessment of the molecular features underpinning JAK2 and JAK3 selectivity, including signaling features directly relevant to inhibitor design, mutational landscapes, and structural determinants such as the uniquely targetable Cys909 residue in JAK3.\n- Over the past two decades, the field has progressed from the identification of early JAK2 inhibitors to the approval of several first-generation agents, including ruxolitinib, tofacitinib, baricitinib, and fedratinib, which validated the clinical feasibility of JAK blockade.\n- Janus kinase (JAK) dysregulation plays a central role in the pathogenesis of inflammatory, autoimmune, and malignant disorders, making the JAK family an essential therapeutic target across multiple disease domains.\n\n### Why It Matters\nOver the past two decades, the field has progressed from the identification of early JAK2 inhibitors to the approval of several first-generation agents, including ruxolitinib, tofacitinib, baricitinib, and fedratinib, which validated the clinical feasibility of JAK blockade.\n\n> **Fallback note**: generated from extracted evidence because the local LLM output was incomplete or unavailable.",
+    "score": 9
+  },
+  {
+    "title": "Discovery of novel and highly potent XIAP-targeted peptide inhibitors using virtual screening.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41566873/",
+    "topic": "Drug Discovery & Cheminformatics",
+    "tldr": "### Problem\nLung cancer, a globally prevalent fatal malignancy, remains a major therapeutic challenge.\n\n### Method\nIn summary, our study confirms that Peptide-5 is a highly potent and promising XIAP-targeted inhibitor for the treatment of cancer.\n\n### Dataset / Benchmark\nNot clearly stated in the provided evidence.\n\n### Key Findings\n- Through virtual screening, we identified five novel candidate peptides (Peptides 1-5) with picomolar-level inhibitory activity.\n- Peptide-5 showed the highest binding affinity (Kd = 10.2 ± 0.5 pM), and FP assay indicated that Peptide-5 competitively binds the BIR3 domain of XIAP against caspase-9.\n- Meanwhile, Peptide-5 showed good serum and metabolic stability, as well as favourable cellular permeability.\n\n### Why It Matters\nX-linked inhibitor of apoptosis protein (XIAP) is overexpressed in various cancers, driving uncontrolled proliferation, while its specific inhibition suppresses tumour growth.\n\n> **Fallback note**: generated from extracted evidence because the local LLM output was incomplete or unavailable.",
     "score": 8
   },
   {
-    "title": "Transfer Learning for Loan Recovery Prediction under Distribution Shifts with Heterogeneous Feature Spaces",
-    "url": "http://arxiv.org/abs/2604.02832v1",
-    "topic": "Uncertainty Quantification",
-    "tldr": "### Problem\nTransfer learning (TL) for risk rating (RR) forecasting in small data regimes can be challenging due to potential distributional shifts and heterogeneity between source and target feature spaces.\n\n### Method\nThe study proposes using a Fine-tuned Multimodal Distribution-aware Transformer (FT–MDN–Transformer) model for RR prediction, which accommodates schema heterogeneity and models full conditional distributions.\n\n### Dataset / Benchmark\nThe research is based on both real-data and simulation settings.\n\n### Key Findings\n- FT–MDN–T outperforms baseline models when target domain data are limited, particularly under covariate and conditional shifts. However, label shift remains challenging.\n- The model remains stable when features appear or disappear between pretraining and fine-tuning, whereas schema-dependent baselines can degrade sharply under mismatch.\n- RR benefits from distributional modeling: FT–MDN–T captures multimodal recovery behavior and",
-    "score": 8
+    "title": "Integrating virtual screening and molecular dynamics simulations to identify emodin as a PYCR1 inhibitor modulating docetaxel sensitivity in prostate cancer.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41665114/",
+    "topic": "Drug Discovery & Cheminformatics",
+    "tldr": "### Problem\nIt is highly expressed in various cancers and promotes malignant progression, yet its role in DTX resistance in prostate cancer remains unclear.\n\n### Method\nFinally, its functions and safety were also verified through in vitro experiments.\n\n### Dataset / Benchmark\nNot clearly stated in the provided evidence.\n\n### Key Findings\n- Subsequently, via structure-based virtual screening, molecular dynamics simulations, and cellular thermal shift assay (CETSA), emodin-an anthraquinone compound-was identified as a PYCR1-targeting agent.\n- In this study, bioinformatics analyses and in vitro/vivo experiments demonstrated that interfering with PYCR1 expression modulates the sensitivity of prostate cancer cells to DTX.\n\n### Why It Matters\nDocetaxel (DTX) resistance is the main cause of treatment failure in castration-resistant prostate cancer (CRPC).\n\n> **Fallback note**: generated from extracted evidence because the local LLM output was incomplete or unavailable.",
+    "score": 6
   },
   {
-    "title": "Lipidation of a nuclear localization sequence enhances broad-spectrum antimicrobial activity: synthesis, characterization, and in silico analysis.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41916422/",
-    "topic": "Computational Chemistry",
-    "tldr": "### Problem\nInvestigation of potential mechanisms and electronic properties of lipopeptides for their antimicrobial properties, focusing on the influence of chain length, saturation, and structure-activity relationships.\n\n### Method\nSynthesis of five PKKKRKV-based lipopeptides (LP-1-LP-5) using Fmoc solid-phase peptide synthesis, followed by conjugation with different fatty acids. The antimicrobial activities were evaluated through in silico studies, including molecular docking, molecular dynamics simulations, and DFT calculations.\n\n### Dataset / Benchmark\nThe antimicrobial activities of the synthesized lipopeptides were tested against various bacterial strains, both Gram-positive and Gram-negative.\n\n### Key Findings\n- LP-5 (C18:1, unsaturated) showed the broadest spectrum, with MIC values of 11.59-23.19 µ",
-    "score": 5
-  },
-  {
-    "title": "A Numerical Method for Coupling Parameterized Physics-Informed Neural Networks and FDM for Advanced Thermal-Hydraulic System Simulation",
-    "url": "http://arxiv.org/abs/2604.02663v1",
-    "topic": "Computational Chemistry",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Integrated bioinformatics analysis reveals cross-talking hub genes and therapeutic agents between sepsis and acute myocardial infarction.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41863100/",
+    "title": "Identification of a peptide inhibitor disrupting the PCSK9-LDLR interaction via pharmacophore-based virtual screening, molecular dynamics simulations and in vitro/vivo evaluation.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41568436/",
     "topic": "Drug Discovery & Cheminformatics",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "Molecular-Level Insights into Alkali-Metal Cation–CO2 Interactions at Electrified Copper Interfaces by Molecular Dynamics Simulations",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001527/v1",
-    "topic": "Computational Chemistry",
+    "title": "Chemically Interpretable Explanations for Molecular Property Prediction via Fragment-Level Shapley Values",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002302/v1",
+    "topic": "QSAR & ADMET",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "Cross-subject Muscle Fatigue Detection via Adversarial and Supervised Contrastive Learning with Inception-Attention Network",
-    "url": "http://arxiv.org/abs/2604.02670v1",
-    "topic": "Molecular Representation Learning",
+    "title": "When Do Models Win? A Learning Curve Benchmark for Molecular Property Prediction in Low-Data Regimes",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001253/v3",
+    "topic": "QSAR & ADMET",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "Dataset Distillation for Machine Learning Force Field in Phase Transition Regime",
-    "url": "http://arxiv.org/abs/2604.03027v1",
-    "topic": "Computational Chemistry",
+    "title": "FlowKAN-Chem: A Unified Framework Integrating Invertible Flow Networks with KAN Hybrid Architectures for Molecular Property Prediction and Chemical Time Series Analysis",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002276/v1",
+    "topic": "QSAR & ADMET",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "The role of 3-carboxy-4-methyl-5-propyl-2-furanpropanoic acid (CMPF) in erectile dysfunction: an integrated mendelian randomization, network pharmacology, and multi-omics study.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41634900/",
+    "title": "A Systematic Survey and Benchmark of Deep Learning for Molecular Property Prediction in the Foundation Model Era",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002208/v1",
+    "topic": "QSAR & ADMET",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "Efficient Diffusion Models under Nonconvex Equality and Inequality constraints via Landing",
+    "url": "http://arxiv.org/abs/2604.17838v1",
+    "topic": "Generative Chemistry & Molecular Design",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "The Syntax of Matter: Synthesis Planning as the Foundation of Generative Chemistry",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001278/v3",
+    "topic": "Generative Chemistry & Molecular Design",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "When Active Learning Falls Short: An Empirical Study on Chemical Reaction Extraction",
+    "url": "http://arxiv.org/abs/2604.19335v1",
+    "topic": "Bayesian Optimization & Active Learning",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "Unleashing the power of DNA-encoded libraries for challenging targets in drug discovery.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41907305/",
     "topic": "Drug Discovery & Cheminformatics",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "A Continuous-Space Analytical Framework for Committor Functions from Molecular Dynamics",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001632/v1",
-    "topic": "Computational Chemistry",
+    "title": "Mol-Debate: Multi-Agent Debate Improves Structural Reasoning in Molecular Design",
+    "url": "http://arxiv.org/abs/2604.20254v1",
+    "topic": "Generative Chemistry & Molecular Design",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "AbDist: a lightweight, distance-based model for antibody affinity prediction as an interpretable benchmark for machine learning models.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41847928/",
-    "topic": "Uncertainty Quantification",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "AI foundation models for RNA biology.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41873866/",
+    "title": "Sheaf Neural Networks on SPD Manifolds: Second-Order Geometric Representation Learning",
+    "url": "http://arxiv.org/abs/2604.20308v1",
     "topic": "Molecular Representation Learning",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "Structure-Preserving Multi-View Embedding Using Gromov-Wasserstein Optimal Transport",
-    "url": "http://arxiv.org/abs/2604.02610v1",
-    "topic": "Molecular Representation Learning",
+    "title": "Identification of novel HIF2α inhibitors: a structure-based virtual screening approach.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41493169/",
+    "topic": "Drug Discovery & Cheminformatics",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "Communication-free Sampling and 4D Hybrid Parallelism for Scalable Mini-batch GNN Training",
-    "url": "http://arxiv.org/abs/2604.02651v1",
-    "topic": "Molecular Representation Learning",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Water molecular dynamics during dough heating by Fast Field Cycling Nuclear Magnetic Resonance",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001606/v1",
-    "topic": "Computational Chemistry",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Complex-Valued GNNs for Distributed Basis-Invariant Control of Planar Systems",
-    "url": "http://arxiv.org/abs/2604.02615v1",
-    "topic": "Molecular Representation Learning",
+    "title": "Multimodal Iterative Reasoning for Molecular Generation with Contribution-Aware Dynamic Modality Balancing",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002261/v1",
+    "topic": "Generative Chemistry & Molecular Design",
     "tldr": "",
     "brief": true,
     "score": 0

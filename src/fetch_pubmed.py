@@ -3,27 +3,12 @@ from datetime import datetime, timedelta, timezone
 from xml.etree import ElementTree
 
 from Bio import Entrez
+from research_taxonomy import build_pubmed_query
 
 
 Entrez.email = os.getenv("ENTREZ_EMAIL", "your_email@example.com")
 
-QUERY = """
-(
-drug discovery OR molecular docking OR virtual screening
-OR QSAR OR QSPR OR ADMET
-OR cheminformatics
-OR binding affinity
-OR structure based drug design
-OR molecular generation
-OR generative chemistry
-OR Bayesian optimization
-OR active learning
-OR fep
-OR "fep calculation"
-OR "free energy perturbation"
-OR uncertainty quantification
-)
-"""
+QUERY = build_pubmed_query()
 
 
 def _extract_abstract(article):

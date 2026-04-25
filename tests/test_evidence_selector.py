@@ -26,16 +26,18 @@ def test_select_relevant_evidence_prioritizes_results_and_domain_language(monkey
     evidence = select_relevant_evidence(paper, top_k=2)
 
     assert evidence
-    assert evidence[0]["section"] == "results"
-    assert "binding affinity" in evidence[0]["text"].lower()
+    findings = [item for item in evidence if item["role"] == "findings"]
+    assert findings
+    assert findings[0]["section"] == "results"
+    assert "binding affinity" in findings[0]["text"].lower()
 
 
 def test_build_summary_payload_formats_evidence_lines(monkeypatch):
     monkeypatch.setattr(
         "evidence_selector.select_relevant_evidence",
         lambda paper, top_k=12: [
-            {"section": "results", "text": "The method improved docking accuracy."},
-            {"section": "conclusion", "text": "The approach is useful for screening."},
+            {"role": "findings", "section": "results", "text": "The method improved docking accuracy."},
+            {"role": "problem", "section": "conclusion", "text": "The approach is useful for screening."},
         ],
     )
 
@@ -43,5 +45,5 @@ def test_build_summary_payload_formats_evidence_lines(monkeypatch):
         {"title": "Example", "url": "https://example.org/paper", "topic": "Docking"}
     )
 
-    assert "[Results] The method improved docking accuracy." in payload["summary_input"]
-    assert "[Conclusion] The approach is useful for screening." in payload["summary_input"]
+    assert "[Findings | Results] The method improved docking accuracy." in payload["summary_input"]
+    assert "[Problem | Conclusion] The approach is useful for screening." in payload["summary_input"]

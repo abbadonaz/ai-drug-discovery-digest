@@ -1,4 +1,5 @@
 import os
+import re
 from datetime import date
 
 from blog_template import render_blog
@@ -6,6 +7,7 @@ from clean_sentences import clean_sentences
 from config import MAX_BRIEF_PAPERS, MAX_FEATURED_PAPERS, PROCESS_ALL_WHEN_NO_NEW
 from deduplicate_papers import mark_papers_seen, split_new_and_seen_papers
 from download_pdfs import download_pdf
+from evidence_selector import has_sufficient_summary_evidence
 from fetch_arxiv import fetch_arxiv_papers
 from fetch_chemrxiv import fetch_chemrxiv_papers
 from fetch_pubmed import fetch_pubmed_papers
@@ -28,6 +30,54 @@ SUMMARIES_PATH = "data/summaries.json"
 POSTS_DIR = "docs/posts"
 INDEX_PATH = "docs/index.html"
 ARCHIVE_PATH = "docs/archive.html"
+
+
+def _normalize_text(text):
+    return re.sub(r"\W+", " ", (text or "").lower()).strip()
+
+
+def _is_informative_abstract(title, abstract):
+    abstract = (abstract or "").strip()
+    if not abstract:
+        return False
+
+    if _normalize_text(title) == _normalize_text(abstract):
+        return False
+
+    return len(abstract) >= 120 and any(char in abstract for char in ".!?")
+
+
+def _make_brief_record(paper):
+    return {
+        "title": paper["title"],
+        "url": paper["url"],
+        "topic": paper.get("topic", "Other"),
+        "brief": True,
+    }
+
+
+def _build_abstract_record(paper, abstract):
+    abstract = (abstract or "").strip()
+    if not _is_informative_abstract(paper.get("title", ""), abstract):
+        return None
+
+    abstract_sentences = clean_sentences(split_sentences(abstract))
+    if not abstract_sentences:
+        abstract_sentences = [abstract]
+
+    record = {
+        "title": paper["title"],
+        "url": paper["url"],
+        "topic": paper.get("topic", "Other"),
+        "sentences": abstract_sentences[:10],
+        "context": abstract,
+        "sections": {"abstract": abstract},
+    }
+
+    if not has_sufficient_summary_evidence(record):
+        return None
+
+    return record
 
 
 def ensure_dirs():
@@ -161,48 +211,18 @@ def rebuild_archive():
 def build_featured_paper_record(paper):
     pdf_path = download_pdf(paper)
     if not pdf_path:
-        abstract = (paper.get("abstract") or "").strip()
-        if not abstract:
-            return None
-
-        abstract_sentences = clean_sentences(split_sentences(abstract))
-        if not abstract_sentences:
-            abstract_sentences = [abstract]
-
-        return {
-            "title": paper["title"],
-            "url": paper["url"],
-            "topic": paper.get("topic", "Other"),
-            "sentences": abstract_sentences[:10],
-            "context": abstract,
-            "sections": {"abstract": abstract},
-        }
+        return _build_abstract_record(paper, paper.get("abstract"))
 
     text = extract_pdf_text(pdf_path)
     if not text:
-        abstract = (paper.get("abstract") or "").strip()
-        if not abstract:
-            return None
-
-        abstract_sentences = clean_sentences(split_sentences(abstract))
-        if not abstract_sentences:
-            abstract_sentences = [abstract]
-
-        return {
-            "title": paper["title"],
-            "url": paper["url"],
-            "topic": paper.get("topic", "Other"),
-            "sentences": abstract_sentences[:10],
-            "context": abstract,
-            "sections": {"abstract": abstract},
-        }
+        return _build_abstract_record(paper, paper.get("abstract"))
 
     sections = extract_sections(text)
     combined_text = build_paper_context(sections)
     sentences = clean_sentences(split_sentences(combined_text))
     ranked = rank_sentences(sentences, top_k=25)
 
-    return {
+    record = {
         "title": paper["title"],
         "url": paper["url"],
         "topic": paper.get("topic", "Other"),
@@ -210,6 +230,11 @@ def build_featured_paper_record(paper):
         "context": combined_text,
         "sections": sections,
     }
+
+    if not has_sufficient_summary_evidence(record):
+        return _build_abstract_record(paper, paper.get("abstract"))
+
+    return record
 
 
 def main():
@@ -274,15 +299,13 @@ def main():
         featured_paper = build_featured_paper_record(paper)
         if featured_paper:
             paper_sentences.append(featured_paper)
+        elif len(brief_papers) < MAX_BRIEF_PAPERS:
+            brief_papers.append(_make_brief_record(paper))
 
-    upper_bound = MAX_FEATURED_PAPERS + MAX_BRIEF_PAPERS
-    for paper in filtered[MAX_FEATURED_PAPERS:upper_bound]:
-        brief_papers.append({
-            "title": paper["title"],
-            "url": paper["url"],
-            "topic": paper.get("topic", "Other"),
-            "brief": True,
-        })
+    for paper in filtered[MAX_FEATURED_PAPERS:]:
+        if len(brief_papers) >= MAX_BRIEF_PAPERS:
+            break
+        brief_papers.append(_make_brief_record(paper))
 
     print(f"Processed PDFs for {len(paper_sentences)} featured papers")
     print(f"Added {len(brief_papers)} brief references")

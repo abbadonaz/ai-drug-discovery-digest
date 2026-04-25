@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta, timezone
 
 import arxiv
+from research_taxonomy import build_arxiv_query
 
 
-QUERY = "(cat:q-bio.QM OR cat:cs.LG OR cat:stat.ML OR cat:physics.chem-ph)"
+QUERY = build_arxiv_query()
 
 
 def _normalize_datetime(dt):

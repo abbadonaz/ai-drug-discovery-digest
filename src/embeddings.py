@@ -2,7 +2,11 @@ from functools import lru_cache
 import re
 
 import numpy as np
-from sentence_transformers import SentenceTransformer
+
+try:
+    from sentence_transformers import SentenceTransformer
+except Exception:  # pragma: no cover - dependency availability depends on local setup
+    SentenceTransformer = None
 
 
 HASH_DIM = 256
@@ -11,6 +15,9 @@ TOKEN_PATTERN = re.compile(r"[a-z0-9\-\+]+")
 
 @lru_cache(maxsize=1)
 def get_embedding_model():
+    if SentenceTransformer is None:
+        return None
+
     try:
         return SentenceTransformer(
             "sentence-transformers/all-MiniLM-L6-v2",

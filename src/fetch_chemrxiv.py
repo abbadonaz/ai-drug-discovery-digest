@@ -5,6 +5,7 @@ import re
 
 import feedparser
 import requests
+from research_taxonomy import COARSE_CHEMISTRY_TERMS, keyword_match
 
 
 CHEMRXIV_RSS = "https://chemrxiv.org/engage/chemrxiv/rss"
@@ -19,47 +20,22 @@ REQUEST_HEADERS = {
     )
 }
 
-KEYWORDS = [
-    "drug discovery",
-    "computational chemistry",
-    "molecular docking",
+SPARSE_CROSSREF_TERMS = (
     "docking",
     "virtual screening",
-    "ligand",
-    "protein-ligand",
     "binding affinity",
-    "qsar",
+    "protein-ligand",
+    "ligand design",
+    "lead optimization",
     "admet",
+    "qsar",
     "cheminformatics",
+    "drug discovery",
     "molecular design",
     "molecular generation",
     "molecular dynamics",
-    "quantum chemistry",
-    "active learning",
-    "bayesian optimization",
-    "fep",
-    "free energy perturbation",
-    "uncertainty quantification",
-]
-
-COARSE_CHEMISTRY_TERMS = [
-    "chemistry",
-    "molecule",
-    "molecular",
-    "docking",
-    "ligand",
-    "protein",
-    "screening",
-    "synthesis",
-    "reaction",
-    "compound",
-]
-
-
-def keyword_match(text):
-    lowered = (text or "").lower()
-    return any(keyword in lowered for keyword in KEYWORDS)
-
+    "free energy",
+)
 
 def _strip_html(text):
     cleaned = re.sub(r"<[^>]+>", " ", text or "")
@@ -135,6 +111,27 @@ def _looks_like_chemrxiv_entry(entry):
     return chemistry_hits >= 2 and keyword_match(text)
 
 
+def _matches_crossref_target_domain(title, abstract):
+    title = (title or "").strip()
+    abstract = _strip_html(abstract or "")
+    text = f"{title} {abstract}".strip()
+
+    if keyword_match(text):
+        return True
+
+    if not title:
+        return False
+
+    # Crossref often only gives us a title, so allow a slightly looser gate here.
+    if abstract and abstract.lower() != title.lower():
+        return False
+
+    lowered_title = title.lower()
+    direct_hits = sum(term in lowered_title for term in SPARSE_CROSSREF_TERMS)
+    chemistry_hits = sum(term in lowered_title for term in COARSE_CHEMISTRY_TERMS)
+    return direct_hits >= 1 and (chemistry_hits >= 1 or "benchmark" in lowered_title)
+
+
 def _parse_feed_entries(feed_text, days_back, chemrxiv_only=False):
     feed = feedparser.parse(feed_text)
     cutoff = datetime.utcnow() - timedelta(days=days_back)
@@ -201,8 +198,7 @@ def _parse_crossref_entries(days_back):
         if not abstract:
             abstract = title
 
-        text = f"{title} {abstract}"
-        if not keyword_match(text):
+        if not _matches_crossref_target_domain(title, abstract):
             continue
 
         resource_url = (
