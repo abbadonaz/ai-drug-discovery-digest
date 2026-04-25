@@ -28,8 +28,8 @@ def test_summarize_papers_uses_extractive_fallback_when_ollama_fails(monkeypatch
     summaries = summarize_papers(papers)
 
     assert len(summaries) == 1
-    assert "Fallback note" in summaries[0]["tldr"]
-    assert "### Problem" in summaries[0]["tldr"]
+    assert "virtual screening workflow" in summaries[0]["tldr"].lower()
+    assert "###" not in summaries[0]["tldr"]
 
 
 def test_ollama_chat_uses_fallback_model_on_memory_error(monkeypatch):
@@ -141,27 +141,25 @@ def test_ollama_chat_uses_installed_model_when_configured_models_are_unavailable
 
 def test_summary_quality_issues_detect_incomplete_output():
     issues = llm_summarizer.summary_quality_issues(
-        "### Problem\nA partial summary.\n\n### Key Findings\n- one finding"
+        "A partial summary that stops at the"
     )
 
-    assert any("missing headings" in issue for issue in issues)
+    assert any("too few sentences" in issue for issue in issues)
     assert any("ending" in issue for issue in issues)
 
 
 def test_summarize_with_llm_retries_when_first_output_is_truncated(monkeypatch):
     calls = []
     valid_summary = (
-        "### Problem\nReliable ranking is hard.\n\n"
-        "### Method\nThe method calibrates judge scores.\n\n"
-        "### Dataset / Benchmark\nNot clearly stated in the provided evidence.\n\n"
-        "### Key Findings\n- Width tracks uncertainty.\n- Calibration improves trust signals.\n\n"
-        "### Why It Matters\nThe approach gives a grounded deployment signal."
+        "Reliable ranking is hard in low-data settings. "
+        "The method calibrates judge scores and improves trust signals. "
+        "The approach gives a grounded deployment signal."
     )
 
     def fake_chat(prompt, max_retries=1, num_predict=None):
         calls.append(num_predict)
         if len(calls) == 1:
-            return "### Problem\nPartial output that stops at the"
+            return "Partial output that stops at the"
         return valid_summary
 
     monkeypatch.setattr("llm_summarizer._ollama_chat", fake_chat)
@@ -172,8 +170,8 @@ def test_summarize_with_llm_retries_when_first_output_is_truncated(monkeypatch):
     )
 
     assert result == valid_summary
-    assert calls[0] == llm_summarizer.OLLAMA_NUM_PREDICT
-    assert calls[1] >= 360
+    assert calls[0] == min(llm_summarizer.OLLAMA_NUM_PREDICT, 180)
+    assert calls[1] >= 180
 
 
 def test_summarize_paper_falls_back_when_summary_is_invalid(monkeypatch):
@@ -183,9 +181,12 @@ def test_summarize_paper_falls_back_when_summary_is_invalid(monkeypatch):
             "title": paper["title"],
             "url": paper["url"],
             "topic": paper["topic"],
-            "summary_input": "[Problem | Abstract] A grounded source sentence.",
-            "context": "A grounded source sentence.",
-            "evidence": [{"role": "problem", "text": "A grounded source sentence."}],
+            "summary_input": "[Overview | Abstract] A grounded source sentence. [Result | Results] The model improves docking accuracy on a benchmark.",
+            "context": "A grounded source sentence. The model improves docking accuracy on a benchmark.",
+            "evidence": [
+                {"summary_role": "overview", "role": "problem", "section": "abstract", "text": "A grounded source sentence."},
+                {"summary_role": "result", "role": "findings", "section": "results", "text": "The model improves docking accuracy on a benchmark."},
+            ],
         },
     )
     monkeypatch.setattr(
@@ -200,4 +201,6 @@ def test_summarize_paper_falls_back_when_summary_is_invalid(monkeypatch):
         "sentences": ["A grounded source sentence."],
     })
 
-    assert "Fallback note" in summary
+    assert "A grounded source sentence." in summary
+    assert "benchmark" in summary.lower()
+    assert "###" not in summary

@@ -12,6 +12,9 @@ NUMBERED_SECTION_RE = re.compile(
 SUBSECTION_HEADER_RE = re.compile(
     r"^\d+(?:\.\d+)*\s+[A-Z][A-Za-z0-9\-]+(?:\s+[A-Z][A-Za-z0-9\-]+){0,8}:\s+"
 )
+INLINE_HEADER_RE = re.compile(
+    r"^(?:[A-Z][A-Za-z0-9\-]*(?:\s+[A-Z][A-Za-z0-9\-]*){2,10})\s+(?=(?:We|This|In)\b)"
+)
 TRAILING_FRAGMENT_WORDS = {
     "a",
     "an",
@@ -37,6 +40,19 @@ TRAILING_FRAGMENT_WORDS = {
     "were",
     "which",
     "with",
+}
+MOJIBAKE_REPLACEMENTS = {
+    "â€ť": '"',
+    "â€œ": '"',
+    "â€": '"',
+    "â€˜": "'",
+    "â€™": "'",
+    "â€“": "-",
+    "â€”": "-",
+    "Â±": "+/-",
+    "Î±": "alpha",
+    "Î²": "beta",
+    "Î³": "gamma",
 }
 
 
@@ -91,13 +107,24 @@ def _looks_incomplete(text):
     return len(stripped) > 140
 
 
+def _normalize_artifacts(text):
+    normalized = text or ""
+
+    for source, target in MOJIBAKE_REPLACEMENTS.items():
+        normalized = normalized.replace(source, target)
+
+    normalized = re.sub(r"\s+", " ", normalized)
+    return normalized.strip()
+
+
 def clean_sentence(s):
 
-    s = s.strip()
+    s = _normalize_artifacts(s)
 
     s = NUMBERED_SECTION_RE.sub("", s)
     s = SECTION_PREFIX_RE.sub("", s)
     s = SUBSECTION_HEADER_RE.sub("", s)
+    s = INLINE_HEADER_RE.sub("", s)
     s = s.replace("- ", "")
 
     if s.startswith("(") and re.search(r"\b(results?|methods?|discussion|conclusion)\b", s, flags=re.IGNORECASE):
@@ -108,6 +135,9 @@ def clean_sentence(s):
 
     # remove figure references
     s = re.sub(r"\(Fig\.[^)]+\)", "", s)
+
+    if re.search(r"\b(fig(?:ure)?|table|scheme|chart)\s+\d+\b", s, flags=re.IGNORECASE):
+        return None
 
     # remove citation brackets
     s = re.sub(r"\[[0-9, ]+\]", "", s)
@@ -124,7 +154,7 @@ def clean_sentence(s):
         return None
 
     # remove very short sentences
-    if len(s) < 80:
+    if len(s) < 60:
         return None
 
     # remove sentences that look like references
@@ -169,18 +199,22 @@ def clean_sentences(sentences):
     return cleaned
 
 def is_reference(sentence):
+    lowered = (sentence or "").lower()
 
     # typical reference patterns
-    if "et al." in sentence:
+    if "et al." in lowered:
         return True
 
     if ":" in sentence and "," in sentence and len(sentence) < 120:
         return True
 
-    if "doi" in sentence.lower():
+    if "doi" in lowered:
         return True
 
-    if "arxiv" in sentence.lower():
+    if "arxiv" in lowered:
+        return True
+
+    if any(token in lowered for token in ("journal", "conference", "proceedings", "vol.", "pp.", "openreview")):
         return True
 
     return False

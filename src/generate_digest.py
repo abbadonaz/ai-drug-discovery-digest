@@ -100,7 +100,7 @@ def generate_digest_html(summaries, narrative):
         html += """
         <section class="featured-section">
             <h2 class="section-headline">Featured papers</h2>
-            <p class="section-subtitle">Structured summaries for the most relevant papers after retrieval, filtering, and evidence selection.</p>
+            <p class="section-subtitle">Concise paper overviews built from section-aware evidence selection and local summarization.</p>
         """
 
         groups = defaultdict(list)

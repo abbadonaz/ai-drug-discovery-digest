@@ -61,7 +61,7 @@ def _build_abstract_record(paper, abstract):
     if not _is_informative_abstract(paper.get("title", ""), abstract):
         return None
 
-    abstract_sentences = clean_sentences(split_sentences(abstract))
+    abstract_sentences = clean_sentences(split_sentences(abstract, min_chars=0, max_chars=1000))
     if not abstract_sentences:
         abstract_sentences = [abstract]
 
@@ -218,6 +218,10 @@ def build_featured_paper_record(paper):
         return _build_abstract_record(paper, paper.get("abstract"))
 
     sections = extract_sections(text)
+    source_abstract = (paper.get("abstract") or "").strip()
+    if _is_informative_abstract(paper.get("title", ""), source_abstract):
+        sections["abstract"] = source_abstract
+
     combined_text = build_paper_context(sections)
     sentences = clean_sentences(split_sentences(combined_text))
     ranked = rank_sentences(sentences, top_k=25)
@@ -316,24 +320,18 @@ def main():
         print("No papers processed.")
         return
 
-    print("\nGenerating structured summaries for featured papers...")
+    print("\nGenerating concise summaries for featured papers...")
     try:
         summaries = summarize_papers(paper_sentences)
     except Exception as error:
-        print(f"Structured summarization failed at pipeline level: {error}")
+        print(f"Concise summarization failed at pipeline level: {error}")
         summaries = []
         for paper in paper_sentences:
             summaries.append({
                 "title": paper["title"],
                 "url": paper["url"],
                 "topic": paper.get("topic", "Other"),
-                "tldr": (
-                    "### Problem\nAutomatic summarization failed.\n\n"
-                    "### Method\nThe pipeline preserved this paper entry without a model-generated summary.\n\n"
-                    "### Dataset / Benchmark\nNot available.\n\n"
-                    "### Key Findings\n- Review the original paper for details.\n\n"
-                    "### Why It Matters\nThis item stayed in the weekly digest despite a local summarization failure."
-                ),
+                "tldr": "Automatic summarization failed for this paper, so please review the original source directly.",
             })
     summaries = rank_papers(summaries)
 

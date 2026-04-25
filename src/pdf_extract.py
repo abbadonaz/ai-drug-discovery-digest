@@ -30,10 +30,10 @@ def extract_pdf_text(pdf_path):
         return ""
 
 
-def split_sentences(text):
+def split_sentences(text, min_chars=80, max_chars=400):
     sentences = re.split(r"(?<=[.!?])\s+", text)
     return [
         sentence.strip()
         for sentence in sentences
-        if len(sentence) > 80 and len(sentence) < 400
+        if len(sentence) > min_chars and len(sentence) < max_chars
     ]

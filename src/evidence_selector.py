@@ -1,3 +1,5 @@
+import re
+
 from clean_sentences import clean_sentences
 from embeddings import cosine_similarity, encode_texts
 from pdf_extract import split_sentences
@@ -142,6 +144,118 @@ ROLE_TARGETS = {
 
 LOW_INFORMATION_ROLES = {"problem", "method", "findings"}
 ROLE_SELECTION_ORDER = ["problem", "method", "findings", "dataset"]
+SUMMARY_SLOT_PREFERENCES = [
+    {
+        "summary_role": "overview",
+        "roles": ("problem", "method", "supporting"),
+        "sections": ("abstract", "introduction", "conclusion", "discussion", "results", "ranked_sentences"),
+    },
+    {
+        "summary_role": "approach",
+        "roles": ("method", "supporting", "problem"),
+        "sections": ("abstract", "methods", "introduction", "results", "ranked_sentences"),
+    },
+    {
+        "summary_role": "result",
+        "roles": ("findings", "supporting", "dataset"),
+        "sections": ("results", "conclusion", "discussion", "abstract", "ranked_sentences"),
+    },
+]
+SUMMARY_SLOT_KEYWORDS = {
+    "overview": {
+        "this paper": 0.55,
+        "this study": 0.8,
+        "this work": 0.8,
+        "in this work": 0.85,
+        "we develop": 0.8,
+        "we evaluate": 0.6,
+        "we introduce": 0.8,
+        "we investigate": 0.65,
+        "we present": 0.8,
+        "we propose": 0.8,
+        "we study": 0.8,
+        "review": 0.45,
+        "survey": 0.45,
+    },
+    "approach": {
+        "approach": 0.35,
+        "combining": 0.25,
+        "contrastive": 0.2,
+        "framework": 0.4,
+        "integrat": 0.2,
+        "machine learning": 0.2,
+        "method": 0.35,
+        "model": 0.35,
+        "pipeline": 0.3,
+        "qsar": 0.2,
+        "random forest": 0.2,
+        "using": 0.15,
+        "virtual screening": 0.15,
+        "workflow": 0.25,
+    },
+    "result": {
+        "achiev": 0.3,
+        "assay": 0.3,
+        "auc": 0.25,
+        "benchmark": 0.35,
+        "demonstrat": 0.25,
+        "findings": 0.2,
+        "identif": 0.35,
+        "indicat": 0.25,
+        "improv": 0.35,
+        "mic": 0.35,
+        "outperform": 0.35,
+        "performance": 0.2,
+        "precision": 0.2,
+        "recall": 0.2,
+        "results": 0.2,
+        "show": 0.2,
+        "yielding": 0.2,
+        "yielded": 0.25,
+        "zero-shot": 0.2,
+    },
+}
+TITLE_OVERLAP_STOPWORDS = {
+    "about",
+    "across",
+    "against",
+    "approach",
+    "based",
+    "disease",
+    "drug",
+    "from",
+    "highly",
+    "identification",
+    "identifies",
+    "integrating",
+    "learning",
+    "models",
+    "molecular",
+    "novel",
+    "paper",
+    "predictive",
+    "study",
+    "using",
+    "with",
+}
+BACKGROUND_PENALTIES = (
+    "continues to restrict",
+    "faces the dual challenge",
+    "is a progressive",
+    "is often described as",
+    "is overexpressed",
+    "plays a central role",
+    "remains a major therapeutic challenge",
+    "remains unclear",
+)
+PROMOTIONAL_PENALTIES = (
+    "in summary",
+    "our study confirms",
+    "our work provides",
+    "promising",
+    "provides a robust paradigm",
+    "valuable contribution",
+)
 
 
 def _keyword_bonus(sentence):
@@ -165,6 +279,19 @@ def _candidate_sentences_from_sections(sections):
     return candidates
 
 
+def _ranked_candidates_for_paper(paper):
+    candidates = _candidate_sentences_from_sections(paper.get("sections") or {})
+
+    if not candidates:
+        fallback = clean_sentences(paper.get("sentences", []))
+        candidates = [("ranked_sentences", sentence) for sentence in fallback]
+
+    if not candidates:
+        return []
+
+    return _rank_candidates(candidates)
+
+
 def _rank_candidates(candidates):
     texts = [sentence for _, sentence in candidates]
     sentence_embeddings = encode_texts(texts)
@@ -183,6 +310,23 @@ def _rank_candidates(candidates):
 
     ranked.sort(key=lambda item: item["score"], reverse=True)
     return ranked
+
+
+def _infer_candidate_role(candidate):
+    best_role = "supporting"
+    best_score = 0.0
+
+    for role in ROLE_SELECTION_ORDER:
+        role_score = _role_bonus(candidate["text"], role)
+        if role_score < ROLE_MIN_BONUS[role]:
+            continue
+
+        role_score *= ROLE_SECTION_WEIGHTS[role].get(candidate["section"], 1.0)
+        if role_score > best_score:
+            best_score = role_score
+            best_role = role
+
+    return best_role
 
 
 def _select_role_evidence(ranked_candidates, role, selected, seen):
@@ -229,16 +373,10 @@ def _select_role_evidence(ranked_candidates, role, selected, seen):
 
 
 def select_relevant_evidence(paper, top_k=12):
-    candidates = _candidate_sentences_from_sections(paper.get("sections") or {})
-
-    if not candidates:
-        fallback = clean_sentences(paper.get("sentences", []))
-        candidates = [("ranked_sentences", sentence) for sentence in fallback]
-
-    if not candidates:
+    ranked_candidates = _ranked_candidates_for_paper(paper)
+    if not ranked_candidates:
         return []
 
-    ranked_candidates = _rank_candidates(candidates)
     selected = []
     seen = set()
 
@@ -286,12 +424,280 @@ def has_sufficient_summary_evidence(paper, min_sentences=3):
     return combined_length >= 320
 
 
+def _summary_title_tokens(title):
+    return {
+        token
+        for token in re.findall(r"[a-z0-9]+", (title or "").lower())
+        if len(token) >= 4 and token not in TITLE_OVERLAP_STOPWORDS
+    }
+
+
+def _title_overlap_bonus(text, title):
+    title_tokens = _summary_title_tokens(title)
+    if not title_tokens:
+        return 0.0
+
+    sentence_tokens = {
+        token
+        for token in re.findall(r"[a-z0-9]+", (text or "").lower())
+        if len(token) >= 4
+    }
+    overlap = sentence_tokens & title_tokens
+    if not overlap:
+        return 0.0
+
+    bonus = 0.18 * len(overlap)
+    if len(overlap) >= 3:
+        bonus += 0.15
+
+    return min(bonus, 0.9)
+
+
+def _has_study_cue(text):
+    lowered = (text or "").lower()
+    return any(
+        cue in lowered
+        for cue in (
+            "in this work",
+            "this paper",
+            "this study",
+            "this work",
+            "we develop",
+            "we evaluate",
+            "we introduce",
+            "we investigate",
+            "we present",
+            "we propose",
+            "we study",
+        )
+    )
+
+
+def _has_method_cue(text):
+    lowered = (text or "").lower()
+    return any(
+        cue in lowered
+        for cue in (
+            "approach",
+            "combining",
+            "contrastive",
+            "docking",
+            "framework",
+            "machine learning",
+            "method",
+            "model",
+            "molecular dynamics",
+            "pipeline",
+            "qsar",
+            "random forest",
+            "using",
+            "virtual screening",
+            "workflow",
+        )
+    )
+
+
+def _has_result_cue(text):
+    lowered = (text or "").lower()
+    return any(
+        cue in lowered
+        for cue in (
+            "achiev",
+            "assay",
+            "auc",
+            "benchmark",
+            "demonstrat",
+            "findings",
+            "identified",
+            "indicat",
+            "improv",
+            "mic",
+            "outperform",
+            "performance",
+            "precision",
+            "recall",
+            "results",
+            "show",
+            "yielding",
+            "yielded",
+            "zero-shot",
+        )
+    )
+
+
+def _summary_slot_penalty(text, summary_role):
+    lowered = (text or "").lower()
+    penalty = 0.0
+
+    if any(fragment in lowered for fragment in BACKGROUND_PENALTIES):
+        if summary_role == "overview" and not _has_study_cue(lowered):
+            penalty += 0.7
+        if summary_role == "result":
+            penalty += 0.45
+
+    if any(fragment in lowered for fragment in PROMOTIONAL_PENALTIES):
+        if summary_role == "overview":
+            penalty += 0.65
+        elif summary_role in {"approach", "result"}:
+            penalty += 0.55
+
+    if summary_role == "approach" and not _has_method_cue(lowered):
+        penalty += 0.2
+
+    if summary_role == "result" and not _has_result_cue(lowered):
+        penalty += 0.35
+
+    return penalty
+
+
+def _summary_slot_score(item, summary_role, preferred_roles, preferred_sections, title):
+    text = item.get("text", "")
+    role = item.get("role", "supporting")
+    section = item.get("section", "ranked_sentences")
+    lowered = text.lower()
+
+    score = item.get("score", 0.0)
+    score += _title_overlap_bonus(text, title)
+    score += sum(
+        weight
+        for keyword, weight in SUMMARY_SLOT_KEYWORDS[summary_role].items()
+        if keyword in lowered
+    )
+
+    if role in preferred_roles:
+        score += 0.18 * (len(preferred_roles) - preferred_roles.index(role))
+
+    if section in preferred_sections:
+        score += 0.12 * (len(preferred_sections) - preferred_sections.index(section))
+
+    if summary_role == "overview" and _has_study_cue(lowered):
+        score += 0.35
+    if summary_role == "approach" and _has_method_cue(lowered):
+        score += 0.2
+    if summary_role == "result" and _has_result_cue(lowered):
+        score += 0.2
+        score += 0.08 * item.get("position", 0)
+
+    score -= _summary_slot_penalty(text, summary_role)
+    return score
+
+
+def _pick_summary_item(candidates, summary_role, preferred_roles, preferred_sections, title, seen):
+    best_item = None
+    best_key = None
+
+    for item in candidates:
+        text = (item.get("text") or "").strip()
+        if not text:
+            continue
+
+        normalized = text.lower()
+        if normalized in seen:
+            continue
+
+        candidate_key = (
+            -_summary_slot_score(item, summary_role, preferred_roles, preferred_sections, title),
+            -_title_overlap_bonus(text, title),
+            -len(text),
+        )
+
+        if best_key is None or candidate_key < best_key:
+            best_key = candidate_key
+            best_item = item
+
+    return best_item
+
+
+def select_summary_evidence(paper, max_items=3):
+    title = paper.get("title", "")
+    abstract_text = ((paper.get("sections") or {}).get("abstract") or "").strip()
+    abstract_candidates = []
+
+    for index, sentence in enumerate(clean_sentences(split_sentences(abstract_text, min_chars=0, max_chars=1000))):
+        safe_sentence = safe_source_block(sentence, max_chars=500)
+        if not safe_sentence:
+            continue
+
+        candidate = {
+            "position": index,
+            "role": _infer_candidate_role({"section": "abstract", "text": safe_sentence}),
+            "section": "abstract",
+            "text": safe_sentence,
+            "score": _keyword_bonus(safe_sentence),
+        }
+        abstract_candidates.append(candidate)
+
+    selected = []
+    seen = set()
+
+    for slot in SUMMARY_SLOT_PREFERENCES:
+        item = _pick_summary_item(
+            abstract_candidates,
+            slot["summary_role"],
+            slot["roles"],
+            slot["sections"],
+            title,
+            seen,
+        )
+        if not item:
+            continue
+
+        copied = dict(item)
+        copied["summary_role"] = slot["summary_role"]
+        selected.append(copied)
+        seen.add(copied["text"].lower())
+
+    evidence = select_relevant_evidence(paper, top_k=10)
+
+    if len(selected) < len(SUMMARY_SLOT_PREFERENCES):
+        for slot in SUMMARY_SLOT_PREFERENCES:
+            if any(item.get("summary_role") == slot["summary_role"] for item in selected):
+                continue
+
+            item = _pick_summary_item(
+                evidence,
+                slot["summary_role"],
+                slot["roles"],
+                slot["sections"],
+                title,
+                seen,
+            )
+            if not item:
+                continue
+
+            copied = dict(item)
+            copied["summary_role"] = slot["summary_role"]
+            selected.append(copied)
+            seen.add(copied["text"].lower())
+
+    if len(selected) < 2:
+        fallback_sections = ("abstract", "results", "conclusion", "introduction", "discussion", "ranked_sentences")
+        while len(selected) < max_items:
+            item = _pick_summary_item(
+                evidence,
+                "overview",
+                ("supporting", "method", "findings", "problem", "dataset"),
+                fallback_sections,
+                title,
+                seen,
+            )
+            if not item:
+                break
+            copied = dict(item)
+            copied["summary_role"] = copied.get("summary_role", "context")
+            selected.append(copied)
+            seen.add(copied["text"].lower())
+
+    return selected[:max_items]
+
+
 def build_summary_payload(paper, top_k=12):
-    evidence = select_relevant_evidence(paper, top_k=top_k)
+    evidence = select_summary_evidence(paper, max_items=min(top_k, 4))
     lines = []
 
     for item in evidence:
-        role_name = item.get("role", "supporting").replace("_", " ").title()
+        role_name = item.get("summary_role") or item.get("role", "supporting")
+        role_name = role_name.replace("_", " ").title()
         section_name = item["section"].replace("_", " ").title()
         lines.append(f"[{role_name} | {section_name}] {item['text']}")
 
