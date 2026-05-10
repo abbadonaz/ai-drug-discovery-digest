@@ -1,0 +1,712 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Drug Discovery Digest</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #eef3f5;
+            --bg-accent: #dde9ec;
+            --paper: rgba(255, 255, 255, 0.92);
+            --paper-strong: #ffffff;
+            --ink: #13212b;
+            --muted: #51626f;
+            --line: #cad7de;
+            --teal: #0c6b63;
+            --teal-soft: #dff2ee;
+            --slate: #d9e3ea;
+            --gold: #b8892d;
+            --gold-soft: #f5edd7;
+            --shadow: 0 24px 60px rgba(19, 33, 43, 0.10);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top left, rgba(12, 107, 99, 0.10), transparent 30%),
+                radial-gradient(circle at top right, rgba(184, 137, 45, 0.10), transparent 28%),
+                linear-gradient(180deg, var(--bg) 0%, #f7fafb 100%);
+            font-family: Georgia, "Times New Roman", serif;
+            line-height: 1.65;
+        }
+
+        a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .page-shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 28px 18px 72px;
+        }
+
+        .hero {
+            background: linear-gradient(145deg, rgba(255,255,255,0.96), rgba(248,251,252,0.88));
+            border: 1px solid rgba(202, 215, 222, 0.9);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 34px;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(12, 107, 99, 0.12), transparent 45%),
+                linear-gradient(315deg, rgba(184, 137, 45, 0.12), transparent 42%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            position: relative;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--teal-soft);
+            color: var(--teal);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin: 18px 0 10px;
+            font-size: clamp(2.2rem, 4.6vw, 4rem);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .meta-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .meta-chip {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.82);
+            border: 1px solid var(--line);
+        }
+
+        .profile-card {
+            width: min(280px, 100%);
+            background: rgba(255,255,255,0.84);
+            border: 1px solid rgba(202, 215, 222, 0.95);
+            border-radius: 22px;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .profile-card img {
+            width: 76px;
+            height: 76px;
+            border-radius: 18px;
+            display: block;
+            margin-bottom: 14px;
+            box-shadow: 0 10px 24px rgba(19, 33, 43, 0.18);
+        }
+
+        .profile-card strong {
+            display: block;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1rem;
+        }
+
+        .profile-card span {
+            display: block;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+            margin: 6px 0 14px;
+        }
+
+        .profile-card a {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: var(--ink);
+            color: white;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .profile-card a:hover {
+            text-decoration: none;
+            background: var(--teal);
+        }
+
+        .content-frame {
+            background: var(--paper);
+            border: 1px solid rgba(202, 215, 222, 0.92);
+            border-radius: 26px;
+            box-shadow: var(--shadow);
+            padding: 26px;
+        }
+
+        .digest-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(239,245,247,0.95));
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stat-value {
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .section-headline, .section-title {
+            font-family: "Segoe UI", sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            line-height: 1.15;
+            margin: 0 0 12px;
+            letter-spacing: -0.03em;
+        }
+
+        .section-subtitle {
+            margin: 0 0 24px;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .footer {
+            margin-top: 28px;
+            padding: 22px 8px 0;
+            border-top: 1px solid var(--line);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .paper-card {
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            background: var(--paper-strong);
+            margin-bottom: 18px;
+        }
+
+        .must-read-container {
+            margin-bottom: 32px;
+        }
+
+        .must-read-badge {
+            display: inline-block;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .must-read-paper, .insights-container, .optional-section {
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: rgba(255,255,255,0.9);
+            padding: 24px;
+        }
+
+        .must-read-paper {
+            background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(248,252,251,0.92));
+        }
+
+        .must-read-title {
+            margin: 12px 0 14px;
+            font-size: clamp(1.7rem, 3vw, 2.4rem);
+            line-height: 1.18;
+        }
+
+        .must-read-meta, .must-read-action {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .must-read-summary, .insights-body, .paper-summary-featured {
+            color: var(--ink);
+        }
+
+        .must-read-summary p, .insights-body p, .paper-summary-featured p {
+            margin: 0 0 12px;
+        }
+
+        .must-read-summary ul, .insights-body ul, .paper-summary-featured ul {
+            margin: 0 0 12px 20px;
+        }
+
+        .topic-badge, .rank-indicator {
+            display: inline-flex;
+            align-items: center;
+            min-height: 34px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.88rem;
+            border: 1px solid var(--line);
+        }
+
+        .topic-badge {
+            background: var(--teal-soft);
+            color: var(--teal);
+            font-weight: 700;
+        }
+
+        .rank-indicator {
+            background: rgba(255,255,255,0.9);
+            color: var(--muted);
+        }
+
+        .btn-primary, .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--ink);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--teal);
+            border: 1px solid var(--line);
+        }
+
+        .featured-section {
+            margin-top: 34px;
+        }
+
+        .topic-group {
+            margin-top: 28px;
+        }
+
+        .topic-header {
+            margin: 0 0 14px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.15rem;
+            color: var(--teal);
+        }
+
+        .papers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 18px;
+        }
+
+        .paper-card-featured {
+            position: relative;
+            background: rgba(255,255,255,0.94);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 100%;
+        }
+
+        .paper-rank {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .paper-title-featured {
+            margin: 0 0 12px;
+            padding-right: 56px;
+            font-size: 1.15rem;
+            line-height: 1.3;
+        }
+
+        .paper-footer {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .link-read-more {
+            font-weight: 700;
+        }
+
+        .brief-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .brief-topic-title {
+            margin: 0 0 10px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--teal);
+        }
+
+        .brief-item {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .brief-item:last-child {
+            border-bottom: 0;
+        }
+
+        .brief-link {
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+        }
+
+        .paper-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .page-shell {
+                padding: 16px 12px 48px;
+            }
+
+            .hero-inner, .content-frame {
+                padding: 18px;
+            }
+
+            .footer {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="hero">
+            <div class="hero-inner">
+                <div>
+                    <div class="eyebrow">Scientific Literature Intelligence</div>
+                    <h1>AI Drug Discovery Digest</h1>
+                    <p>Weekly literature intelligence for drug discovery, cheminformatics, and molecular AI</p>
+                    <div class="meta-strip">
+                        <div class="meta-chip">Published May 10, 2026</div>
+                        <div class="meta-chip">Sources: arXiv, PubMed, ChemRxiv</div>
+                        <div class="meta-chip">Local summarization with Ollama</div>
+                    </div>
+                </div>
+                <aside class="profile-card">
+                    <img src="https://github.com/abbadonaz.png" alt="GitHub avatar for abbadonaz">
+                    <strong>abbadonaz</strong>
+                    <span>Maintainer of this automated digest for drug discovery and molecular AI.</span>
+                    <a href="https://github.com/abbadonaz">View GitHub Profile</a>
+                </aside>
+            </div>
+        </header>
+
+        <main class="content-frame">
+            
+    <div class="digest-stats">
+        <div class="stat-card">
+            <span class="stat-value">8</span>
+            <span class="stat-label">Featured papers</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">13</span>
+            <span class="stat-label">Additional references</span>
+        </div>
+    </div>
+    
+        <section class="must-read-container">
+            <div class="must-read-badge">Editor's pick</div>
+            <article class="must-read-paper" id="graphpi-efficient-protein-inference-with-graph-neural-networks">
+                <div class="must-read-meta">
+                    <span class="topic-badge">Molecular Representation Learning</span>
+                    <span class="rank-indicator">Highest ranked paper this week</span>
+                </div>
+                <h2 class="must-read-title">GraphPI: Efficient Protein Inference with Graph Neural Networks</h2>
+                <div class="must-read-summary">
+                    <p>This paper presents GraphPI, a novel framework that leverages Graph Neural Networks (GNNs) for efficient protein inference, treating it as a node classification problem. The study demonstrates promising results on multiple test datasets, showcasing improved performance and significantly reduced computation times compared to traditional protein inference algorithms, highlighting the potential of GNNs in accelerating drug discovery and cheminformatics research.</p>
+                </div>
+                <div class="must-read-action">
+                    <a href="http://arxiv.org/abs/2605.04376v1" class="btn-primary">Read the paper</a>
+                    <a href="http://arxiv.org/abs/2605.04376v1" class="btn-secondary">Open source record</a>
+                </div>
+            </article>
+        </section>
+        
+    <section class="insights-container">
+        <h2 class="section-headline">Weekly research themes</h2>
+        <p class="section-subtitle">A short editorial synthesis of the strongest scientific directions in this batch.</p>
+        <div class="insights-body">
+            <p>In this week's digest, we witness a convergence of innovative research themes in molecular AI and computational chemistry. A recurring method is the application of Graph Neural Networks (GNNs) for protein inference, showcased in the development of GraphPI, promising to accelerate drug discovery and cheminformatics research.</p>
+<p>Another significant trend is the exploration of various open-source tools for antiviral drug discovery, with a focus on AI-based systems and docking tools. This work provides valuable insights into selecting effective tools for ongoing antiviral research.</p>
+<p>The importance of understanding and addressing confounding factors in molecular representation learning is highlighted by the introduction of Confound-Aware Representation Learning within Transformer-VAE latent spaces, ensuring more accurate predictions in drug discovery processes.</p>
+<p>Moreover, advancements in Bayesian Optim</p>
+        </div>
+    </section>
+    
+        <section class="featured-section">
+            <h2 class="section-headline">Featured papers</h2>
+            <p class="section-subtitle">Concise paper overviews built from section-aware evidence selection and local summarization.</p>
+        
+            <div class="topic-group">
+                <h3 class="topic-header">Bayesian Optimization &amp; Active Learning</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="pretrained-model-representations-as-acquisition-signals-for-active-learning-of-mlips">
+                    <div class="paper-rank">#2</div>
+                    <h4 class="paper-title-featured">Pretrained Model Representations as Acquisition Signals for Active Learning of MLIPs</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper presents two acquisition signals derived from a pretrained MACE potential: a finite-width neural tangent kernel (NTK) and an activation kernel built from hidden latent space features. The pretrained model induces similarity spaces that preserve chemically meaningful structure, providing more reliable residual uncertainty estimates than other kernels. On reactive-chemistry benchmarks, both kernels outperform fixed-descriptor baselines, committee disagreement, and random acquisition, reducing the data required to reach performance targets by an average of 38% for energy error and 28% for force error, demonstrating their potential in active learning of MLIPs.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2605.03964v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="regime-conditioned-evaluation-in-multi-context-bayesian-optimization">
+                    <div class="paper-rank">#3</div>
+                    <h4 class="paper-title-featured">Regime-Conditioned Evaluation in Multi-Context Bayesian Optimization</h4>
+                    <div class="paper-summary-featured">
+                        <p>In the multi-context Bayesian optimization, a hierarchical model reveals that the performance difference between Greedy and UCB strategies can reverse depending on the budget (B=50 vs B=100) in the GDSC2 benchmark, with a maximum gap of 0.050 Hit@1. Across 79 conditions, a significant fraction (19%) shows minimal difference (&lt;0.01 Hit@1) between these strategies. Pre-registered predictions demonstrate an overall accuracy of 67.5%, and high accuracy within EMA prior families exceeding 90%.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2605.04895v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="discovering-reaction-mechanisms-with-transition-path-sampling-based-active-learning-of-machine-learned-potentials">
+                    <div class="paper-rank">#4</div>
+                    <h4 class="paper-title-featured">Discovering Reaction Mechanisms with Transition Path Sampling-Based Active Learning of Machine-Learned Potentials</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper presents an active learning framework that utilizes Transition Path Sampling (TPS) to generate targeted data for Machine Learning Potential (MLP) models, improving their accuracy in barrier regions. Applied to the electrochemical CO$_2$ reduction to CO on copper in explicit water, this approach eliminates nonphysical artifacts present in early models and achieves near-DFT energy and force accuracy. The resulting MLPs enable stable long-time sampling of reactive pathways, addressing a common challenge of MLP reliability in transition-state regions governing rare events. This work could potentially streamline the computational analysis of complex chemical reactions.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2605.03737v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">Computational Chemistry</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="card-coarse-to-fine-autoregressive-modeling-with-radix-based-decomposition-for-transferable-free-energy-estimation">
+                    <div class="paper-rank">#5</div>
+                    <h4 class="paper-title-featured">CARD: Coarse-to-fine Autoregressive Modeling with Radix-based Decomposition for Transferable Free Energy Estimation</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper introduces CARD, a generative model that utilizes radix-based decomposition for coarse-to-fine autoregressive modeling of 3D molecular coordinates. The novel approach aims to enhance expressiveness and address the limitations of existing methods, which are either prohibitively expensive due to reliance on extensive molecular dynamics simulations or constrained by less-expressive generative models or input dimensions tied to a specific system. Experimental results across various tasks show that CARD matches the accuracy of classical computational methods on unseen systems with diverse topologies, while achieving an approximately 40-fold speedup in inference. This could potentially revolutionize drug discovery and cheminformatics by offering a more efficient and versatile free energy estimation method.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2605.02657v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">Drug Discovery &amp; Cheminformatics</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="benchmarking-open-source-tools-for-in-silico-antiviral-drug-discovery">
+                    <div class="paper-rank">#6</div>
+                    <h4 class="paper-title-featured">Benchmarking open-source tools for in silico antiviral drug discovery</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper studies the performance of various open-source computational tools for in silico antiviral drug discovery, with a focus on AI-based systems and docking tools. The study found that Boltz-2 and DrugFormDTA performed best among machine learning approaches, while GNINA excelled among docking approaches, although performance varied across specific viral proteins. The research further benchmarked 15 open-source binding affinity prediction tools using a custom test set of 853 antiviral compounds across 16 protein targets from 10 virus species. This work provides valuable insights for selecting effective tools in the ongoing pursuit of antiviral drug discovery.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2605.04265v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="spade-faster-drug-discovery-by-learning-from-sparse-data">
+                    <div class="paper-rank">#7</div>
+                    <h4 class="paper-title-featured">SPADE: Faster Drug Discovery by Learning from Sparse Data</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper presents SPADE, a novel algorithm for drug discovery that excels in sparse data scenarios. On average, SPADE requires just 40 tests to identify 10 high-quality ligands. In one-vs-one comparisons, SPADE demonstrates superior sample efficiency over deep learning and Bayesian optimization methods, achieving median improvements of 7%-32%. The significance of this work lies in its potential to accelerate drug discovery processes by reducing the number of required tests.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2605.05370v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">Molecular Representation Learning</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="molecules-meet-language-confound-aware-representation-learning-and-chemical-property-steering-in-transformer-vae-latent-spaces">
+                    <div class="paper-rank">#8</div>
+                    <h4 class="paper-title-featured">Molecules Meet Language: Confound-Aware Representation Learning and Chemical Property Steering in Transformer-VAE Latent Spaces</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper presents a method called Confound-Aware Representation Learning within Transformer-VAE latent spaces, aimed at separating chemical signals from artifacts in the SELFIES dataset. The approach demonstrates that apparent property predictability in molecular generative models can be due to sequence-level shortcuts rather than chemical organization. The main result shows that chemically meaningful steering can emerge in entangled molecular latent spaces, but only when validated through decoded molecules and controlled for representation-level confounds. This work highlights the importance of understanding and addressing confounding factors in molecular representation learning to ensure accurate property predictions.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2605.06303v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            </section>
+        <section class="optional-section">
+            <h2 class="section-headline">Additional references</h2>
+            <p class="section-subtitle">13 papers passed the filter but were not expanded into full summaries.</p>
+            <div class="brief-list">
+        <div class='brief-topic'><h4 class='brief-topic-title'>Computational Chemistry</h4>
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2605.06489v1" class="brief-link">TDDFT Gradients and Nonadiabatic Couplings with Minimal Auxiliary Basis Set Approximation for Fewest-Switches Surface Hopping Dynamics</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.10001531/v2" class="brief-link">GEMDAT: A Python Toolkit for Site-Resolved Diffusion Analysis in Solid-State Molecular Dynamics</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Drug Discovery &amp; Cheminformatics</h4>
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002770/v1" class="brief-link">Drug repurposing identifies Saquinavir as a dual inhibitor of Hepsin and Matriptase: A pharmacophore-based virtual screening, docking, and MD simulation study</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Generative Chemistry &amp; Molecular Design</h4>
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2605.06134v1" class="brief-link">Diffusion model for SU(N) gauge theories</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2605.06322v1" class="brief-link">SMolLM: Small Language Models Learn Small Molecular Grammar</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Molecular Representation Learning</h4>
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002804/v1" class="brief-link">Closing the gap on a $0 budget: ensembling public molecular foundation models for HIV bioactivity prediction</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002849/v1" class="brief-link">Benchmarking Graph Neural Networks, Molecular Fingerprints, and Their Fusion for Toxicity Prediction</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2605.05524v1" class="brief-link">MOSAIC: Module Discovery via Sparse Additive Identifiable Causal Learning for Scientific Time Series</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>QSAR &amp; ADMET</h4>
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002835/v1" class="brief-link">ChemAgent: A Multi-Agent Attention Framework with Linear Distilled Encoding for Molecular Property Prediction and Chemical Reaction Optimization</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002429/v2" class="brief-link">QuADMET-Former: Pre-training on Quantum Mechanical Properties Improves ADMET Prediction</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15000942/v2" class="brief-link">Review of Machine Learning in Surfactant Science: QSPR Modelling and Generative Approaches</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/41931967/" class="brief-link">Dysfunctional microglia-targeted nanoscavenger synergistically accelerates Aβ clearance and inhibits inflammatory cascade.</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Uncertainty Quantification</h4>
+                <div class="brief-item">
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/42099067/" class="brief-link">A comprehensive evaluation of the human Tg32 and Tg276 FcRn transgenic mouse and non-human primate models for predicting antibody pharmacokinetics in human.</a>
+                </div>
+                </div>
+            </div>
+        </section>
+        
+            <footer class="footer">
+                <div>Curated pipeline for recent literature triage, evidence extraction, and scientific summarization.</div>
+                <div>Built for GitHub Pages and local LLM workflows.</div>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>

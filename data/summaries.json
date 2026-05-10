@@ -1,153 +1,160 @@
 [
   {
-    "title": "Structure-guided molecular design with contrastive 3D protein-ligand learning",
-    "url": "http://arxiv.org/abs/2604.19562v1",
-    "topic": "Generative Chemistry & Molecular Design",
-    "tldr": "This paper introduces a unified framework for structure-guided molecular design, combining contrastive 3D protein-ligand learning and autoregressive molecular generation. The SE(3)-equivariant transformer encodes ligand and pocket structures into a shared embedding space, demonstrating competitive results in zero-shot virtual screening. The model generates target-specific molecules conditioned on either pocket or ligand structures, steering the output towards desired chemical spaces, resulting in candidates with favorable predicted binding properties across diverse targets. This approach could potentially streamline drug discovery processes by enabling the generation of tailored compounds for specific protein pockets.",
+    "title": "GraphPI: Efficient Protein Inference with Graph Neural Networks",
+    "url": "http://arxiv.org/abs/2605.04376v1",
+    "topic": "Molecular Representation Learning",
+    "tldr": "This paper presents GraphPI, a novel framework that leverages Graph Neural Networks (GNNs) for efficient protein inference, treating it as a node classification problem. The study demonstrates promising results on multiple test datasets, showcasing improved performance and significantly reduced computation times compared to traditional protein inference algorithms, highlighting the potential of GNNs in accelerating drug discovery and cheminformatics research.",
     "score": 15
   },
   {
-    "title": "Discovery of novel and highly potent XIAP-targeted peptide inhibitors using virtual screening.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41566873/",
+    "title": "Benchmarking open-source tools for in silico antiviral drug discovery",
+    "url": "http://arxiv.org/abs/2605.04265v1",
     "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "This paper explores the discovery of potent peptide inhibitors targeting XIAP, focusing on virtual screening methodology. The standout candidate, Peptide-5, demonstrates exceptional binding affinity (Kd = 10.2 ± 0.5 pM) to the BIR3 domain of XIAP, competing effectively with caspase-9. Furthermore, Peptide-5 exhibits promising serum and metabolic stability, along with favourable cellular permeability, making it a noteworthy candidate for further investigation in drug discovery and cheminformatics.",
+    "tldr": "This paper studies the performance of various open-source computational tools for in silico antiviral drug discovery, with a focus on AI-based systems and docking tools. The study found that Boltz-2 and DrugFormDTA performed best among machine learning approaches, while GNINA excelled among docking approaches, although performance varied across specific viral proteins. The research further benchmarked 15 open-source binding affinity prediction tools using a custom test set of 853 antiviral compounds across 16 protein targets from 10 virus species. This work provides valuable insights for selecting effective tools in the ongoing pursuit of antiviral drug discovery.",
+    "score": 14
+  },
+  {
+    "title": "Molecules Meet Language: Confound-Aware Representation Learning and Chemical Property Steering in Transformer-VAE Latent Spaces",
+    "url": "http://arxiv.org/abs/2605.06303v1",
+    "topic": "Molecular Representation Learning",
+    "tldr": "This paper presents a method called Confound-Aware Representation Learning within Transformer-VAE latent spaces, aimed at separating chemical signals from artifacts in the SELFIES dataset. The approach demonstrates that apparent property predictability in molecular generative models can be due to sequence-level shortcuts rather than chemical organization. The main result shows that chemically meaningful steering can emerge in entangled molecular latent spaces, but only when validated through decoded molecules and controlled for representation-level confounds. This work highlights the importance of understanding and addressing confounding factors in molecular representation learning to ensure accurate property predictions.",
+    "score": 13
+  },
+  {
+    "title": "SPADE: Faster Drug Discovery by Learning from Sparse Data",
+    "url": "http://arxiv.org/abs/2605.05370v1",
+    "topic": "Drug Discovery & Cheminformatics",
+    "tldr": "This paper presents SPADE, a novel algorithm for drug discovery that excels in sparse data scenarios. On average, SPADE requires just 40 tests to identify 10 high-quality ligands. In one-vs-one comparisons, SPADE demonstrates superior sample efficiency over deep learning and Bayesian optimization methods, achieving median improvements of 7%-32%. The significance of this work lies in its potential to accelerate drug discovery processes by reducing the number of required tests.",
+    "score": 12
+  },
+  {
+    "title": "Pretrained Model Representations as Acquisition Signals for Active Learning of MLIPs",
+    "url": "http://arxiv.org/abs/2605.03964v1",
+    "topic": "Bayesian Optimization & Active Learning",
+    "tldr": "This paper presents two acquisition signals derived from a pretrained MACE potential: a finite-width neural tangent kernel (NTK) and an activation kernel built from hidden latent space features. The pretrained model induces similarity spaces that preserve chemically meaningful structure, providing more reliable residual uncertainty estimates than other kernels. On reactive-chemistry benchmarks, both kernels outperform fixed-descriptor baselines, committee disagreement, and random acquisition, reducing the data required to reach performance targets by an average of 38% for energy error and 28% for force error, demonstrating their potential in active learning of MLIPs.",
+    "score": 12
+  },
+  {
+    "title": "Regime-Conditioned Evaluation in Multi-Context Bayesian Optimization",
+    "url": "http://arxiv.org/abs/2605.04895v1",
+    "topic": "Bayesian Optimization & Active Learning",
+    "tldr": "In the multi-context Bayesian optimization, a hierarchical model reveals that the performance difference between Greedy and UCB strategies can reverse depending on the budget (B=50 vs B=100) in the GDSC2 benchmark, with a maximum gap of 0.050 Hit@1. Across 79 conditions, a significant fraction (19%) shows minimal difference (<0.01 Hit@1) between these strategies. Pre-registered predictions demonstrate an overall accuracy of 67.5%, and high accuracy within EMA prior families exceeding 90%.",
+    "score": 12
+  },
+  {
+    "title": "Discovering Reaction Mechanisms with Transition Path Sampling-Based Active Learning of Machine-Learned Potentials",
+    "url": "http://arxiv.org/abs/2605.03737v1",
+    "topic": "Bayesian Optimization & Active Learning",
+    "tldr": "This paper presents an active learning framework that utilizes Transition Path Sampling (TPS) to generate targeted data for Machine Learning Potential (MLP) models, improving their accuracy in barrier regions. Applied to the electrochemical CO$_2$ reduction to CO on copper in explicit water, this approach eliminates nonphysical artifacts present in early models and achieves near-DFT energy and force accuracy. The resulting MLPs enable stable long-time sampling of reactive pathways, addressing a common challenge of MLP reliability in transition-state regions governing rare events. This work could potentially streamline the computational analysis of complex chemical reactions.",
     "score": 11
   },
   {
-    "title": "Next-generation Janus kinase inhibitors: Integrating synthetic innovation, structural biology, and computational design for precision drug discovery.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41907306/",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "This review integrates synthetic innovation, structural biology, and computational design to advance next-generation Janus kinase (JAK) inhibitors for oncology, immunology, and chronic inflammatory diseases. Key strategies include hinge-binding optimization, heterocyclic diversification, multicomponent reactions, scaffold-hopping, molecular docking, molecular dynamics simulations, QM/MM calculations, and machine-learning-based predictive modeling. These multidisciplinary approaches have accelerated hit discovery, refined selectivity, and improved the pharmacokinetic and safety profiles of emerging JAK inhibitors, offering promising prospects for precision drug discovery.",
-    "score": 10
-  },
-  {
-    "title": "Predictive Modeling of Natural Medicinal Compounds for Alzheimer Disease Using Cheminformatics",
-    "url": "http://arxiv.org/abs/2604.18316v1",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "This paper introduces a cheminformatics model for predicting natural medicinal compounds effective against Alzheimer's disease. The approach combines molecular descriptors and machine learning to screen potential anti-Alzheimer drugs. A Random Forest classifier, trained on approved treatments, demonstrates moderate performance, achieving precision of 0.5970 and recall of 0.6590, identifying 73 candidate compounds. This work could facilitate the discovery of novel therapeutic options for Alzheimer's disease.",
-    "score": 10
-  },
-  {
-    "title": "How Creative Are Large Language Models in Generating Molecules?",
-    "url": "http://arxiv.org/abs/2604.18031v1",
-    "topic": "Generative Chemistry & Molecular Design",
-    "tldr": "This paper investigates the creative capabilities of Large Language Models (LLMs) in generating molecular structures. The study conducts a comprehensive empirical evaluation across physicochemical, ADMET, and biological activity tasks. The results suggest that LLMs display unique patterns of creative behavior in molecule generation, notably an increase in constraint satisfaction when additional constraints are imposed. This research offers insights into the potential and limitations of using LLMs for molecular design and synthesis.",
+    "title": "CARD: Coarse-to-fine Autoregressive Modeling with Radix-based Decomposition for Transferable Free Energy Estimation",
+    "url": "http://arxiv.org/abs/2605.02657v1",
+    "topic": "Computational Chemistry",
+    "tldr": "This paper introduces CARD, a generative model that utilizes radix-based decomposition for coarse-to-fine autoregressive modeling of 3D molecular coordinates. The novel approach aims to enhance expressiveness and address the limitations of existing methods, which are either prohibitively expensive due to reliance on extensive molecular dynamics simulations or constrained by less-expressive generative models or input dimensions tied to a specific system. Experimental results across various tasks show that CARD matches the accuracy of classical computational methods on unseen systems with diverse topologies, while achieving an approximately 40-fold speedup in inference. This could potentially revolutionize drug discovery and cheminformatics by offering a more efficient and versatile free energy estimation method.",
     "score": 8
   },
   {
-    "title": "Drug-likeness prioritised selection identifies anti-Escherichia coli candidates confirmed by molecular docking, dynamics simulations, and antibacterial assays.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41840942/",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "This paper presents a comprehensive screening strategy for identifying anti-Escherichia coli candidates, focusing on maximizing drug-likeness. The strategy involves 33 predictive submodels across five dimensions: physicochemical properties, pharmacokinetics, safety, efficacy, and stability. Notably, the candidate compound M3 demonstrated superior binding stability compared to the reference drug Cefaclor, as confirmed by molecular docking, dynamics simulations, and antibacterial assays. This strategy could potentially aid in balancing antibacterial potency and developability in cephalosporin discovery against Escherichia coli.",
-    "score": 5
-  },
-  {
-    "title": "Integrating virtual screening and molecular dynamics simulations to identify emodin as a PYCR1 inhibitor modulating docetaxel sensitivity in prostate cancer.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41665114/",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "This paper integrates virtual screening and molecular dynamics simulations to identify emodin, an anthraquinone compound, as a potential PYCR1 inhibitor modulating docetaxel (DTX) sensitivity in prostate cancer. Through structure-based virtual screening, molecular dynamics simulations, and cellular thermal shift assay (CETSA), emodin was identified as a PYCR1-targeting agent. The findings suggest that PYCR1 may be a key target mediating DTX resistance in prostate cancer, and the emodin-DTX combination could offer a promising potential clinical strategy to overcome such resistance.",
-    "score": 5
-  },
-  {
-    "title": "Identification of a peptide inhibitor disrupting the PCSK9-LDLR interaction via pharmacophore-based virtual screening, molecular dynamics simulations and in vitro/vivo evaluation.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41568436/",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Chemically Interpretable Explanations for Molecular Property Prediction via Fragment-Level Shapley Values",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002302/v1",
-    "topic": "QSAR & ADMET",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "When Do Models Win? A Learning Curve Benchmark for Molecular Property Prediction in Low-Data Regimes",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001253/v3",
-    "topic": "QSAR & ADMET",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "FlowKAN-Chem: A Unified Framework Integrating Invertible Flow Networks with KAN Hybrid Architectures for Molecular Property Prediction and Chemical Time Series Analysis",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002276/v1",
-    "topic": "QSAR & ADMET",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "A Systematic Survey and Benchmark of Deep Learning for Molecular Property Prediction in the Foundation Model Era",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002208/v1",
-    "topic": "QSAR & ADMET",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Efficient Diffusion Models under Nonconvex Equality and Inequality constraints via Landing",
-    "url": "http://arxiv.org/abs/2604.17838v1",
-    "topic": "Generative Chemistry & Molecular Design",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "The Syntax of Matter: Synthesis Planning as the Foundation of Generative Chemistry",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001278/v3",
-    "topic": "Generative Chemistry & Molecular Design",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "When Active Learning Falls Short: An Empirical Study on Chemical Reaction Extraction",
-    "url": "http://arxiv.org/abs/2604.19335v1",
-    "topic": "Bayesian Optimization & Active Learning",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Unleashing the power of DNA-encoded libraries for challenging targets in drug discovery.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41907305/",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Mol-Debate: Multi-Agent Debate Improves Structural Reasoning in Molecular Design",
-    "url": "http://arxiv.org/abs/2604.20254v1",
-    "topic": "Generative Chemistry & Molecular Design",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Sheaf Neural Networks on SPD Manifolds: Second-Order Geometric Representation Learning",
-    "url": "http://arxiv.org/abs/2604.20308v1",
+    "title": "Closing the gap on a $0 budget: ensembling public molecular foundation models for HIV bioactivity prediction",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002804/v1",
     "topic": "Molecular Representation Learning",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "Identification of novel HIF2α inhibitors: a structure-based virtual screening approach.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41493169/",
+    "title": "Benchmarking Graph Neural Networks, Molecular Fingerprints, and Their Fusion for Toxicity Prediction",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002849/v1",
+    "topic": "Molecular Representation Learning",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "ChemAgent: A Multi-Agent Attention Framework with Linear Distilled Encoding for Molecular Property Prediction and Chemical Reaction Optimization",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002835/v1",
+    "topic": "QSAR & ADMET",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "Drug repurposing identifies Saquinavir as a dual inhibitor of Hepsin and Matriptase: A pharmacophore-based virtual screening, docking, and MD simulation study",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002770/v1",
     "topic": "Drug Discovery & Cheminformatics",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "Multimodal Iterative Reasoning for Molecular Generation with Contribution-Aware Dynamic Modality Balancing",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002261/v1",
+    "title": "QuADMET-Former: Pre-training on Quantum Mechanical Properties Improves ADMET Prediction",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002429/v2",
+    "topic": "QSAR & ADMET",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "Diffusion model for SU(N) gauge theories",
+    "url": "http://arxiv.org/abs/2605.06134v1",
     "topic": "Generative Chemistry & Molecular Design",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "Review of Machine Learning in Surfactant Science: QSPR Modelling and Generative Approaches",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15000942/v2",
+    "topic": "QSAR & ADMET",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "TDDFT Gradients and Nonadiabatic Couplings with Minimal Auxiliary Basis Set Approximation for Fewest-Switches Surface Hopping Dynamics",
+    "url": "http://arxiv.org/abs/2605.06489v1",
+    "topic": "Computational Chemistry",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "SMolLM: Small Language Models Learn Small Molecular Grammar",
+    "url": "http://arxiv.org/abs/2605.06322v1",
+    "topic": "Generative Chemistry & Molecular Design",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "Dysfunctional microglia-targeted nanoscavenger synergistically accelerates Aβ clearance and inhibits inflammatory cascade.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41931967/",
+    "topic": "QSAR & ADMET",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "A comprehensive evaluation of the human Tg32 and Tg276 FcRn transgenic mouse and non-human primate models for predicting antibody pharmacokinetics in human.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42099067/",
+    "topic": "Uncertainty Quantification",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "GEMDAT: A Python Toolkit for Site-Resolved Diffusion Analysis in Solid-State Molecular Dynamics",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.10001531/v2",
+    "topic": "Computational Chemistry",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "MOSAIC: Module Discovery via Sparse Additive Identifiable Causal Learning for Scientific Time Series",
+    "url": "http://arxiv.org/abs/2605.05524v1",
+    "topic": "Molecular Representation Learning",
     "tldr": "",
     "brief": true,
     "score": 0
