@@ -1,159 +1,166 @@
 [
   {
-    "title": "GraphPI: Efficient Protein Inference with Graph Neural Networks",
-    "url": "http://arxiv.org/abs/2605.04376v1",
+    "title": "On Improving Graph Neural Networks for QSAR by Pre-training on Extended-Connectivity Fingerprints",
+    "url": "http://arxiv.org/abs/2605.10722v1",
     "topic": "Molecular Representation Learning",
-    "tldr": "This paper presents GraphPI, a novel framework that leverages Graph Neural Networks (GNNs) for efficient protein inference, treating it as a node classification problem. The study demonstrates promising results on multiple test datasets, showcasing improved performance and significantly reduced computation times compared to traditional protein inference algorithms, highlighting the potential of GNNs in accelerating drug discovery and cheminformatics research.",
+    "tldr": "This paper investigates the influence of substructure-level data leakage during pre-training on Graph Neural Networks (GNNs) using Extended-Connectivity Fingerprints (ECFPs), a common approach in drug discovery, particularly for Quantitative Structure-Activity Relationship (QSAR) studies. The study reveals that while there are scenarios where ECFP-based pre-training may underperform, it can significantly improve out-of-distribution performance on various practical QSAR tasks, suggesting its potential value in enhancing the predictive capabilities of GNNs for drug discovery applications.",
+    "score": 18
+  },
+  {
+    "title": "Active Learning for Gaussian Process Regression Under Self-Induced Boltzmann Weights",
+    "url": "http://arxiv.org/abs/2605.10654v1",
+    "topic": "Bayesian Optimization & Active Learning",
+    "tldr": "This paper introduces AB-SID-iVAR, a novel Gaussian Process (GP) acquisition function for active learning. It approximates the Bayesian target distribution in closed form without requiring partition function estimation, applicable to both discrete and continuous input domains. The method shows consistent improvements over existing approaches on synthetic benchmarks and real-world PES modeling and drug discovery tasks, demonstrating its potential significance for drug discovery, cheminformatics, and molecular machine learning by addressing the active learning problem under an unknown Boltzmann distribution induced by the function itself.",
+    "score": 18
+  },
+  {
+    "title": "Physical probes expose and alleviate chemical-environment collapse in molecular representations",
+    "url": "http://arxiv.org/abs/2605.10429v1",
+    "topic": "Molecular Representation Learning",
+    "tldr": "This paper introduces CLAIM (Contrastive Learning for Atom-to-molecule Inference of Molecular NMR), a framework that aligns topological molecular inputs with atom-resolved NMR observables to address the chemical-environment collapse issue in molecular representations. The method demonstrates robust performance in 13C NMR prediction, improves stereoisomer discrimination without explicit 3D modeling, and shows transferability to broader molecular property tasks such as ADMET prediction and fluorescence estimation. These findings establish physically grounded spectral alignment as an effective strategy for alleviating chemical-environment collapse and guiding experimentally grounded molecular representation learning.",
     "score": 15
   },
   {
-    "title": "Benchmarking open-source tools for in silico antiviral drug discovery",
-    "url": "http://arxiv.org/abs/2605.04265v1",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "This paper studies the performance of various open-source computational tools for in silico antiviral drug discovery, with a focus on AI-based systems and docking tools. The study found that Boltz-2 and DrugFormDTA performed best among machine learning approaches, while GNINA excelled among docking approaches, although performance varied across specific viral proteins. The research further benchmarked 15 open-source binding affinity prediction tools using a custom test set of 853 antiviral compounds across 16 protein targets from 10 virus species. This work provides valuable insights for selecting effective tools in the ongoing pursuit of antiviral drug discovery.",
-    "score": 14
-  },
-  {
-    "title": "Molecules Meet Language: Confound-Aware Representation Learning and Chemical Property Steering in Transformer-VAE Latent Spaces",
-    "url": "http://arxiv.org/abs/2605.06303v1",
-    "topic": "Molecular Representation Learning",
-    "tldr": "This paper presents a method called Confound-Aware Representation Learning within Transformer-VAE latent spaces, aimed at separating chemical signals from artifacts in the SELFIES dataset. The approach demonstrates that apparent property predictability in molecular generative models can be due to sequence-level shortcuts rather than chemical organization. The main result shows that chemically meaningful steering can emerge in entangled molecular latent spaces, but only when validated through decoded molecules and controlled for representation-level confounds. This work highlights the importance of understanding and addressing confounding factors in molecular representation learning to ensure accurate property predictions.",
+    "title": "LiTENexus: An End-to-End Virtual Drug Discovery System Based on Quantum Chemical Grounding",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15003380/v1",
+    "topic": "Uncertainty Quantification",
+    "tldr": "The LiTENexus system offers a revolutionary end-to-end virtual drug discovery approach. It combines quantum chemical grounding with physics-informed neural operators, achieving quantum-level accuracy in microscopic property derivation, up to 2-3 orders of magnitude faster than standard Density Functional Theory (DFT). In macroscopic pharmacokinetic prediction, it outperforms over 20 baselines on Biogen dataset and excels in 25 of 33 PharmaBench metrics, dominating 62 of 77 ADMETLAB 3.0 tasks.",
     "score": 13
   },
   {
-    "title": "SPADE: Faster Drug Discovery by Learning from Sparse Data",
-    "url": "http://arxiv.org/abs/2605.05370v1",
+    "title": "ToolMol: Evolutionary Agentic Framework for Multi-objective Drug Discovery",
+    "url": "http://arxiv.org/abs/2605.12784v2",
     "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "This paper presents SPADE, a novel algorithm for drug discovery that excels in sparse data scenarios. On average, SPADE requires just 40 tests to identify 10 high-quality ligands. In one-vs-one comparisons, SPADE demonstrates superior sample efficiency over deep learning and Bayesian optimization methods, achieving median improvements of 7%-32%. The significance of this work lies in its potential to accelerate drug discovery processes by reducing the number of required tests.",
+    "tldr": "This paper presents the evolutionary agentic framework, ToolMol, for multi-objective drug discovery. It demonstrates superior performance on property optimization tasks, discovering ligands with over 10% stronger predicted binding affinity compared to existing methods across three protein targets. Notably, ToolMol ligands also excel in Absolute Binding Free Energy scores, surpassing existing methods by more than 35%. This suggests ToolMol could potentially lead to the discovery of novel, high-performing drug candidates.",
     "score": 12
   },
   {
-    "title": "Pretrained Model Representations as Acquisition Signals for Active Learning of MLIPs",
-    "url": "http://arxiv.org/abs/2605.03964v1",
-    "topic": "Bayesian Optimization & Active Learning",
-    "tldr": "This paper presents two acquisition signals derived from a pretrained MACE potential: a finite-width neural tangent kernel (NTK) and an activation kernel built from hidden latent space features. The pretrained model induces similarity spaces that preserve chemically meaningful structure, providing more reliable residual uncertainty estimates than other kernels. On reactive-chemistry benchmarks, both kernels outperform fixed-descriptor baselines, committee disagreement, and random acquisition, reducing the data required to reach performance targets by an average of 38% for energy error and 28% for force error, demonstrating their potential in active learning of MLIPs.",
-    "score": 12
+    "title": "Architecture-Specific Failure Modes in hERG QSAR Predictions for Iboga Alkaloids: A Within-Family Empirical Test of the Binding-vs-Blockade Limitation",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15003259/v1",
+    "topic": "QSAR & ADMET",
+    "tldr": "This paper investigates the limitations of Pred-hERG, a QSAR model for predicting hERG inhibition, using the iboga alkaloid compound family. The study reveals that despite low structural similarity among the eight tested compounds, Pred-hERG consistently labels seven as \"Inside AD\", while flagging only oxa-noribogaine, which has a benzofuran-replaced indole, as \"Outside AD\". This asymmetric failure pattern in Pred-hERG's applicability domain assessment provides a previously undescribed elaboration to the CiPA-aligned literature on clinically active compound classes.",
+    "score": 10
   },
   {
-    "title": "Regime-Conditioned Evaluation in Multi-Context Bayesian Optimization",
-    "url": "http://arxiv.org/abs/2605.04895v1",
-    "topic": "Bayesian Optimization & Active Learning",
-    "tldr": "In the multi-context Bayesian optimization, a hierarchical model reveals that the performance difference between Greedy and UCB strategies can reverse depending on the budget (B=50 vs B=100) in the GDSC2 benchmark, with a maximum gap of 0.050 Hit@1. Across 79 conditions, a significant fraction (19%) shows minimal difference (<0.01 Hit@1) between these strategies. Pre-registered predictions demonstrate an overall accuracy of 67.5%, and high accuracy within EMA prior families exceeding 90%.",
-    "score": 12
+    "title": "CADMA: Contribution-Aware Dynamic Multi-Modal Attention for Molecular Property Prediction and Chemical Reaction Analysis",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15003366/v1",
+    "topic": "QSAR & ADMET",
+    "tldr": "This paper introduces CADMA, a Contribution-Aware Dynamic Multi-modal Attention framework for molecular property prediction and chemical reaction analysis. The model addresses limitations in current methods by introducing three key innovations, including adaptive modality contribution adjustment and domain knowledge integration. Extensive experiments on MoleculeNet, QM9, USPTO-50K benchmarks show that CADMA outperforms existing methods, achieving high AUC scores (up to 0.931 on BACE) and top-1 accuracy (53.1% on USPTO-50K reaction prediction). The model's superior performance and interpretability make it a promising tool for drug discovery and cheminformatics research.",
+    "score": 10
   },
   {
-    "title": "Discovering Reaction Mechanisms with Transition Path Sampling-Based Active Learning of Machine-Learned Potentials",
-    "url": "http://arxiv.org/abs/2605.03737v1",
-    "topic": "Bayesian Optimization & Active Learning",
-    "tldr": "This paper presents an active learning framework that utilizes Transition Path Sampling (TPS) to generate targeted data for Machine Learning Potential (MLP) models, improving their accuracy in barrier regions. Applied to the electrochemical CO$_2$ reduction to CO on copper in explicit water, this approach eliminates nonphysical artifacts present in early models and achieves near-DFT energy and force accuracy. The resulting MLPs enable stable long-time sampling of reactive pathways, addressing a common challenge of MLP reliability in transition-state regions governing rare events. This work could potentially streamline the computational analysis of complex chemical reactions.",
-    "score": 11
-  },
-  {
-    "title": "CARD: Coarse-to-fine Autoregressive Modeling with Radix-based Decomposition for Transferable Free Energy Estimation",
-    "url": "http://arxiv.org/abs/2605.02657v1",
-    "topic": "Computational Chemistry",
-    "tldr": "This paper introduces CARD, a generative model that utilizes radix-based decomposition for coarse-to-fine autoregressive modeling of 3D molecular coordinates. The novel approach aims to enhance expressiveness and address the limitations of existing methods, which are either prohibitively expensive due to reliance on extensive molecular dynamics simulations or constrained by less-expressive generative models or input dimensions tied to a specific system. Experimental results across various tasks show that CARD matches the accuracy of classical computational methods on unseen systems with diverse topologies, while achieving an approximately 40-fold speedup in inference. This could potentially revolutionize drug discovery and cheminformatics by offering a more efficient and versatile free energy estimation method.",
+    "title": "Enabling Structure-Only Initialization and Out-of-Distribution Generalization in GNN-based Molecular Dynamics Simulators",
+    "url": "http://arxiv.org/abs/2605.09495v1",
+    "topic": "Uncertainty Quantification",
+    "tldr": "This paper presents a novel approach to molecular dynamics simulations using Graph Neural Networks (GNNs). The study introduces a differentiable GNN-based barostat for accurate tracking of system dimensions and pressure, crucial for capturing macroscopic responses and supporting out-of-distribution (OOD) generalization. By implementing these methods, the research significantly improves rollout stability and enables reliable OOD generalization, even in regimes with complex dynamics distinct from those in the training data. This work could potentially revolutionize the efficiency of modeling complex systems for materials design.",
     "score": 8
   },
   {
-    "title": "Closing the gap on a $0 budget: ensembling public molecular foundation models for HIV bioactivity prediction",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002804/v1",
+    "title": "QT-Net: Rethinking Evaluation of AI Models in Atomic Chemical Space",
+    "url": "http://arxiv.org/abs/2605.10458v1",
     "topic": "Molecular Representation Learning",
-    "tldr": "",
-    "brief": true,
-    "score": 0
+    "tldr": "This paper introduces QT-Net, a model for evaluating AI models within atomic chemical space. The evaluation protocol clusters atomic environments using SOAP descriptors and computes metrics based on unseen cluster labels during training. Notably, the computed molecular dipole moments from QT-Net's per-atom outputs align with ground-truth values reported in QM9. This suggests that QT-Net can infer properties of atoms in molecules outside its training set, potentially improving downstream molecular property prediction tasks.",
+    "score": 6
   },
   {
-    "title": "Benchmarking Graph Neural Networks, Molecular Fingerprints, and Their Fusion for Toxicity Prediction",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002849/v1",
-    "topic": "Molecular Representation Learning",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "ChemAgent: A Multi-Agent Attention Framework with Linear Distilled Encoding for Molecular Property Prediction and Chemical Reaction Optimization",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002835/v1",
-    "topic": "QSAR & ADMET",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Drug repurposing identifies Saquinavir as a dual inhibitor of Hepsin and Matriptase: A pharmacophore-based virtual screening, docking, and MD simulation study",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002770/v1",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "QuADMET-Former: Pre-training on Quantum Mechanical Properties Improves ADMET Prediction",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002429/v2",
-    "topic": "QSAR & ADMET",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Diffusion model for SU(N) gauge theories",
-    "url": "http://arxiv.org/abs/2605.06134v1",
-    "topic": "Generative Chemistry & Molecular Design",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Review of Machine Learning in Surfactant Science: QSPR Modelling and Generative Approaches",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15000942/v2",
-    "topic": "QSAR & ADMET",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "TDDFT Gradients and Nonadiabatic Couplings with Minimal Auxiliary Basis Set Approximation for Fewest-Switches Surface Hopping Dynamics",
-    "url": "http://arxiv.org/abs/2605.06489v1",
+    "title": "Absolute Binding Free Energy Calculations between the SARS-CoV-2 Main Protease and 130 Drug Leads using Implicit Ligand Theory",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001142/v2",
     "topic": "Computational Chemistry",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "SMolLM: Small Language Models Learn Small Molecular Grammar",
-    "url": "http://arxiv.org/abs/2605.06322v1",
-    "topic": "Generative Chemistry & Molecular Design",
+    "title": "In-Silico Screening and Molecular Dynamics Evaluation of Spirulina Platensis-Derived Compounds as Potential Antiviral Agents Against Dengue Virus NS2b/NS3 Protease",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15003303/v1",
+    "topic": "Computational Chemistry",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "Dysfunctional microglia-targeted nanoscavenger synergistically accelerates Aβ clearance and inhibits inflammatory cascade.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/41931967/",
-    "topic": "QSAR & ADMET",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "A comprehensive evaluation of the human Tg32 and Tg276 FcRn transgenic mouse and non-human primate models for predicting antibody pharmacokinetics in human.",
-    "url": "https://pubmed.ncbi.nlm.nih.gov/42099067/",
+    "title": "Scaffold-Aware QSAR Modelling of Cyclin-Dependent Kinase 2 Inhibition: Multi-Model Benchmarking, Applicability Domain Assessment, and an Open-Source Decision-Support Platform",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15003014/v1",
     "topic": "Uncertainty Quantification",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "GEMDAT: A Python Toolkit for Site-Resolved Diffusion Analysis in Solid-State Molecular Dynamics",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.10001531/v2",
+    "title": "Leveling up upconverting nanoparticles with machine learning",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001200/v2",
+    "topic": "Bayesian Optimization & Active Learning",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "An Iterative Evaluation Framework for Non-Canonical Amino Acid Peptide Drug Discovery: Sign-Direction Reproducible Multi-Layer Verification",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002948/v2",
+    "topic": "Drug Discovery & Cheminformatics",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "MLIP-Enhanced Thermochemistry Predictions across Organic Chemical Space",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15003003/v2",
+    "topic": "Uncertainty Quantification",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "Fast contracted Clebsch--Gordan tensor products for equivariant graph neural networks",
+    "url": "http://arxiv.org/abs/2605.15073v1",
+    "topic": "Molecular Representation Learning",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "Building a Physically-Interpretable Compressed Chemical Space via Grid-Based Optimization",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002967/v1",
+    "topic": "Generative Chemistry & Molecular Design",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "Rethinking Molecular OOD Generalization via Target-Aware Source Selection",
+    "url": "http://arxiv.org/abs/2605.13932v1",
+    "topic": "Uncertainty Quantification",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "It's All Connected: Topology-Aware Structural Graph Encoding Improves Performance on Polymer Prediction",
+    "url": "http://arxiv.org/abs/2605.10551v1",
+    "topic": "Molecular Representation Learning",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "Early Detection and Recovery of SCF Convergence Failures in Automated Quantum Chemistry Workflows via Time-Series Learning",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15001181/v3",
     "topic": "Computational Chemistry",
     "tldr": "",
     "brief": true,
     "score": 0
   },
   {
-    "title": "MOSAIC: Module Discovery via Sparse Additive Identifiable Causal Learning for Scientific Time Series",
-    "url": "http://arxiv.org/abs/2605.05524v1",
+    "title": "AMOEBA polarizable atomic multipole forcefield parameters for flavins",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15003242/v1",
+    "topic": "Uncertainty Quantification",
+    "tldr": "",
+    "brief": true,
+    "score": 0
+  },
+  {
+    "title": "WavesFM: Hierarchical Representation Learning for Longitudinal Wearable Sensor Waveforms",
+    "url": "http://arxiv.org/abs/2605.09173v1",
     "topic": "Molecular Representation Learning",
     "tldr": "",
     "brief": true,
