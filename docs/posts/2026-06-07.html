@@ -1,0 +1,732 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Drug Discovery Digest</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #eef3f5;
+            --bg-accent: #dde9ec;
+            --paper: rgba(255, 255, 255, 0.92);
+            --paper-strong: #ffffff;
+            --ink: #13212b;
+            --muted: #51626f;
+            --line: #cad7de;
+            --teal: #0c6b63;
+            --teal-soft: #dff2ee;
+            --slate: #d9e3ea;
+            --gold: #b8892d;
+            --gold-soft: #f5edd7;
+            --shadow: 0 24px 60px rgba(19, 33, 43, 0.10);
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background:
+                radial-gradient(circle at top left, rgba(12, 107, 99, 0.10), transparent 30%),
+                radial-gradient(circle at top right, rgba(184, 137, 45, 0.10), transparent 28%),
+                linear-gradient(180deg, var(--bg) 0%, #f7fafb 100%);
+            font-family: Georgia, "Times New Roman", serif;
+            line-height: 1.65;
+        }
+
+        a {
+            color: var(--teal);
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .page-shell {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 28px 18px 72px;
+        }
+
+        .hero {
+            background: linear-gradient(145deg, rgba(255,255,255,0.96), rgba(248,251,252,0.88));
+            border: 1px solid rgba(202, 215, 222, 0.9);
+            border-radius: 28px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+            margin-bottom: 34px;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(135deg, rgba(12, 107, 99, 0.12), transparent 45%),
+                linear-gradient(315deg, rgba(184, 137, 45, 0.12), transparent 42%);
+            pointer-events: none;
+        }
+
+        .hero-inner {
+            position: relative;
+            padding: 32px;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: var(--teal-soft);
+            color: var(--teal);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin: 18px 0 10px;
+            font-size: clamp(2.2rem, 4.6vw, 4rem);
+            line-height: 1.05;
+            letter-spacing: -0.03em;
+        }
+
+        .hero p {
+            margin: 0;
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 1.05rem;
+        }
+
+        .meta-strip {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 22px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--muted);
+            font-size: 0.92rem;
+        }
+
+        .meta-chip {
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.82);
+            border: 1px solid var(--line);
+        }
+
+        .profile-card {
+            width: min(280px, 100%);
+            background: rgba(255,255,255,0.84);
+            border: 1px solid rgba(202, 215, 222, 0.95);
+            border-radius: 22px;
+            padding: 20px;
+            backdrop-filter: blur(8px);
+        }
+
+        .profile-card img {
+            width: 76px;
+            height: 76px;
+            border-radius: 18px;
+            display: block;
+            margin-bottom: 14px;
+            box-shadow: 0 10px 24px rgba(19, 33, 43, 0.18);
+        }
+
+        .profile-card strong {
+            display: block;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1rem;
+        }
+
+        .profile-card span {
+            display: block;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+            margin: 6px 0 14px;
+        }
+
+        .profile-card a {
+            display: inline-block;
+            padding: 10px 14px;
+            border-radius: 999px;
+            background: var(--ink);
+            color: white;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .profile-card a:hover {
+            text-decoration: none;
+            background: var(--teal);
+        }
+
+        .content-frame {
+            background: var(--paper);
+            border: 1px solid rgba(202, 215, 222, 0.92);
+            border-radius: 26px;
+            box-shadow: var(--shadow);
+            padding: 26px;
+        }
+
+        .digest-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 26px;
+        }
+
+        .stat-card {
+            background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(239,245,247,0.95));
+            border: 1px solid var(--line);
+            border-radius: 18px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .stat-value {
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.9rem;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .section-headline, .section-title {
+            font-family: "Segoe UI", sans-serif;
+            font-size: clamp(1.5rem, 3vw, 2.2rem);
+            line-height: 1.15;
+            margin: 0 0 12px;
+            letter-spacing: -0.03em;
+        }
+
+        .section-subtitle {
+            margin: 0 0 24px;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .footer {
+            margin-top: 28px;
+            padding: 22px 8px 0;
+            border-top: 1px solid var(--line);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: space-between;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .paper-card {
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            background: var(--paper-strong);
+            margin-bottom: 18px;
+        }
+
+        .must-read-container {
+            margin-bottom: 32px;
+        }
+
+        .must-read-badge {
+            display: inline-block;
+            margin-bottom: 12px;
+            padding: 8px 12px;
+            border-radius: 999px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+        }
+
+        .must-read-paper, .insights-container, .optional-section {
+            border: 1px solid var(--line);
+            border-radius: 22px;
+            background: rgba(255,255,255,0.9);
+            padding: 24px;
+        }
+
+        .must-read-paper {
+            background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(248,252,251,0.92));
+        }
+
+        .must-read-title {
+            margin: 12px 0 14px;
+            font-size: clamp(1.7rem, 3vw, 2.4rem);
+            line-height: 1.18;
+        }
+
+        .must-read-meta, .must-read-action {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .must-read-summary, .insights-body, .paper-summary-featured {
+            color: var(--ink);
+        }
+
+        .must-read-summary p, .insights-body p, .paper-summary-featured p {
+            margin: 0 0 12px;
+        }
+
+        .must-read-summary ul, .insights-body ul, .paper-summary-featured ul {
+            margin: 0 0 12px 20px;
+        }
+
+        .topic-badge, .rank-indicator {
+            display: inline-flex;
+            align-items: center;
+            min-height: 34px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.88rem;
+            border: 1px solid var(--line);
+        }
+
+        .topic-badge {
+            background: var(--teal-soft);
+            color: var(--teal);
+            font-weight: 700;
+        }
+
+        .rank-indicator {
+            background: rgba(255,255,255,0.9);
+            color: var(--muted);
+        }
+
+        .btn-primary, .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 44px;
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--ink);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--teal);
+            border: 1px solid var(--line);
+        }
+
+        .featured-section {
+            margin-top: 34px;
+        }
+
+        .topic-group {
+            margin-top: 28px;
+        }
+
+        .topic-header {
+            margin: 0 0 14px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.15rem;
+            color: var(--teal);
+        }
+
+        .papers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 18px;
+        }
+
+        .paper-card-featured {
+            position: relative;
+            background: rgba(255,255,255,0.94);
+            border: 1px solid var(--line);
+            border-radius: 20px;
+            padding: 20px;
+            min-height: 100%;
+        }
+
+        .paper-rank {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .paper-title-featured {
+            margin: 0 0 12px;
+            padding-right: 56px;
+            font-size: 1.15rem;
+            line-height: 1.3;
+        }
+
+        .paper-footer {
+            margin-top: 16px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .link-read-more {
+            font-weight: 700;
+        }
+
+        .brief-list {
+            display: grid;
+            gap: 18px;
+        }
+
+        .brief-topic-title {
+            margin: 0 0 10px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--teal);
+        }
+
+        .brief-item {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .brief-item:last-child {
+            border-bottom: 0;
+        }
+
+        .brief-link {
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 600;
+        }
+
+        .paper-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 900px) {
+            .hero-inner {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-card {
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 680px) {
+            .page-shell {
+                padding: 16px 12px 48px;
+            }
+
+            .hero-inner, .content-frame {
+                padding: 18px;
+            }
+
+            .footer {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-shell">
+        <header class="hero">
+            <div class="hero-inner">
+                <div>
+                    <div class="eyebrow">Scientific Literature Intelligence</div>
+                    <h1>AI Drug Discovery Digest</h1>
+                    <p>Weekly literature intelligence for drug discovery, cheminformatics, and molecular AI</p>
+                    <div class="meta-strip">
+                        <div class="meta-chip">Published June 07, 2026</div>
+                        <div class="meta-chip">Sources: arXiv, PubMed, ChemRxiv</div>
+                        <div class="meta-chip">Local summarization with Ollama</div>
+                    </div>
+                </div>
+                <aside class="profile-card">
+                    <img src="https://github.com/abbadonaz.png" alt="GitHub avatar for abbadonaz">
+                    <strong>abbadonaz</strong>
+                    <span>Maintainer of this automated digest for drug discovery and molecular AI.</span>
+                    <a href="https://github.com/abbadonaz">View GitHub Profile</a>
+                </aside>
+            </div>
+        </header>
+
+        <main class="content-frame">
+            
+    <div class="digest-stats">
+        <div class="stat-card">
+            <span class="stat-value">10</span>
+            <span class="stat-label">Featured papers</span>
+        </div>
+        <div class="stat-card">
+            <span class="stat-value">13</span>
+            <span class="stat-label">Additional references</span>
+        </div>
+    </div>
+    
+        <section class="must-read-container">
+            <div class="must-read-badge">Editor's pick</div>
+            <article class="must-read-paper" id="genotype-conditioned-molecular-generation-via-evidence-grounded-multi-objective-latent-perturbation-in-diffusion-models">
+                <div class="must-read-meta">
+                    <span class="topic-badge">Generative Chemistry &amp; Molecular Design</span>
+                    <span class="rank-indicator">Highest ranked paper this week</span>
+                </div>
+                <h2 class="must-read-title">Genotype-Conditioned Molecular Generation via Evidence-Grounded Multi-Objective Latent Perturbation in Diffusion Models</h2>
+                <div class="must-read-summary">
+                    <p>This paper introduces a latent-space optimization approach for a pretrained genotype-to-drug diffusion model, utilizing a learnable perturbation to optimize a composite reward that considers predicted drug sensitivity (AUC), drug-likeness (QED), and synthetic accessibility (SAS). The method also incorporates a multi-agent language model pipeline grounded in the diffusion model's attention mechanism for mechanistic consistency. Experiments on 15 cancer cell lines from three held-out evaluation sets show consistent and significant improvements over competing baselines in terms of sensitivity, drug-likeness, synthesizability, and chemical validity. This work could potentially advance drug discovery by providing a more comprehensive and plausible molecular generation approach.</p>
+                </div>
+                <div class="must-read-action">
+                    <a href="http://arxiv.org/abs/2606.01461v1" class="btn-primary">Read the paper</a>
+                    <a href="http://arxiv.org/abs/2606.01461v1" class="btn-secondary">Open source record</a>
+                </div>
+            </article>
+        </section>
+        
+    <section class="insights-container">
+        <h2 class="section-headline">Weekly research themes</h2>
+        <p class="section-subtitle">A short editorial synthesis of the strongest scientific directions in this batch.</p>
+        <div class="insights-body">
+            <p>In this week's digest, we witness an intriguing convergence of advancements in generative chemistry and molecular design, underscoring the growing importance of AI-driven approaches in industrial R&amp;D. Two papers introduce novel methods for optimizing drug candidates: one leverages a latent-space optimization approach for pretrained genotype-to-drug models, while another presents RxnMol, a framework that encodes candidates as synthetic-route representations for efficient drug discovery and cheminformatics applications.</p>
+<p>Another theme emerging is the exploration of Bayesian Optimization &amp; Active Learning, with a paper proposing a method to dynamically calibrate Large Language Model priors in multi-objective Bayesian optimization, enhancing robustness over fixed LLM priors. This development could potentially streamline the decision-making process in drug discovery and cheminformat</p>
+        </div>
+    </section>
+    
+        <section class="featured-section">
+            <h2 class="section-headline">Featured papers</h2>
+            <p class="section-subtitle">Concise paper overviews built from section-aware evidence selection and local summarization.</p>
+        
+            <div class="topic-group">
+                <h3 class="topic-header">Bayesian Optimization &amp; Active Learning</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="evidence-gated-llm-priors-for-multi-objective-bayesian-optimization">
+                    <div class="paper-rank">#2</div>
+                    <h4 class="paper-title-featured">Evidence-Gated LLM Priors for Multi-Objective Bayesian Optimization</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper explores the utilization of Large Language Model (LLM) generated expert priors in multi-objective Bayesian optimization, addressing the issue of uncalibrated suggestions from these models. The study presents a method to dynamically calibrate LLM priors based on downstream objective values, improving robustness over fixed LLM priors. This approach was tested across synthetic stress tests and three molecule optimization benchmarks using \qwenflash{}-generated expert priors.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2606.01730v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="towards-automated-discovery-a-review-of-generative-models-multimodal-learning-and-closed-loop-workflows-in-inverse-materials-design">
+                    <div class="paper-rank">#3</div>
+                    <h4 class="paper-title-featured">Towards Automated Discovery: A Review of Generative Models, Multimodal Learning and Closed-Loop Workflows in Inverse Materials Design</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper reviews advancements in generative crystal structure modeling, multimodal learning, and closed-loop design pipelines for crystalline solids within the context of inverse materials design. The approach aims to transition materials discovery from predictive models to targeted proposals that meet physical constraints. Notably, the review highlights the potential of multimodal learning to integrate various materials modalities, such as crystal structures, thermodynamic, electronic information, microscopy, spectroscopy, processing context, and scientific text, creating a more universal and transferable representation of chemical space.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2606.02507v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">Computational Chemistry</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="physics-based-vs-ai-based-free-energy-prediction-for-protein-ligand-potency-public-benchmarks-and-internal-project-evidence">
+                    <div class="paper-rank">#4</div>
+                    <h4 class="paper-title-featured">Physics-Based vs AI-Based Free Energy Prediction for Protein-Ligand Potency: Public Benchmarks and Internal Project Evidence</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper investigates the factors influencing the accuracy and robustness of modern Reaction-Based Free Energy (RBFE) workflows for predicting protein-ligand potency. It compares the performance of physics-based and AI methods, finding that while AI methods excel on curated benchmarks, physics-based free energy calculations are crucial for decision-making in unseen chemical matter. The study also highlights improvements through localized force field refinements, protein conformational control, and alchemical schedule design.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002526/v2" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="using-relative-binding-free-energy-calculations-for-rank-ordering-of-endocrine-disrupting-compounds-to-the-human-estrogen-receptor-alpha">
+                    <div class="paper-rank">#5</div>
+                    <h4 class="paper-title-featured">Using Relative Binding Free Energy Calculations for Rank Ordering of Endocrine Disrupting Compounds to the Human Estrogen Receptor Alpha</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper explores the application of alchemical relative binding free energy (RBFE) calculations for ranking endocrine disrupting compounds (EDCs) towards the human Estrogen Receptor Alpha (ERα). The study demonstrates that molecular docking, particularly with receptor flexibility taken into account, can accurately predict EDC binding poses to ERα, potentially enhancing computational predictions in risk assessment for EDCs.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004264/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">Generative Chemistry &amp; Molecular Design</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="synthesis-aware-molecular-generation-via-reaction-driven-global-search">
+                    <div class="paper-rank">#6</div>
+                    <h4 class="paper-title-featured">Synthesis-Aware Molecular Generation via Reaction-Driven Global Search</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper introduces RxnMol, a framework for synthesis-aware molecular optimization. It encodes candidates as synthetic-route representations of readily available building blocks, which are converted into products through sequential reaction prediction and population-based global optimization. In protein target and bioactivity optimization tasks, RxnMol demonstrates improved Top-1 performance compared to generative baselines and synthesis-constrained methods in most benchmarks, suggesting its potential for efficient drug discovery and cheminformatics applications.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004299/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="fairness-definitions-and-metrics-in-deep-reinforcement-learning-for-drug-discovery-in-healthcare-a-rapid-evidence-review">
+                    <div class="paper-rank">#7</div>
+                    <h4 class="paper-title-featured">Fairness Definitions and Metrics in Deep Reinforcement Learning for Drug Discovery in Healthcare: A Rapid Evidence Review</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper focuses on fairness definitions and metrics in Deep Reinforcement Learning (DRL) for drug discovery, specifically in molecule generation within healthcare. The study presents a concise set of fairness criteria, including distributional balance in physicochemical descriptors, scaffold/chemotype diversity, groupwise validity, toxicity, and synthetic accessibility as key metrics. These findings offer valuable guidance for ensuring equitable outcomes in DRL-driven drug discovery processes.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="http://arxiv.org/abs/2606.02902v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="validity-is-not-enough-quantifying-structural-collapse-and-inheritance-loss-in-selfies-based-molecular-crossover">
+                    <div class="paper-rank">#8</div>
+                    <h4 class="paper-title-featured">VALIDITY IS NOT ENOUGH: QUANTIFYING STRUCTURAL COLLAPSE AND INHERITANCE LOSS IN SELFIES-BASED MOLECULAR CROSSOVER</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper investigates the impact of SELFIES correction on molecular crossover in genetic algorithms (GAs), using drug-like molecules from the ZINC20 database. Through 10,000 large-scale simulations and multi-generational experiments, it reveals that while SELFIES ensures chemically valid generations, its correction mechanism may unintentionally alter crossover semantics and limit structural diversity during evolutionary exploration. This finding highlights the need for a better understanding of SELFIES' effects on molecular evolution in drug discovery and cheminformatics.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004274/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                <article class="paper-card-featured" id="generative-glide-a-de-novo-workflow-for-ultra-large-library-screening">
+                    <div class="paper-rank">#9</div>
+                    <h4 class="paper-title-featured">Generative Glide: A De Novo Workflow for Ultra-large Library Screening</h4>
+                    <div class="paper-summary-featured">
+                        <p>The Generative Glide workflow, an integrated framework linking in silico generation to physical acquisition, utilizes active learning to enhance its predictive accuracy within high-potency domains. This refinement allows for effective navigation and exploitation of underrepresented low-scoring compounds in the initial training data. Deployed across various protein targets and multiple ultra-large libraries, it consistently achieves a significant improvement in docking score distributions towards better scoring compounds while maintaining scaffold diversity.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004314/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            
+            <div class="topic-group">
+                <h3 class="topic-header">QSAR &amp; ADMET</h3>
+                <div class="papers-grid">
+            
+                <article class="paper-card-featured" id="chemdistill-hierarchical-graph-attention-distillation-with-parameter-efficient-multi-task-adapters-for-molecular-property-prediction-and-chemical-reaction-analysis">
+                    <div class="paper-rank">#10</div>
+                    <h4 class="paper-title-featured">ChemDistill: Hierarchical Graph Attention Distillation with Parameter-Efficient Multi-Task Adapters for Molecular Property Prediction and Chemical Reaction Analysis</h4>
+                    <div class="paper-summary-featured">
+                        <p>This paper introduces ChemDistill, a framework for chemical knowledge distillation utilizing hierarchical graph attention and parameter-efficient multi-task adapters. The proposed method aims to address challenges in molecular property prediction and chemical reaction analysis, particularly cross-domain knowledge transfer, multi-task learning for diverse endpoints, and the integration of spectral data with molecular graph representations. On the Tox21 benchmark, ChemDistill achieves a ROCAUC of 0.879, outperforming the teacher model ChemBERTa while being significantly more compact, demonstrating its potential for efficient and effective drug discovery and cheminformatics applications.</p>
+                    </div>
+                    <div class="paper-footer">
+                        <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004323/v1" class="link-read-more">Read paper</a>
+                    </div>
+                </article>
+                
+                </div>
+            </div>
+            </section>
+        <section class="optional-section">
+            <h2 class="section-headline">Additional references</h2>
+            <p class="section-subtitle">13 papers passed the filter but were not expanded into full summaries.</p>
+            <div class="brief-list">
+        <div class='brief-topic'><h4 class='brief-topic-title'>Bayesian Optimization &amp; Active Learning</h4>
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2606.04647v1" class="brief-link">ALINC: Active Learning for Inductive Node Classification via Graph Sampling</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Computational Chemistry</h4>
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2606.04100v1" class="brief-link">Stein Kernelized Molecular Dynamics for Active Learning of Interatomic Potentials</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004357/v1" class="brief-link">PyChemTools: An Open-Source Workflow for Computational Chemistry, Spectral Analysis, and Reaction Modelling Huma Basheer, Imran A. Khan</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Drug Discovery &amp; Cheminformatics</h4>
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004205/v2" class="brief-link">A Machine Learning Crowdsourcing Initiative to Accelerate DEL-ML Hit Finding in Drug Discovery</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004114/v1" class="brief-link">Predicting PROTAC Oral Bioavailability with Physics-Based Foundation Model Finetuning</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Molecular Representation Learning</h4>
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004175/v1" class="brief-link">Feature Attribution in Graph Neural Networks and Its Connection to Chemical Group Contributions</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2606.04021v1" class="brief-link">Structure-Aware Prediction of PROTAC-Mediated Protein Degradability via Graph Neural Networks</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>QSAR &amp; ADMET</h4>
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004188/v1" class="brief-link">Do Frozen SMILES Foundation Embeddings Beat Fingerprints? A Split- and Low-Data Benchmark on ADMET and CNS Bioactivity Tasks</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004122/v1" class="brief-link">ChemCorr: A Unified Framework for Molecular Property Prediction and Chemical Knowledge Graph Reasoning via Correlation-Aware Pre-training</a>
+                </div>
+                </div><div class='brief-topic'><h4 class='brief-topic-title'>Uncertainty Quantification</h4>
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004189/v1" class="brief-link">Are Atoms Enough? An Explainable Graph Neural Network for Carbon Capture and Gas Separation in Metal-Organic Frameworks</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2606.01595v1" class="brief-link">Uncertainty-Calibrated Diffusion for Reliable 3D Molecular Graph Generation</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="http://arxiv.org/abs/2606.03846v1" class="brief-link">Clustered Self-Assessment: A Simple yet Effective Method for Uncertainty Quantification in Large Language Models</a>
+                </div>
+                
+                <div class="brief-item">
+                    <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15000086/v2" class="brief-link">Mixed Quantum-Classical Dynamics for Molecular Excited States: Reliability, Scalability, and Representation</a>
+                </div>
+                </div>
+            </div>
+        </section>
+        
+            <footer class="footer">
+                <div>Curated pipeline for recent literature triage, evidence extraction, and scientific summarization.</div>
+                <div>Built for GitHub Pages and local LLM workflows.</div>
+            </footer>
+        </main>
+    </div>
+</body>
+</html>
