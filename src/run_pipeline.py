@@ -1,25 +1,29 @@
-import os
-import re
-from datetime import date
-
-from blog_template import render_blog
-from clean_sentences import clean_sentences
-from config import MAX_BRIEF_PAPERS, MAX_FEATURED_PAPERS, PROCESS_ALL_WHEN_NO_NEW
-from deduplicate_papers import mark_papers_seen, split_new_and_seen_papers
-from download_pdfs import download_pdf
-from evidence_selector import has_sufficient_summary_evidence
-from fetch_arxiv import fetch_arxiv_papers
-from fetch_chemrxiv import fetch_chemrxiv_papers
-from fetch_pubmed import fetch_pubmed_papers
-from filter_papers import filter_relevant_papers
-from generate_digest import generate_digest_html, slugify_title
-from generate_narrative import generate_weekly_narrative
-from llm_summarizer import summarize_papers
-from paper_scoring import rank_papers
-from pdf_extract import extract_pdf_text, split_sentences
-from pdf_sections import build_paper_context, extract_sections
-from sentence_ranker import rank_sentences
-from utils import save_json
+from digest_core.cache import JsonSourceCache
+from digest_core.config import MAX_BRIEF_PAPERS, MAX_FEATURED_PAPERS, PROCESS_ALL_WHEN_NO_NEW
+from digest_core.logging import RunLogger
+from digest_core.models import PipelinePaths, PipelineSettings
+from evidence.download_pdfs import download_pdf
+from evidence.pdf_extract import extract_pdf_text
+from evidence.pdf_sections import build_paper_context, extract_sections
+from evidence.pipeline import (
+    EvidenceBuilderDependencies,
+    EvidencePreparationPipeline,
+    FeaturedPaperEvidenceBuilder,
+    build_abstract_record as _build_abstract_record,
+    is_informative_abstract as _is_informative_abstract,
+    make_brief_record as _make_brief_record,
+    normalize_text as _normalize_text,
+)
+from evidence.selector import has_sufficient_summary_evidence
+from evidence.sentence_ranker import rank_sentences
+from pipeline.research_pipeline import ResearchDigestPipeline
+from sources.arxiv import fetch_arxiv_papers
+from sources.chemrxiv import fetch_chemrxiv_papers
+from sources.pubmed import fetch_pubmed_papers
+from sources.retrieval import LiteratureRetriever, PaperSource
+from summarization.llm import summarize_papers
+from summarization.narrative import generate_weekly_narrative
+from web.publishing import DigestPublisher
 
 
 RAW_PATH = "data/raw_papers.json"
@@ -32,337 +36,122 @@ INDEX_PATH = "docs/index.html"
 ARCHIVE_PATH = "docs/archive.html"
 
 
-def _normalize_text(text):
-    return re.sub(r"\W+", " ", (text or "").lower()).strip()
-
-
-def _is_informative_abstract(title, abstract):
-    abstract = (abstract or "").strip()
-    if not abstract:
-        return False
-
-    if _normalize_text(title) == _normalize_text(abstract):
-        return False
-
-    return len(abstract) >= 120 and any(char in abstract for char in ".!?")
-
-
-def _make_brief_record(paper):
-    return {
-        "title": paper["title"],
-        "url": paper["url"],
-        "topic": paper.get("topic", "Other"),
-        "brief": True,
-    }
-
-
-def _build_abstract_record(paper, abstract):
-    abstract = (abstract or "").strip()
-    if not _is_informative_abstract(paper.get("title", ""), abstract):
-        return None
-
-    abstract_sentences = clean_sentences(split_sentences(abstract, min_chars=0, max_chars=1000))
-    if not abstract_sentences:
-        abstract_sentences = [abstract]
-
-    record = {
-        "title": paper["title"],
-        "url": paper["url"],
-        "topic": paper.get("topic", "Other"),
-        "sentences": abstract_sentences[:10],
-        "context": abstract,
-        "sections": {"abstract": abstract},
-    }
-
-    if not has_sufficient_summary_evidence(record):
-        return None
-
-    return record
-
-
 def ensure_dirs():
-    os.makedirs("data", exist_ok=True)
-    os.makedirs(POSTS_DIR, exist_ok=True)
+    DigestPublisher(_default_paths()).ensure_dirs()
 
 
 def save_weekly_post(html):
-    today = date.today().isoformat()
-    filename = f"{POSTS_DIR}/{today}.html"
-
-    with open(filename, "w", encoding="utf-8") as f:
-        f.write(html)
-
-    return filename
+    return DigestPublisher(_default_paths()).save_weekly_post(html)
 
 
 def save_latest_post(html):
-    with open(INDEX_PATH, "w", encoding="utf-8") as f:
-        f.write(html)
+    DigestPublisher(_default_paths()).save_latest_post(html)
 
 
 def build_navigation_index(summaries, latest_post_filename):
-    featured = [paper for paper in summaries if not paper.get("brief", False)]
-    brief = [paper for paper in summaries if paper.get("brief", False)]
-    latest_post_name = os.path.basename(latest_post_filename)
-
-    featured_links = ""
-    for idx, paper in enumerate(featured[:12], start=1):
-        anchor = slugify_title(paper["title"])
-        featured_links += f"""
-        <div class="paper-card">
-            <div class="paper-title">#{idx} {paper["title"]}</div>
-            <div class="section-subtitle">{paper.get("topic", "Other")}</div>
-            <a href="posts/{latest_post_name}#{anchor}">Open summary</a>
-        </div>
-        """
-
-    brief_links = ""
-    for paper in brief[:20]:
-        brief_links += f"""
-        <div class="paper-card">
-            <div class="paper-title">{paper["title"]}</div>
-            <div class="section-subtitle">{paper.get("topic", "Other")}</div>
-            <a href="{paper["url"]}">Open source paper</a>
-        </div>
-        """
-
-    return render_blog(
-        f"""
-        <div class="digest-stats">
-            <div class="stat-card">
-                <span class="stat-value">{len(featured)}</span>
-                <span class="stat-label">Featured summaries</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value">{len(brief)}</span>
-                <span class="stat-label">Additional references</span>
-            </div>
-        </div>
-
-        <section class="must-read-container">
-            <div class="must-read-badge">Navigation Hub</div>
-            <article class="must-read-paper">
-                <h2 class="must-read-title">Choose where to start</h2>
-                <p class="section-subtitle">Use this homepage as the mother index for the current weekly batch. Open the full digest, jump to a featured paper summary, or browse the archive.</p>
-                <div class="must-read-action">
-                    <a href="posts/{latest_post_name}" class="btn-primary">Open latest digest</a>
-                    <a href="archive.html" class="btn-secondary">Browse archive</a>
-                </div>
-            </article>
-        </section>
-
-        <section class="featured-section">
-            <h2 class="section-headline">Featured summaries</h2>
-            <p class="section-subtitle">Direct links into the latest digest for the current featured papers.</p>
-            <div class="papers-grid">
-                {featured_links or '<p>No featured summaries are available for this run.</p>'}
-            </div>
-        </section>
-
-        <section class="optional-section">
-            <h2 class="section-headline">Additional references</h2>
-            <p class="section-subtitle">Relevant papers kept as lightweight references in the current run.</p>
-            <div class="papers-grid">
-                {brief_links or '<p>No additional references were included in this run.</p>'}
-            </div>
-        </section>
-        """,
-        publication_date=date.today(),
-        page_title="AI Drug Discovery Digest",
-        page_tagline="A navigation hub for the latest weekly summaries, paper links, and archive pages.",
-    )
+    return DigestPublisher(_default_paths()).build_navigation_index(summaries, latest_post_filename)
 
 
 def rebuild_archive():
-    posts = sorted(os.listdir(POSTS_DIR), reverse=True)
-    links = ""
-
-    for post_name in posts:
-        if not post_name.endswith(".html"):
-            continue
-
-        date_str = post_name.replace(".html", "")
-        links += f"""
-        <div class="paper-card">
-            <div class="paper-title">
-                Weekly Digest - {date_str}
-            </div>
-
-            <a href="posts/{post_name}">Read digest -></a>
-        </div>
-        """
-
-    page = render_blog(
-        f"""
-        <div class="section-title">
-        Digest Archive
-        </div>
-
-        {links}
-        """,
-        page_title="AI Drug Discovery Digest Archive",
-        page_tagline="An index of weekly digests focused on drug discovery, computational chemistry, and molecular machine learning.",
-    )
-
-    with open(ARCHIVE_PATH, "w", encoding="utf-8") as f:
-        f.write(page)
+    DigestPublisher(_default_paths()).rebuild_archive()
 
 
 def build_featured_paper_record(paper):
-    pdf_path = download_pdf(paper)
-    if not pdf_path:
-        return _build_abstract_record(paper, paper.get("abstract"))
+    dependencies = EvidenceBuilderDependencies(
+        download_pdf=download_pdf,
+        extract_pdf_text=extract_pdf_text,
+        extract_sections=extract_sections,
+        build_paper_context=build_paper_context,
+        rank_sentences=rank_sentences,
+        evidence_validator=has_sufficient_summary_evidence,
+    )
+    return FeaturedPaperEvidenceBuilder(dependencies).build_featured_record(paper)
 
-    text = extract_pdf_text(pdf_path)
-    if not text:
-        return _build_abstract_record(paper, paper.get("abstract"))
 
-    sections = extract_sections(text)
-    source_abstract = (paper.get("abstract") or "").strip()
-    if _is_informative_abstract(paper.get("title", ""), source_abstract):
-        sections["abstract"] = source_abstract
+def _default_paths():
+    return PipelinePaths(
+        raw_papers=RAW_PATH,
+        filtered_papers=FILTERED_PATH,
+        clustered_papers="data/clustered_papers.json",
+        paper_sentences=SENTENCES_PATH,
+        summaries=SUMMARIES_PATH,
+        posts_dir=POSTS_DIR,
+        index=INDEX_PATH,
+        archive=ARCHIVE_PATH,
+    )
 
-    combined_text = build_paper_context(sections)
-    sentences = clean_sentences(split_sentences(combined_text))
-    ranked = rank_sentences(sentences, top_k=25)
 
-    record = {
-        "title": paper["title"],
-        "url": paper["url"],
-        "topic": paper.get("topic", "Other"),
-        "sentences": ranked,
-        "context": combined_text,
-        "sections": sections,
-    }
+def _default_settings():
+    return PipelineSettings(
+        max_featured_papers=MAX_FEATURED_PAPERS,
+        max_brief_papers=MAX_BRIEF_PAPERS,
+        process_all_when_no_new=PROCESS_ALL_WHEN_NO_NEW,
+    )
 
-    if not has_sufficient_summary_evidence(record):
-        return _build_abstract_record(paper, paper.get("abstract"))
 
-    return record
+def build_pipeline():
+    paths = _default_paths()
+    settings = _default_settings()
+    logger = RunLogger()
+
+    retriever = LiteratureRetriever(
+        [
+            PaperSource(
+                "arXiv",
+                lambda: fetch_arxiv_papers(
+                    days_back=settings.days_back,
+                    max_results=settings.arxiv_max_results,
+                ),
+                cache_key="arxiv",
+            ),
+            PaperSource(
+                "PubMed",
+                lambda: fetch_pubmed_papers(
+                    days_back=settings.days_back,
+                    max_results=settings.pubmed_max_results,
+                ),
+                cache_key="pubmed",
+            ),
+            PaperSource(
+                "ChemRxiv",
+                lambda: fetch_chemrxiv_papers(days_back=settings.days_back),
+                cache_key="chemrxiv",
+            ),
+        ],
+        cache=JsonSourceCache(),
+        cache_ttl_hours=settings.source_cache_ttl_hours,
+        retry_attempts=settings.source_retry_attempts,
+        logger=logger,
+    )
+
+    evidence_dependencies = EvidenceBuilderDependencies(
+        download_pdf=download_pdf,
+        extract_pdf_text=extract_pdf_text,
+        extract_sections=extract_sections,
+        build_paper_context=build_paper_context,
+        rank_sentences=rank_sentences,
+        evidence_validator=has_sufficient_summary_evidence,
+    )
+    evidence_pipeline = EvidencePreparationPipeline(
+        FeaturedPaperEvidenceBuilder(evidence_dependencies),
+        max_featured_papers=settings.max_featured_papers,
+        max_brief_papers=settings.max_brief_papers,
+    )
+
+    return ResearchDigestPipeline(
+        retriever=retriever,
+        evidence_pipeline=evidence_pipeline,
+        publisher=DigestPublisher(paths),
+        paths=paths,
+        settings=settings,
+        summarizer=summarize_papers,
+        narrative_generator=generate_weekly_narrative,
+        logger=logger,
+    )
 
 
 def main():
-    ensure_dirs()
-
-    print("\n--- AI & Cheminformatics Literature Pipeline ---\n")
-
-    print("Fetching papers from arXiv...")
-    try:
-        arxiv_papers = fetch_arxiv_papers(days_back=7, max_results=75)
-        print(f"  Got {len(arxiv_papers)} arXiv papers")
-    except Exception as e:
-        print(f"  arXiv fetch failed: {e}")
-        arxiv_papers = []
-
-    print("Fetching papers from PubMed...")
-    try:
-        pubmed_papers = fetch_pubmed_papers(days_back=7, max_results=100)
-        print(f"  Got {len(pubmed_papers)} PubMed papers")
-    except Exception as e:
-        print(f"  PubMed fetch failed: {e}")
-        pubmed_papers = []
-
-    print("Fetching papers from ChemRxiv...")
-    try:
-        chemrxiv_papers = fetch_chemrxiv_papers(days_back=7)
-        print(f"  Got {len(chemrxiv_papers)} ChemRxiv papers")
-    except Exception as e:
-        print(f"  ChemRxiv fetch failed: {e}")
-        chemrxiv_papers = []
-
-    fetched_papers = arxiv_papers + pubmed_papers + chemrxiv_papers
-    print(f"\nFetched {len(fetched_papers)} total papers")
-
-    new_papers, seen_papers = split_new_and_seen_papers(fetched_papers)
-    print(f"{len(new_papers)} new papers after deduplication")
-
-    if new_papers:
-        mark_papers_seen(new_papers)
-
-    papers_to_process = new_papers
-    if not papers_to_process and PROCESS_ALL_WHEN_NO_NEW:
-        papers_to_process = seen_papers
-        print("No new papers found; rebuilding digest from the current fetched set.")
-
-    save_json(papers_to_process, RAW_PATH)
-
-    if not papers_to_process:
-        print("\nNo papers available for processing. Pipeline halting.")
-        return
-
-    print("\nFiltering relevant papers...")
-    filtered = filter_relevant_papers(papers_to_process)
-    print(f"{len(filtered)} papers passed filtering")
-    save_json(filtered, FILTERED_PATH)
-
-    print("\nDownloading PDFs and extracting key evidence...")
-    paper_sentences = []
-    brief_papers = []
-
-    for paper in filtered[:MAX_FEATURED_PAPERS]:
-        featured_paper = build_featured_paper_record(paper)
-        if featured_paper:
-            paper_sentences.append(featured_paper)
-        elif len(brief_papers) < MAX_BRIEF_PAPERS:
-            brief_papers.append(_make_brief_record(paper))
-
-    for paper in filtered[MAX_FEATURED_PAPERS:]:
-        if len(brief_papers) >= MAX_BRIEF_PAPERS:
-            break
-        brief_papers.append(_make_brief_record(paper))
-
-    print(f"Processed PDFs for {len(paper_sentences)} featured papers")
-    print(f"Added {len(brief_papers)} brief references")
-
-    save_json(paper_sentences, SENTENCES_PATH)
-
-    if not paper_sentences:
-        print("No papers processed.")
-        return
-
-    print("\nGenerating concise summaries for featured papers...")
-    try:
-        summaries = summarize_papers(paper_sentences)
-    except Exception as error:
-        print(f"Concise summarization failed at pipeline level: {error}")
-        summaries = []
-        for paper in paper_sentences:
-            summaries.append({
-                "title": paper["title"],
-                "url": paper["url"],
-                "topic": paper.get("topic", "Other"),
-                "tldr": "Automatic summarization failed for this paper, so please review the original source directly.",
-            })
-    summaries = rank_papers(summaries)
-
-    for brief in brief_papers:
-        summaries.append({
-            "title": brief["title"],
-            "url": brief["url"],
-            "topic": brief.get("topic", "Other"),
-            "tldr": "",
-            "brief": True,
-            "score": 0,
-        })
-
-    print(f"Generated {len(summaries)} total entries ({len(paper_sentences)} featured + {len(brief_papers)} brief)")
-    save_json(summaries, SUMMARIES_PATH)
-
-    print("\nGenerating weekly narrative...")
-    narrative = generate_weekly_narrative(summaries)
-
-    print("\nGenerating blog HTML...")
-    content_html = generate_digest_html(summaries, narrative)
-    page = render_blog(content_html, publication_date=date.today())
-    filename = save_weekly_post(page)
-    save_latest_post(build_navigation_index(summaries, filename))
-
-    print(f"\nWeekly post saved: {filename}")
-    print(f"Homepage updated with navigation hub: {INDEX_PATH}")
-
-    rebuild_archive()
-    print(f"Archive updated: {ARCHIVE_PATH}")
-    print("\nPipeline finished successfully")
+    build_pipeline().run()
 
 
 if __name__ == "__main__":

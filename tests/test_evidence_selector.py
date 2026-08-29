@@ -1,13 +1,13 @@
-from evidence_selector import build_summary_payload, select_relevant_evidence, select_summary_evidence
+from evidence.selector import build_summary_payload, select_relevant_evidence, select_summary_evidence
 
 
 def test_select_relevant_evidence_prioritizes_results_and_domain_language(monkeypatch):
     monkeypatch.setattr(
-        "evidence_selector.encode_texts",
+        "evidence.selector.encode_texts",
         lambda texts: [[float(index + 1)] for index, _ in enumerate(texts)],
     )
     monkeypatch.setattr(
-        "evidence_selector.cosine_similarity",
+        "evidence.selector.cosine_similarity",
         lambda a, b: float(a[0]),
     )
 
@@ -34,7 +34,7 @@ def test_select_relevant_evidence_prioritizes_results_and_domain_language(monkey
 
 def test_build_summary_payload_formats_evidence_lines(monkeypatch):
     monkeypatch.setattr(
-        "evidence_selector.select_summary_evidence",
+        "evidence.selector.select_summary_evidence",
         lambda paper, max_items=4: [
             {
                 "summary_role": "result",
@@ -55,8 +55,8 @@ def test_build_summary_payload_formats_evidence_lines(monkeypatch):
         {"title": "Example", "url": "https://example.org/paper", "topic": "Docking"}
     )
 
-    assert "[Result | Results] The method improved docking accuracy." in payload["summary_input"]
-    assert "[Overview | Conclusion] The approach is useful for screening." in payload["summary_input"]
+    assert "[E1 | Result | Results] The method improved docking accuracy." in payload["summary_input"]
+    assert "[E2 | Overview | Conclusion] The approach is useful for screening." in payload["summary_input"]
 
 
 def test_select_summary_evidence_prefers_title_aligned_study_sentences_from_abstract():

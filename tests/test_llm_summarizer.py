@@ -1,11 +1,11 @@
-from llm_summarizer import summarize_papers
-import llm_summarizer
-from config import OLLAMA_FALLBACK_NUM_PREDICT, SECONDARY_FALLBACK_MODEL_NAME
+from summarization.llm import summarize_papers
+import summarization.llm as llm_summarizer
+from digest_core.config import OLLAMA_FALLBACK_NUM_PREDICT, SECONDARY_FALLBACK_MODEL_NAME
 
 
 def test_summarize_papers_uses_extractive_fallback_when_ollama_fails(monkeypatch):
     monkeypatch.setattr(
-        "llm_summarizer.summarize_paper",
+        "summarization.llm.summarize_paper",
         lambda paper: (_ for _ in ()).throw(RuntimeError("runner crashed")),
     )
 
@@ -34,7 +34,7 @@ def test_summarize_papers_uses_extractive_fallback_when_ollama_fails(monkeypatch
 
 def test_ollama_chat_uses_fallback_model_on_memory_error(monkeypatch):
     calls = []
-    monkeypatch.setattr("ollama_client.get_installed_model_names", lambda: ())
+    monkeypatch.setattr("summarization.ollama_client.get_installed_model_names", lambda: ())
 
     def fake_chat(model, messages, options):
         calls.append((model, options["num_predict"]))
@@ -44,7 +44,7 @@ def test_ollama_chat_uses_fallback_model_on_memory_error(monkeypatch):
             )
         return {"message": {"content": "fallback summary"}}
 
-    monkeypatch.setattr("llm_summarizer.ollama.chat", fake_chat)
+    monkeypatch.setattr("summarization.llm.ollama.chat", fake_chat)
 
     result = llm_summarizer._ollama_chat("test prompt", max_retries=0)
 
@@ -56,7 +56,7 @@ def test_ollama_chat_uses_fallback_model_on_memory_error(monkeypatch):
 
 def test_ollama_chat_uses_secondary_fallback_when_first_two_models_oom(monkeypatch):
     calls = []
-    monkeypatch.setattr("ollama_client.get_installed_model_names", lambda: ())
+    monkeypatch.setattr("summarization.ollama_client.get_installed_model_names", lambda: ())
 
     def fake_chat(model, messages, options):
         calls.append(model)
@@ -66,7 +66,7 @@ def test_ollama_chat_uses_secondary_fallback_when_first_two_models_oom(monkeypat
             )
         return {"message": {"content": "secondary fallback summary"}}
 
-    monkeypatch.setattr("llm_summarizer.ollama.chat", fake_chat)
+    monkeypatch.setattr("summarization.llm.ollama.chat", fake_chat)
 
     result = llm_summarizer._ollama_chat("test prompt", max_retries=0)
 
@@ -80,7 +80,7 @@ def test_ollama_chat_uses_secondary_fallback_when_first_two_models_oom(monkeypat
 
 def test_ollama_chat_uses_fallback_model_when_primary_is_missing(monkeypatch):
     calls = []
-    monkeypatch.setattr("ollama_client.get_installed_model_names", lambda: ())
+    monkeypatch.setattr("summarization.ollama_client.get_installed_model_names", lambda: ())
 
     def fake_chat(model, messages, options):
         calls.append(model)
@@ -88,7 +88,7 @@ def test_ollama_chat_uses_fallback_model_when_primary_is_missing(monkeypatch):
             raise RuntimeError(f"model '{model}' not found (status code: 404)")
         return {"message": {"content": "fallback summary"}}
 
-    monkeypatch.setattr("llm_summarizer.ollama.chat", fake_chat)
+    monkeypatch.setattr("summarization.llm.ollama.chat", fake_chat)
 
     result = llm_summarizer._ollama_chat("test prompt", max_retries=0)
 
@@ -101,7 +101,7 @@ def test_ollama_chat_uses_fallback_model_when_primary_is_missing(monkeypatch):
 
 def test_ollama_chat_uses_fallback_model_when_primary_runner_crashes(monkeypatch):
     calls = []
-    monkeypatch.setattr("ollama_client.get_installed_model_names", lambda: ())
+    monkeypatch.setattr("summarization.ollama_client.get_installed_model_names", lambda: ())
 
     def fake_chat(model, messages, options):
         calls.append(model)
@@ -111,7 +111,7 @@ def test_ollama_chat_uses_fallback_model_when_primary_runner_crashes(monkeypatch
             )
         return {"message": {"content": "fallback summary"}}
 
-    monkeypatch.setattr("llm_summarizer.ollama.chat", fake_chat)
+    monkeypatch.setattr("summarization.llm.ollama.chat", fake_chat)
 
     result = llm_summarizer._ollama_chat("test prompt", max_retries=0)
 
@@ -124,13 +124,13 @@ def test_ollama_chat_uses_fallback_model_when_primary_runner_crashes(monkeypatch
 
 def test_ollama_chat_uses_installed_model_when_configured_models_are_unavailable(monkeypatch):
     calls = []
-    monkeypatch.setattr("ollama_client.get_installed_model_names", lambda: ("mistral:latest", "nomic-embed-text:latest"))
+    monkeypatch.setattr("summarization.ollama_client.get_installed_model_names", lambda: ("mistral:latest", "nomic-embed-text:latest"))
 
     def fake_chat(model, messages, options):
         calls.append((model, options["num_predict"]))
         return {"message": {"content": "installed-model summary"}}
 
-    monkeypatch.setattr("llm_summarizer.ollama.chat", fake_chat)
+    monkeypatch.setattr("summarization.llm.ollama.chat", fake_chat)
 
     result = llm_summarizer._ollama_chat("test prompt", max_retries=0)
 
@@ -162,7 +162,7 @@ def test_summarize_with_llm_retries_when_first_output_is_truncated(monkeypatch):
             return "Partial output that stops at the"
         return valid_summary
 
-    monkeypatch.setattr("llm_summarizer._ollama_chat", fake_chat)
+    monkeypatch.setattr("summarization.llm._ollama_chat", fake_chat)
 
     result = llm_summarizer.summarize_with_llm(
         "Example paper",
@@ -176,7 +176,7 @@ def test_summarize_with_llm_retries_when_first_output_is_truncated(monkeypatch):
 
 def test_summarize_paper_falls_back_when_summary_is_invalid(monkeypatch):
     monkeypatch.setattr(
-        "llm_summarizer.build_summary_payload",
+        "summarization.llm.build_summary_payload",
         lambda paper: {
             "title": paper["title"],
             "url": paper["url"],
@@ -190,7 +190,7 @@ def test_summarize_paper_falls_back_when_summary_is_invalid(monkeypatch):
         },
     )
     monkeypatch.setattr(
-        "llm_summarizer.summarize_with_llm",
+        "summarization.llm.summarize_with_llm",
         lambda title, summary_input: "### Problem\nIncomplete summary that ends with the",
     )
 

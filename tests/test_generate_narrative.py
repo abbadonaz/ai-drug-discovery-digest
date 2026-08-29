@@ -1,10 +1,10 @@
-from config import MAX_NARRATIVE_CONTEXT_CHARS, MAX_NARRATIVE_PAPERS
-from generate_narrative import build_trend_input, generate_weekly_narrative
+from digest_core.config import MAX_NARRATIVE_CONTEXT_CHARS, MAX_NARRATIVE_PAPERS
+from summarization.narrative import build_trend_input, generate_weekly_narrative
 
 
 def test_generate_weekly_narrative_uses_fallback_model_on_memory_error(monkeypatch):
     calls = []
-    monkeypatch.setattr("ollama_client.get_installed_model_names", lambda: ())
+    monkeypatch.setattr("summarization.ollama_client.get_installed_model_names", lambda: ())
 
     def fake_chat(model, messages, options):
         calls.append(model)
@@ -14,7 +14,7 @@ def test_generate_weekly_narrative_uses_fallback_model_on_memory_error(monkeypat
             )
         return {"message": {"content": "editorial intro"}}
 
-    monkeypatch.setattr("generate_narrative.ollama.chat", fake_chat)
+    monkeypatch.setattr("summarization.narrative.ollama.chat", fake_chat)
 
     text = generate_weekly_narrative([
         {

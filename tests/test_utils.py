@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from utils import load_json
+from digest_core.utils import load_json
 
 
 def test_load_json_returns_default_for_empty_file(tmp_path):

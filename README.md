@@ -12,7 +12,9 @@ The project is designed for people who want a scientist-friendly weekly briefing
 | --- | --- |
 | Weekly literature retrieval | Collects recent papers from arXiv, PubMed, and ChemRxiv |
 | Field-focused triage | Prioritizes domain relevance instead of trying to judge scientific merit |
+| Cluster-aware selection | Groups weekly papers and selects representative papers from each cluster |
 | Evidence-first summarization | Extracts and ranks relevant paper snippets before local LLM summarization |
+| Comparative research page | Renders topic clusters, scores, representative papers, and evidence traces |
 | Safe local inference | Uses Ollama locally and adds prompt-injection filtering for fetched text |
 | Robust fallback behavior | Survives missing PDFs, broken JSON cache files, blocked ChemRxiv RSS, and Ollama runner failures |
 | Publishing-ready output | Generates a professional HTML digest suitable for GitHub Pages |
@@ -47,7 +49,11 @@ The repository already contains generated digest pages you can inspect directly:
 Typical output includes:
 
 - one highlighted "must read" paper
+- a research brief with dominant topics and active paper clusters
+- an at-a-glance comparison table for featured papers
+- a weekly literature map grouped by representative clusters
 - short structured summaries for featured papers
+- evidence traces linking summary claims back to selected snippets
 - an editorial weekly narrative
 - an archive page linking all generated digests
 
@@ -56,51 +62,59 @@ Typical output includes:
 1. Fetches recent papers from `arXiv`, `PubMed`, and `ChemRxiv`
 2. Tracks new versus previously seen papers against a local archive
 3. Filters papers using field-focused topic signals, keywords, and embeddings
-4. Downloads PDFs for the most promising papers when available
-5. Falls back to abstract-only processing when a PDF cannot be retrieved
-6. Extracts section text and ranks evidence-bearing sentences
-7. Sanitizes extracted text before it reaches the LLM
-8. Summarizes only the most relevant snippets with a local `Ollama` model
-9. Falls back to extractive summaries if the local LLM runner fails
-10. Builds a weekly narrative and a professional HTML digest
-11. Writes output to `docs/` for easy deployment with `GitHub Pages`
+4. Clusters the filtered weekly set and selects representative papers per cluster
+5. Downloads PDFs for the most promising papers when available
+6. Falls back to abstract-only processing when a PDF cannot be retrieved
+7. Extracts section text and ranks evidence-bearing sentences
+8. Sanitizes extracted text before it reaches the LLM
+9. Summarizes only the most relevant snippets with a local `Ollama` model
+10. Falls back to extractive summaries if the local LLM runner fails
+11. Builds a weekly narrative, literature map, and professional HTML digest
+12. Writes output to `docs/` for easy deployment with `GitHub Pages`
 
 ## Current Architecture
 
 ### Source retrieval
-- [fetch_arxiv.py](src/fetch_arxiv.py) retrieves recent arXiv papers with rate-limit-aware settings
-- [fetch_pubmed.py](src/fetch_pubmed.py) queries PubMed and reconstructs structured abstracts
-- [fetch_chemrxiv.py](src/fetch_chemrxiv.py) tries the native ChemRxiv feed first and falls back to Crossref when ChemRxiv blocks scripted requests
+- [sources/retrieval.py](src/sources/retrieval.py) defines the source-adapter abstraction, pydantic boundary validation, retry handling, and source cache integration
+- [sources/arxiv.py](src/sources/arxiv.py) retrieves recent arXiv papers with rate-limit-aware settings
+- [sources/pubmed.py](src/sources/pubmed.py) queries PubMed and reconstructs structured abstracts
+- [sources/chemrxiv.py](src/sources/chemrxiv.py) tries the native ChemRxiv feed first and falls back to Crossref when ChemRxiv blocks scripted requests
 
 ### Relevance filtering
-- [filter_papers.py](src/filter_papers.py) scores field relevance rather than scientific merit
-- [research_taxonomy.py](src/research_taxonomy.py) centralizes the keyword taxonomy used across fetching, topic mapping, and ranking
-- [topics.py](src/topics.py) maps papers into the target research areas such as drug discovery, computational chemistry, uncertainty, and molecular representation learning
-- [paper_scoring.py](src/paper_scoring.py) ranks the final digest entries
+- [triage/filtering.py](src/triage/filtering.py) scores field relevance rather than scientific merit
+- [triage/clustering.py](src/triage/clustering.py) clusters filtered papers and computes representative selection scores
+- [triage/taxonomy.py](src/triage/taxonomy.py) centralizes the keyword taxonomy used across fetching, topic mapping, and ranking
+- [triage/topics.py](src/triage/topics.py) maps papers into the target research areas such as drug discovery, computational chemistry, uncertainty, and molecular representation learning
+- [triage/scoring.py](src/triage/scoring.py) ranks the final digest entries
 
 ### PDF processing and evidence selection
-- [download_pdfs.py](src/download_pdfs.py) downloads PDFs with basic content-type validation
-- [pdf_extract.py](src/pdf_extract.py) extracts and cleans raw text
-- [pdf_sections.py](src/pdf_sections.py) segments important sections such as abstract, results, and conclusion
-- [clean_sentences.py](src/clean_sentences.py) removes noisy or reference-like sentences
-- [sentence_ranker.py](src/sentence_ranker.py) ranks sentences using embeddings
-- [evidence_selector.py](src/evidence_selector.py) builds the compact evidence payload used for summarization
+- [evidence/pipeline.py](src/evidence/pipeline.py) builds featured-paper evidence records and brief fallback references
+- [evidence/download_pdfs.py](src/evidence/download_pdfs.py) downloads PDFs with basic content-type validation
+- [evidence/pdf_extract.py](src/evidence/pdf_extract.py) extracts and cleans raw text
+- [evidence/pdf_sections.py](src/evidence/pdf_sections.py) segments important sections such as abstract, results, and conclusion
+- [evidence/clean_sentences.py](src/evidence/clean_sentences.py) removes noisy or reference-like sentences
+- [evidence/sentence_ranker.py](src/evidence/sentence_ranker.py) ranks sentences using embeddings
+- [evidence/selector.py](src/evidence/selector.py) builds the compact evidence payload used for summarization
+- [evidence/provenance.py](src/evidence/provenance.py) maps summary claim sentences back to exact selected evidence snippets
 
 ### Local summarization and safety
-- [llm_summarizer.py](src/llm_summarizer.py) generates structured summaries with `Ollama` and falls back to extractive summaries when the local runner fails
-- [generate_narrative.py](src/generate_narrative.py) writes the digest-wide editorial overview
-- [security.py](src/security.py) strips obvious prompt-injection patterns from extracted PDF content before LLM use
+- [summarization/llm.py](src/summarization/llm.py) generates structured summaries with `Ollama`, adds provenance metadata, and falls back to extractive summaries when the local runner fails
+- [summarization/narrative.py](src/summarization/narrative.py) writes the digest-wide editorial overview
+- [evidence/security.py](src/evidence/security.py) strips obvious prompt-injection patterns from extracted PDF content before LLM use
 
 ### Publishing layer
-- [generate_digest.py](src/generate_digest.py) turns summaries into HTML sections
-- [blog_template.py](src/blog_template.py) provides the science-oriented blog shell used for both digest pages and the archive homepage
-- [run_pipeline.py](src/run_pipeline.py) orchestrates the end-to-end workflow
+- [web/publishing.py](src/web/publishing.py) owns digest persistence, homepage navigation, and archive rebuilding
+- [web/digest.py](src/web/digest.py) turns summaries into comparison tables, cluster maps, evidence traces, and detailed paper sections
+- [web/blog_template.py](src/web/blog_template.py) provides the modern science-oriented shell used for digest pages and archive pages
+- [pipeline/research_pipeline.py](src/pipeline/research_pipeline.py) provides the class-based end-to-end workflow and structured stage metrics
+- [digest_core/models.py](src/digest_core/models.py) centralizes pipeline paths, runtime settings, pydantic records, and run-result metadata
+- [digest_core/logging.py](src/digest_core/logging.py) emits JSON log events with a per-run ID
+- [digest_core/cache.py](src/digest_core/cache.py) provides source-level JSON caching and retry helpers
+- [run_pipeline.py](src/run_pipeline.py) is the composition root and backwards-compatible CLI entrypoint
 
-### Utilities
-- [deduplicate_papers.py](src/deduplicate_papers.py) maintains a local URL archive between runs without blocking digest rebuilds
-- [utils.py](src/utils.py) handles JSON persistence and recovers safely from empty or invalid JSON files
-- [embeddings.py](src/embeddings.py) centralizes the shared sentence-transformer backend and provides a lightweight hashed-vector fallback
-- [config.py](src/config.py) keeps runtime knobs in one place
+### Evaluation and CI
+- [evaluation/harness.py](src/evaluation/harness.py) runs an offline fixture-based check for relevance ranking and summary quality
+- [.github/workflows/digest.yml](.github/workflows/digest.yml) runs tests, runs the evaluation harness, refreshes the digest on a schedule, and deploys `docs/` through GitHub Pages
 
 ## Why The Pipeline Is More Robust Now
 
@@ -164,8 +178,10 @@ Running the pipeline produces:
 
 - `data/raw_papers.json` for freshly fetched papers
 - `data/filtered_papers.json` for relevance-filtered candidates
+- `data/clustered_papers.json` for cluster IDs, labels, representativeness, and selection scores
 - `data/paper_sentences.json` for processed featured-paper evidence
 - `data/summaries.json` for final ranked summaries
+- `data/source_cache/` for ignored source-level cache files
 - `docs/posts/YYYY-MM-DD.html` for the weekly digest
 - `docs/index.html` for the archive page
 
@@ -173,14 +189,15 @@ Running the pipeline produces:
 
 ```text
 src/
-  fetch_*.py              source adapters
-  filter_papers.py        field-focused triage
-  pdf_*.py                PDF extraction and section handling
-  evidence_selector.py    evidence ranking and selection
-  llm_summarizer.py       local summarization + fallbacks
-  generate_digest.py      digest rendering
-  blog_template.py        GitHub Pages-ready layout
-  run_pipeline.py         end-to-end orchestration
+  digest_core/            config, pydantic models, JSON logging, cache, JSON IO
+  sources/                arXiv, PubMed, ChemRxiv, validation, retry, source cache
+  triage/                 taxonomy, topic classification, filtering, scoring
+  evidence/               PDF extraction, sentence ranking, evidence, provenance
+  summarization/          Ollama client, paper summaries, weekly narrative
+  web/                    digest HTML, blog template, publishing
+  pipeline/               deduplication and class-based orchestration
+  evaluation/             fixture-based quality checks
+  run_pipeline.py         CLI entrypoint / dependency wiring
 
 data/
   raw_papers.json
@@ -196,7 +213,7 @@ docs/
 ## Setup
 
 ### Requirements
-- Python `3.10+`
+- Python `3.11+`
 - A local `Ollama` installation
 - An Ollama model such as `mistral`
 - Optional fallback models such as `llama3.2:3b` and `tinyllama`
@@ -209,6 +226,15 @@ python -m venv .venv
 python -m pip install -r requirements.txt
 ollama pull mistral
 ollama pull llama3.2:3b
+```
+
+The repository also supports `uv`:
+
+```powershell
+uv venv
+uv sync --extra dev
+uv run digest-check-env
+uv run digest-run
 ```
 
 Optional environment variables:
@@ -240,6 +266,8 @@ Unit and smoke tests use `pytest`.
 
 ```powershell
 .venv\Scripts\python -m pytest -q
+.venv\Scripts\python src\evaluation\harness.py
+.venv\Scripts\python src\digest_core\env_check.py
 ```
 
 The test suite currently covers:
@@ -252,6 +280,11 @@ The test suite currently covers:
 - rendering helpers and blog output
 - import smoke checks for the main source modules
 - JSON recovery and deduplication edge cases
+- pydantic source validation and source-cache fallback behavior
+- offline relevance and summary-quality evaluation fixtures
+- cluster representative selection and topic precision gates
+- PDF signature/content validation helpers
+- HTML escaping for rendered summaries and scientific comparison page sections
 
 ## Deployment
 
@@ -278,9 +311,9 @@ That combination makes it a strong example of a practical applied AI system rath
 
 ## Customization Ideas
 
-- change field weights in [filter_papers.py](src/filter_papers.py)
-- expand target topic taxonomies in [topics.py](src/topics.py)
-- tune evidence selection heuristics in [evidence_selector.py](src/evidence_selector.py)
+- change field weights in [triage/filtering.py](src/triage/filtering.py)
+- expand target topic taxonomies in [triage/topics.py](src/triage/topics.py)
+- tune evidence selection heuristics in [evidence/selector.py](src/evidence/selector.py)
 - swap the local LLM model through `OLLAMA_MODEL`
 - add new renderers for newsletters, Markdown exports, or JSON feeds
 
@@ -288,8 +321,7 @@ That combination makes it a strong example of a practical applied AI system rath
 
 - better section boundary detection for messy PDFs
 - optional OCR fallback for image-heavy papers
-- richer provenance in summaries, such as evidence-to-claim traceability
-- CI automation for weekly digest generation
+- interactive literature-map visualizations on the homepage
 - source-specific adapters for publisher PDFs and supplementary metadata
 
 ## Project Pitch

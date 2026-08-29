@@ -1,4 +1,4 @@
-from pdf_extract import clean_text, split_sentences
+from evidence.pdf_extract import clean_text, split_sentences
 
 
 def test_clean_text_removes_page_numbers_and_number_blocks():

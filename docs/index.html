@@ -443,6 +443,352 @@
             margin-bottom: 8px;
         }
 
+        .briefing-panel, .comparison-section {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.94);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .briefing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .briefing-block {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #ffffff;
+            padding: 16px;
+        }
+
+        .briefing-block h3 {
+            margin: 0 0 10px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1rem;
+            color: var(--ink);
+        }
+
+        .signal-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        .signal-list li {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 8px;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .signal-list li:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .signal-list span {
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .cluster-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .cluster-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 14px;
+            align-items: start;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #ffffff;
+            padding: 16px;
+        }
+
+        .cluster-row h3 {
+            margin: 0 0 6px;
+            color: var(--teal);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1rem;
+        }
+
+        .cluster-row p {
+            margin: 0;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .cluster-row span, .paper-meta-line span {
+            display: inline-flex;
+            align-items: center;
+            min-height: 28px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: #e8ebf6;
+            color: #4d5c91;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #ffffff;
+        }
+
+        .comparison-table {
+            width: 100%;
+            min-width: 760px;
+            border-collapse: collapse;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--line);
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: #f7fafb;
+            color: var(--muted);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .paper-meta-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .evidence-box {
+            margin-top: 16px;
+            border-top: 1px solid var(--line);
+            padding-top: 14px;
+        }
+
+        .evidence-box h5 {
+            margin: 0 0 8px;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .evidence-detail {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            margin-top: 8px;
+            background: #fbfcfc;
+        }
+
+        .evidence-detail summary {
+            cursor: pointer;
+            padding: 10px 12px;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .evidence-detail ul {
+            margin: 0;
+            padding: 0 12px 12px 28px;
+        }
+
+        .evidence-detail li {
+            margin: 8px 0;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .evidence-detail li span {
+            display: inline-block;
+            margin-right: 8px;
+            color: #9c4558;
+            font-weight: 700;
+        }
+
+        .hero, .content-frame, .must-read-paper, .insights-container, .optional-section, .paper-card, .paper-card-featured, .stat-card {
+            border-radius: 10px;
+        }
+
+        .hero h1, .section-headline, .section-title {
+            letter-spacing: 0;
+        }
+
+        .topic-tabs-section {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.94);
+            padding: 24px;
+            margin-top: 28px;
+        }
+
+        .topic-tabs {
+            display: grid;
+            gap: 18px;
+        }
+
+        .topic-tab-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 14px;
+        }
+
+        .topic-tab-input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .topic-tab-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 42px;
+            padding: 8px 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #ffffff;
+            color: var(--muted);
+            cursor: pointer;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .topic-tab-label strong {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 34px;
+            min-height: 24px;
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: #f1f5f7;
+            color: var(--ink);
+            font-size: 0.78rem;
+        }
+
+        .topic-tab-input:checked + .topic-tab-label {
+            border-color: rgba(12, 107, 99, 0.45);
+            background: var(--teal-soft);
+            color: var(--teal);
+        }
+
+        .topic-tab-input:focus-visible + .topic-tab-label {
+            outline: 3px solid rgba(12, 107, 99, 0.22);
+            outline-offset: 2px;
+        }
+
+        .topic-tab-panel {
+            display: none;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #ffffff;
+            padding: 18px;
+        }
+
+        .topic-tab-controls:has(#topic-tab-0:checked) ~ .topic-tab-panels #topic-panel-0,
+        .topic-tab-controls:has(#topic-tab-1:checked) ~ .topic-tab-panels #topic-panel-1,
+        .topic-tab-controls:has(#topic-tab-2:checked) ~ .topic-tab-panels #topic-panel-2,
+        .topic-tab-controls:has(#topic-tab-3:checked) ~ .topic-tab-panels #topic-panel-3,
+        .topic-tab-controls:has(#topic-tab-4:checked) ~ .topic-tab-panels #topic-panel-4,
+        .topic-tab-controls:has(#topic-tab-5:checked) ~ .topic-tab-panels #topic-panel-5,
+        .topic-tab-controls:has(#topic-tab-6:checked) ~ .topic-tab-panels #topic-panel-6,
+        .topic-tab-controls:has(#topic-tab-7:checked) ~ .topic-tab-panels #topic-panel-7,
+        .topic-tab-controls:has(#topic-tab-8:checked) ~ .topic-tab-panels #topic-panel-8,
+        .topic-tab-controls:has(#topic-tab-9:checked) ~ .topic-tab-panels #topic-panel-9 {
+            display: block;
+        }
+
+        .topic-panel-header {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 16px;
+            align-items: start;
+            margin-bottom: 18px;
+        }
+
+        .topic-panel-header h3 {
+            margin: 0 0 4px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.25rem;
+        }
+
+        .topic-panel-header p {
+            margin: 0;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .topic-panel-header > span {
+            display: inline-flex;
+            align-items: center;
+            min-height: 32px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
+        .topic-panel-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(260px, 0.38fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .topic-panel-grid h4, .topic-reference-panel h4 {
+            margin: 0 0 12px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--ink);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .topic-reference-panel {
+            position: sticky;
+            top: 16px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #f9fbfc;
+            padding: 14px;
+        }
+
+        .compact-reference-list {
+            gap: 0;
+        }
+
         @media (max-width: 900px) {
             .hero-inner {
                 grid-template-columns: 1fr;
@@ -465,6 +811,23 @@
             .footer {
                 flex-direction: column;
             }
+
+            .cluster-row {
+                grid-template-columns: 1fr;
+            }
+
+            .signal-list li {
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .topic-panel-header, .topic-panel-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topic-reference-panel {
+                position: static;
+            }
         }
     </style>
 </head>
@@ -477,7 +840,7 @@
                     <h1>AI Drug Discovery Digest</h1>
                     <p>A navigation hub for the latest weekly summaries, paper links, and archive pages.</p>
                     <div class="meta-strip">
-                        <div class="meta-chip">Published June 07, 2026</div>
+                        <div class="meta-chip">Published August 29, 2026</div>
                         <div class="meta-chip">Sources: arXiv, PubMed, ChemRxiv</div>
                         <div class="meta-chip">Local summarization with Ollama</div>
                     </div>
@@ -493,183 +856,177 @@
 
         <main class="content-frame">
             
-        <div class="digest-stats">
-            <div class="stat-card">
-                <span class="stat-value">10</span>
-                <span class="stat-label">Featured summaries</span>
-            </div>
-            <div class="stat-card">
-                <span class="stat-value">13</span>
-                <span class="stat-label">Additional references</span>
-            </div>
-        </div>
-
-        <section class="must-read-container">
-            <div class="must-read-badge">Navigation Hub</div>
-            <article class="must-read-paper">
-                <h2 class="must-read-title">Choose where to start</h2>
-                <p class="section-subtitle">Use this homepage as the mother index for the current weekly batch. Open the full digest, jump to a featured paper summary, or browse the archive.</p>
-                <div class="must-read-action">
-                    <a href="posts/2026-06-07.html" class="btn-primary">Open latest digest</a>
-                    <a href="archive.html" class="btn-secondary">Browse archive</a>
+            <div class="digest-stats">
+                <div class="stat-card">
+                    <span class="stat-value">9</span>
+                    <span class="stat-label">Featured summaries</span>
                 </div>
-            </article>
-        </section>
-
-        <section class="featured-section">
-            <h2 class="section-headline">Featured summaries</h2>
-            <p class="section-subtitle">Direct links into the latest digest for the current featured papers.</p>
-            <div class="papers-grid">
-                
-        <div class="paper-card">
-            <div class="paper-title">#1 Genotype-Conditioned Molecular Generation via Evidence-Grounded Multi-Objective Latent Perturbation in Diffusion Models</div>
-            <div class="section-subtitle">Generative Chemistry & Molecular Design</div>
-            <a href="posts/2026-06-07.html#genotype-conditioned-molecular-generation-via-evidence-grounded-multi-objective-latent-perturbation-in-diffusion-models">Open summary</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">#2 Synthesis-Aware Molecular Generation via Reaction-Driven Global Search</div>
-            <div class="section-subtitle">Generative Chemistry & Molecular Design</div>
-            <a href="posts/2026-06-07.html#synthesis-aware-molecular-generation-via-reaction-driven-global-search">Open summary</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">#3 Evidence-Gated LLM Priors for Multi-Objective Bayesian Optimization</div>
-            <div class="section-subtitle">Bayesian Optimization & Active Learning</div>
-            <a href="posts/2026-06-07.html#evidence-gated-llm-priors-for-multi-objective-bayesian-optimization">Open summary</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">#4 Physics-Based vs AI-Based Free Energy Prediction for Protein-Ligand Potency: Public Benchmarks and Internal Project Evidence</div>
-            <div class="section-subtitle">Computational Chemistry</div>
-            <a href="posts/2026-06-07.html#physics-based-vs-ai-based-free-energy-prediction-for-protein-ligand-potency-public-benchmarks-and-internal-project-evidence">Open summary</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">#5 Fairness Definitions and Metrics in Deep Reinforcement Learning for Drug Discovery in Healthcare: A Rapid Evidence Review</div>
-            <div class="section-subtitle">Generative Chemistry & Molecular Design</div>
-            <a href="posts/2026-06-07.html#fairness-definitions-and-metrics-in-deep-reinforcement-learning-for-drug-discovery-in-healthcare-a-rapid-evidence-review">Open summary</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">#6 ChemDistill: Hierarchical Graph Attention Distillation with Parameter-Efficient Multi-Task Adapters for Molecular Property Prediction and Chemical Reaction Analysis</div>
-            <div class="section-subtitle">QSAR & ADMET</div>
-            <a href="posts/2026-06-07.html#chemdistill-hierarchical-graph-attention-distillation-with-parameter-efficient-multi-task-adapters-for-molecular-property-prediction-and-chemical-reaction-analysis">Open summary</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">#7 VALIDITY IS NOT ENOUGH: QUANTIFYING STRUCTURAL COLLAPSE AND INHERITANCE LOSS IN SELFIES-BASED MOLECULAR CROSSOVER</div>
-            <div class="section-subtitle">Generative Chemistry & Molecular Design</div>
-            <a href="posts/2026-06-07.html#validity-is-not-enough-quantifying-structural-collapse-and-inheritance-loss-in-selfies-based-molecular-crossover">Open summary</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">#8 Towards Automated Discovery: A Review of Generative Models, Multimodal Learning and Closed-Loop Workflows in Inverse Materials Design</div>
-            <div class="section-subtitle">Bayesian Optimization & Active Learning</div>
-            <a href="posts/2026-06-07.html#towards-automated-discovery-a-review-of-generative-models-multimodal-learning-and-closed-loop-workflows-in-inverse-materials-design">Open summary</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">#9 Generative Glide: A De Novo Workflow for Ultra-large Library Screening</div>
-            <div class="section-subtitle">Generative Chemistry & Molecular Design</div>
-            <a href="posts/2026-06-07.html#generative-glide-a-de-novo-workflow-for-ultra-large-library-screening">Open summary</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">#10 Using Relative Binding Free Energy Calculations for Rank Ordering of Endocrine Disrupting Compounds to the Human Estrogen Receptor Alpha</div>
-            <div class="section-subtitle">Computational Chemistry</div>
-            <a href="posts/2026-06-07.html#using-relative-binding-free-energy-calculations-for-rank-ordering-of-endocrine-disrupting-compounds-to-the-human-estrogen-receptor-alpha">Open summary</a>
-        </div>
-        
+                <div class="stat-card">
+                    <span class="stat-value">13</span>
+                    <span class="stat-label">Additional references</span>
+                </div>
             </div>
-        </section>
 
-        <section class="optional-section">
-            <h2 class="section-headline">Additional references</h2>
-            <p class="section-subtitle">Relevant papers kept as lightweight references in the current run.</p>
-            <div class="papers-grid">
-                
-        <div class="paper-card">
-            <div class="paper-title">Do Frozen SMILES Foundation Embeddings Beat Fingerprints? A Split- and Low-Data Benchmark on ADMET and CNS Bioactivity Tasks</div>
-            <div class="section-subtitle">QSAR & ADMET</div>
-            <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004188/v1">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">Are Atoms Enough? An Explainable Graph Neural Network for Carbon Capture and Gas Separation in Metal-Organic Frameworks</div>
-            <div class="section-subtitle">Uncertainty Quantification</div>
-            <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004189/v1">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">ChemCorr: A Unified Framework for Molecular Property Prediction and Chemical Knowledge Graph Reasoning via Correlation-Aware Pre-training</div>
-            <div class="section-subtitle">QSAR & ADMET</div>
-            <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004122/v1">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">Stein Kernelized Molecular Dynamics for Active Learning of Interatomic Potentials</div>
-            <div class="section-subtitle">Computational Chemistry</div>
-            <a href="http://arxiv.org/abs/2606.04100v1">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">Uncertainty-Calibrated Diffusion for Reliable 3D Molecular Graph Generation</div>
-            <div class="section-subtitle">Uncertainty Quantification</div>
-            <a href="http://arxiv.org/abs/2606.01595v1">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">A Machine Learning Crowdsourcing Initiative to Accelerate DEL-ML Hit Finding in Drug Discovery</div>
-            <div class="section-subtitle">Drug Discovery & Cheminformatics</div>
-            <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004205/v2">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">PyChemTools: An Open-Source Workflow for Computational Chemistry, Spectral Analysis, and Reaction Modelling Huma Basheer, Imran A. Khan</div>
-            <div class="section-subtitle">Computational Chemistry</div>
-            <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004357/v1">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">Predicting PROTAC Oral Bioavailability with Physics-Based Foundation Model Finetuning</div>
-            <div class="section-subtitle">Drug Discovery & Cheminformatics</div>
-            <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004114/v1">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">ALINC: Active Learning for Inductive Node Classification via Graph Sampling</div>
-            <div class="section-subtitle">Bayesian Optimization & Active Learning</div>
-            <a href="http://arxiv.org/abs/2606.04647v1">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">Clustered Self-Assessment: A Simple yet Effective Method for Uncertainty Quantification in Large Language Models</div>
-            <div class="section-subtitle">Uncertainty Quantification</div>
-            <a href="http://arxiv.org/abs/2606.03846v1">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">Feature Attribution in Graph Neural Networks and Its Connection to Chemical Group Contributions</div>
-            <div class="section-subtitle">Molecular Representation Learning</div>
-            <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004175/v1">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">Mixed Quantum-Classical Dynamics for Molecular Excited States: Reliability, Scalability, and Representation</div>
-            <div class="section-subtitle">Uncertainty Quantification</div>
-            <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15000086/v2">Open source paper</a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">Structure-Aware Prediction of PROTAC-Mediated Protein Degradability via Graph Neural Networks</div>
-            <div class="section-subtitle">Molecular Representation Learning</div>
-            <a href="http://arxiv.org/abs/2606.04021v1">Open source paper</a>
-        </div>
-        
+            <section class="must-read-container">
+                <div class="must-read-badge">Navigation Hub</div>
+                <article class="must-read-paper">
+                    <h2 class="must-read-title">Choose where to start</h2>
+                    <p class="section-subtitle">Use this homepage as the mother index for the current weekly batch. Open the full digest, jump to a featured paper summary, or browse the archive.</p>
+                    <div class="must-read-action">
+                        <a href="posts/2026-08-29.html" class="btn-primary">Open latest digest</a>
+                        <a href="archive.html" class="btn-secondary">Browse archive</a>
+                    </div>
+                </article>
+            </section>
+
+            <section class="featured-section">
+                <h2 class="section-headline">Featured summaries</h2>
+                <p class="section-subtitle">Direct links into the latest digest for the current featured papers.</p>
+                <div class="papers-grid">
+                    
+            <div class="paper-card">
+                <div class="paper-title">#1 MolEmb: Multimodal Large Language Models Can Be Strong Molecular Embedding Models</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="posts/2026-08-29.html#molemb-multimodal-large-language-models-can-be-strong-molecular-embedding-models">Open summary</a>
             </div>
-        </section>
-        
+            
+            <div class="paper-card">
+                <div class="paper-title">#2 A General-Purpose Molecular Foundation Model Transfers Across Diverse Olfactory Tasks</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="posts/2026-08-29.html#a-general-purpose-molecular-foundation-model-transfers-across-diverse-olfactory-tasks">Open summary</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">#3 External Evaluation of Multi-Agent AI Systems in Drug Discovery: A PRISMA-Informed Scoping Review of the External-Evaluation Gap</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="posts/2026-08-29.html#external-evaluation-of-multi-agent-ai-systems-in-drug-discovery-a-prisma-informed-scoping-review-of-the-external-evaluation-gap">Open summary</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">#4 Hit-Triage Pretrained Transformer (Hit-TPT), an Interaction-Agnostic Graph-Transformer for Post-docking Enrichment</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="posts/2026-08-29.html#hit-triage-pretrained-transformer-hit-tpt-an-interaction-agnostic-graph-transformer-for-post-docking-enrichment">Open summary</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">#5 Rescuable Stagnation: A Diagnostic for Benchmark Suitability in LLM-Guided Materials Optimization</div>
+                <div class="section-subtitle">Bayesian Optimization &amp; Active Learning</div>
+                <a href="posts/2026-08-29.html#rescuable-stagnation-a-diagnostic-for-benchmark-suitability-in-llm-guided-materials-optimization">Open summary</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">#6 Fragment-Based Virtual Screening and Experimental Validation of MMP-9 Hemopexinlike Domain Inhibitors</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="posts/2026-08-29.html#fragment-based-virtual-screening-and-experimental-validation-of-mmp-9-hemopexinlike-domain-inhibitors">Open summary</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">#7 Gromov-Monge Flow Matching for Equivariant Graph Generation</div>
+                <div class="section-subtitle">Generative Chemistry &amp; Molecular Design</div>
+                <a href="posts/2026-08-29.html#gromov-monge-flow-matching-for-equivariant-graph-generation">Open summary</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">#8 Temperature-induced Changes to the Nucleation Mechanism of MOF-5-inspired Crystals through the Lens of Multiscale Simulation</div>
+                <div class="section-subtitle">Computational Chemistry</div>
+                <a href="posts/2026-08-29.html#temperature-induced-changes-to-the-nucleation-mechanism-of-mof-5-inspired-crystals-through-the-lens-of-multiscale-simulation">Open summary</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">#9 Development of the 12-6-4-3B Model: Incorporating Nonadditive Three-Body Interactions into Metal Ion Simulations</div>
+                <div class="section-subtitle">Computational Chemistry</div>
+                <a href="posts/2026-08-29.html#development-of-the-12-6-4-3b-model-incorporating-nonadditive-three-body-interactions-into-metal-ion-simulations">Open summary</a>
+            </div>
+            
+                </div>
+            </section>
+
+            <section class="optional-section">
+                <h2 class="section-headline">Additional references</h2>
+                <p class="section-subtitle">Relevant papers kept as lightweight references in the current run.</p>
+                <div class="papers-grid">
+                    
+            <div class="paper-card">
+                <div class="paper-title">What Cycle Closure Can and Cannot See in a Relative Binding Free Energy Network</div>
+                <div class="section-subtitle">Computational Chemistry</div>
+                <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007931/v1">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">Population-Specific H-Antigen Chain-Type Variation and Its Potential Impact on Enzymatic Universal-Blood Conversion: A Computational Pilot Study</div>
+                <div class="section-subtitle">Uncertainty Quantification</div>
+                <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007953/v1">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">Sulfated Prism[6]arene Binds One Guest Internally and One Guest Externally</div>
+                <div class="section-subtitle">Computational Chemistry</div>
+                <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007937/v1">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">Mol-JEPA: A multimodal Joint Embedding Predictive Architecture for Molecules</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="http://arxiv.org/abs/2608.22642v2">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">Docking-Score Landscapes Shape Active-Learning Performance across Vina, Glide, and SILCS</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv-2025-3t356/v2">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">Bridging Food Chemistry and Computational Approaches with Agentic AI: Plant Protein Solubility and Bioactive-Enzyme Interactions</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007938/v1">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">DNA Directed Chemistry: Scalable Programmed DNA-Encoded Library Synthesis for More Chemically Diverse and Drug-Like Libraries</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007812/v1">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">Virtual screening of approved drugs nominates tofogliflozin for the SHP2 allosteric pocket</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007828/v1">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">Artificial Intelligence in Antifungal Drug Discovery Against WHO Critical-Priority Pathogens: Toward a WHO-Aligned, Selectivity-Integrated Discovery Pipeline</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007860/v1">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">Vector-Guided Drug Action via Active-Site Electric Fields: A Theoretical Framework Combining Quantum-Mechanical/Molecular-Mechanical Modeling and Vibrational Stark Tuning Principles</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007856/v1">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">Differential Learning for Robust Prediction of Thermal Stability with Application to Energetic Materials</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="http://arxiv.org/abs/2608.23874v1">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">Real-time NMR analysis of glutamine metabolism for screening anti-cancer agents in living cells.</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="https://pubmed.ncbi.nlm.nih.gov/42518517/">Open source paper</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">Cross-mixture-size graph neural network for CO2 solubility prediction in multicomponent amine solvents</div>
+                <div class="section-subtitle">Structure-Based Modeling &amp; Docking</div>
+                <a href="https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007799/v1">Open source paper</a>
+            </div>
+            
+                </div>
+            </section>
+            
             <footer class="footer">
                 <div>Curated pipeline for recent literature triage, evidence extraction, and scientific summarization.</div>
                 <div>Built for GitHub Pages and local LLM workflows.</div>

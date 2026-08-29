@@ -1,0 +1,56 @@
+[project]
+name = "ai-drug-discovery-digest"
+version = "0.1.0"
+description = "Automated molecular AI literature triage and static digest publishing pipeline."
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "arxiv==2.4.1",
+  "biopython==1.86",
+  "feedparser==6.0.12",
+  "markdown==3.10",
+  "numpy==2.4.2",
+  "ollama==0.6.1",
+  "pdfminer.six==20260107",
+  "pydantic==2.12.5",
+  "requests==2.32.5",
+  "scikit-learn==1.8.0",
+  "sentence-transformers==5.2.3",
+  "torch==2.10.0+cpu",
+]
+
+[project.optional-dependencies]
+dev = [
+  "pytest==8.4.2",
+]
+
+[project.scripts]
+digest-run = "run_pipeline:main"
+digest-evaluate = "evaluation.harness:main"
+digest-check-env = "digest_core.env_check:main"
+
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+py-modules = ["run_pipeline"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.uv]
+package = true
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

@@ -1,4 +1,4 @@
-from fetch_chemrxiv import fetch_chemrxiv_papers
+from sources.chemrxiv import fetch_chemrxiv_papers
 
 
 def test_fetch_chemrxiv_papers_uses_direct_feed_and_parses_entries(monkeypatch):
@@ -15,7 +15,7 @@ def test_fetch_chemrxiv_papers_uses_direct_feed_and_parses_entries(monkeypatch):
     </rss>
     """
 
-    monkeypatch.setattr("fetch_chemrxiv._fetch_feed_xml", lambda url: feed_xml)
+    monkeypatch.setattr("sources.chemrxiv._fetch_feed_xml", lambda url: feed_xml)
 
     papers = fetch_chemrxiv_papers(days_back=30)
 
@@ -26,9 +26,9 @@ def test_fetch_chemrxiv_papers_uses_direct_feed_and_parses_entries(monkeypatch):
 
 def test_fetch_chemrxiv_papers_falls_back_when_primary_feed_is_blocked(monkeypatch):
     blocked_html = "<html><title>Just a moment...</title><span>Enable JavaScript and cookies to continue</span></html>"
-    monkeypatch.setattr("fetch_chemrxiv._fetch_feed_xml", lambda url: blocked_html)
+    monkeypatch.setattr("sources.chemrxiv._fetch_feed_xml", lambda url: blocked_html)
     monkeypatch.setattr(
-        "fetch_chemrxiv._fetch_crossref_items",
+        "sources.chemrxiv._fetch_crossref_items",
         lambda days_back, rows=200: [
             {
                 "title": ["Docking benchmark for ligand design"],

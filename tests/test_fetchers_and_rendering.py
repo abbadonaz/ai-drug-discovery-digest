@@ -1,14 +1,14 @@
 from pathlib import Path
 from types import SimpleNamespace
 
-from blog_template import render_blog
-from download_pdfs import get_pdf_filename
-from fetch_chemrxiv import fetch_chemrxiv_papers, keyword_match
-from fetch_pubmed import fetch_pubmed_papers
-from generate_digest import generate_digest_html, render_markdown
-from generate_narrative import build_trend_input
-from pdf_sections import build_paper_context, extract_sections
-from topics import classify_topic
+from web.blog_template import render_blog
+from evidence.download_pdfs import _is_safe_pdf_content, _looks_like_pdf_response, get_pdf_filename
+from sources.chemrxiv import fetch_chemrxiv_papers, keyword_match
+from sources.pubmed import fetch_pubmed_papers
+from web.digest import generate_digest_html, render_markdown
+from summarization.narrative import build_trend_input
+from evidence.pdf_sections import build_paper_context, extract_sections
+from triage.topics import classify_topic
 
 
 def test_keyword_match_identifies_domain_language():
@@ -22,7 +22,7 @@ def test_keyword_match_requires_molecular_context_for_generic_ml_terms():
 
 def test_fetch_chemrxiv_papers_handles_html_and_missing_entries(monkeypatch):
     monkeypatch.setattr(
-        "fetch_chemrxiv._fetch_feed_xml",
+        "sources.chemrxiv._fetch_feed_xml",
         lambda url: "<rss />",
     )
     feed = SimpleNamespace(
@@ -41,7 +41,7 @@ def test_fetch_chemrxiv_papers_handles_html_and_missing_entries(monkeypatch):
             ),
         ]
     )
-    monkeypatch.setattr("fetch_chemrxiv.feedparser.parse", lambda _: feed)
+    monkeypatch.setattr("sources.chemrxiv.feedparser.parse", lambda _: feed)
 
     papers = fetch_chemrxiv_papers(days_back=30)
 
@@ -51,11 +51,11 @@ def test_fetch_chemrxiv_papers_handles_html_and_missing_entries(monkeypatch):
 
 def test_fetch_pubmed_papers_parses_labeled_abstract(monkeypatch):
     monkeypatch.setattr(
-        "fetch_pubmed.Entrez.esearch",
+        "sources.pubmed.Entrez.esearch",
         lambda **kwargs: object(),
     )
     monkeypatch.setattr(
-        "fetch_pubmed.Entrez.read",
+        "sources.pubmed.Entrez.read",
         lambda handle: {"IdList": ["12345"]},
     )
     xml = """
@@ -84,7 +84,7 @@ def test_fetch_pubmed_papers_parses_labeled_abstract(monkeypatch):
     </PubmedArticleSet>
     """
     monkeypatch.setattr(
-        "fetch_pubmed.Entrez.efetch",
+        "sources.pubmed.Entrez.efetch",
         lambda **kwargs: SimpleNamespace(read=lambda: xml),
     )
 
@@ -129,7 +129,22 @@ def test_generate_digest_html_and_blog_template_render_scientific_layout():
             "title": "Paper A",
             "url": "https://example.org/a",
             "topic": "Docking & Structure-Based Design",
+            "cluster_label": "Structure-Based Design",
+            "cluster_overview": "Structure-based design is represented by one paper.",
             "tldr": "### Problem\nProtein-ligand docking is hard.\n### Key Findings\n- Better enrichment.",
+            "score": 12,
+            "selection_score": 0.87,
+            "provenance": [
+                {
+                    "claim": "Protein-ligand docking is hard.",
+                    "evidence": [
+                        {
+                            "section": "abstract",
+                            "text": "Protein-ligand docking remains difficult in benchmark settings.",
+                        }
+                    ],
+                }
+            ],
         },
         {
             "title": "Paper B",
@@ -149,14 +164,28 @@ def test_generate_digest_html_and_blog_template_render_scientific_layout():
     digest = generate_digest_html(summaries, "A strong week for structure-aware modeling.")
     page = render_blog(digest, publication_date="April 06, 2026")
 
-    assert "Editor's pick" in digest
+    assert "Editor's pick" not in digest
     assert "Weekly research themes" in digest
+    assert "Weekly literature map" in digest
+    assert "Structure-Based Design" in digest
+    assert "At-a-glance comparison" in digest
+    assert "<th>Selection</th>" not in digest
+    assert "Evidence trace" in digest
+    assert "Explore by research category" in digest
+    assert "topic-tab-label" in digest
     assert "GitHub avatar for abbadonaz" in page
     assert "Published April 06, 2026" in page
 
 
 def test_render_markdown_handles_empty_text():
     assert "No summary available" in render_markdown("")
+
+
+def test_render_markdown_escapes_html():
+    rendered = render_markdown("<script>alert(1)</script>")
+
+    assert "<script>" not in rendered
+    assert "&lt;script&gt;" in rendered
 
 
 def test_build_trend_input_filters_empty_summaries():
@@ -178,6 +207,22 @@ def test_classify_topic_captures_generative_chemistry():
     assert topic == "Generative Chemistry & Molecular Design"
 
 
+def test_classify_topic_captures_structure_based_modeling():
+    topic = classify_topic({
+        "title": "Docking benchmark for protein-ligand pose prediction",
+        "abstract": "A structure-based drug design study evaluates scoring functions for virtual screening.",
+    })
+
+    assert topic == "Structure-Based Modeling & Docking"
+
+
 def test_get_pdf_filename_sanitizes_urls():
     path = get_pdf_filename({"pdf_url": "https://example.org/files/paper:name.pdf"})
     assert path == Path("data/pdfs/paper_name.pdf")
+
+
+def test_pdf_download_validators_reject_non_pdf_content():
+    assert _looks_like_pdf_response("https://example.org/paper.pdf", "application/octet-stream")
+    assert not _looks_like_pdf_response("https://example.org/paper", "text/html")
+    assert _is_safe_pdf_content(b"%PDF-1.7\nbody")
+    assert not _is_safe_pdf_content(b"<html>not a pdf</html>")

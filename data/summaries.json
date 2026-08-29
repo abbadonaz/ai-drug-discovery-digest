@@ -1,176 +1,634 @@
 [
   {
-    "title": "Genotype-Conditioned Molecular Generation via Evidence-Grounded Multi-Objective Latent Perturbation in Diffusion Models",
-    "url": "http://arxiv.org/abs/2606.01461v1",
-    "topic": "Generative Chemistry & Molecular Design",
-    "tldr": "This paper introduces a latent-space optimization approach for a pretrained genotype-to-drug diffusion model, utilizing a learnable perturbation to optimize a composite reward that considers predicted drug sensitivity (AUC), drug-likeness (QED), and synthetic accessibility (SAS). The method also incorporates a multi-agent language model pipeline grounded in the diffusion model's attention mechanism for mechanistic consistency. Experiments on 15 cancer cell lines from three held-out evaluation sets show consistent and significant improvements over competing baselines in terms of sensitivity, drug-likeness, synthesizability, and chemical validity. This work could potentially advance drug discovery by providing a more comprehensive and plausible molecular generation approach.",
-    "score": 15
-  },
-  {
-    "title": "Synthesis-Aware Molecular Generation via Reaction-Driven Global Search",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004299/v1",
-    "topic": "Generative Chemistry & Molecular Design",
-    "tldr": "This paper introduces RxnMol, a framework for synthesis-aware molecular optimization. It encodes candidates as synthetic-route representations of readily available building blocks, which are converted into products through sequential reaction prediction and population-based global optimization. In protein target and bioactivity optimization tasks, RxnMol demonstrates improved Top-1 performance compared to generative baselines and synthesis-constrained methods in most benchmarks, suggesting its potential for efficient drug discovery and cheminformatics applications.",
+    "title": "MolEmb: Multimodal Large Language Models Can Be Strong Molecular Embedding Models",
+    "url": "http://arxiv.org/abs/2608.23646v1",
+    "topic": "Molecular Representation Learning",
+    "tldr": "MolEmb is a lightweight framework that adapts multimodal large language models (MLLMs) to generate molecular embeddings by aligning them with textual descriptions in a shared space. The study finds that MLLMs, originally designed for image and text processing, can also serve as general molecular embedding models, but the effectiveness depends significantly on the quality and context of the training data, as demonstrated using the MolCAR diagnostic benchmark.",
+    "brief": false,
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
+    "cluster_overview": "Structure-Based Modeling & Docking is represented by 28 paper(s) in this batch. Representative work includes: MolEmb: Multimodal Large Language Models Can Be Strong Molecular Embedding Models; Hit-Triage Pretrained Transformer (Hit-TPT), an Interaction-Agnostic Graph-Transformer for Post-docking Enrichment; A General-Purpose Molecular Foundation Model Transfers Across Diverse Olfactory Tasks.",
+    "provenance": [
+      {
+        "claim_id": "C1",
+        "claim": "MolEmb is a lightweight framework that adapts multimodal large language models (MLLMs) to generate molecular embeddings by aligning them with textual descriptions in a shared space.",
+        "evidence": [
+          {
+            "evidence_id": "E1",
+            "summary_role": "overview",
+            "role": "method",
+            "section": "abstract",
+            "text": "We introduce \\textbf{MolEmb}, a lightweight framework that adapts MLLMs by aligning molecular profiles with textual descriptions in a shared embedding space using a bidirectional contrastive objective.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "claim": "The study finds that MLLMs, originally designed for image and text processing, can also serve as general molecular embedding models, but the effectiveness depends significantly on the quality and context of the training data, as demonstrated using the MolCAR diagnostic benchmark.",
+        "evidence": [
+          {
+            "evidence_id": "E3",
+            "summary_role": "result",
+            "role": "dataset",
+            "section": "abstract",
+            "text": "We further introduce \\textbf{MolCAR}, a diagnostic benchmark for context-aware retrieval, and find that context-aware molecular embedding is primarily a data property of the supervision.",
+            "score": 0.2
+          }
+        ]
+      }
+    ],
     "score": 14
   },
   {
-    "title": "Evidence-Gated LLM Priors for Multi-Objective Bayesian Optimization",
-    "url": "http://arxiv.org/abs/2606.01730v1",
-    "topic": "Bayesian Optimization & Active Learning",
-    "tldr": "This paper explores the utilization of Large Language Model (LLM) generated expert priors in multi-objective Bayesian optimization, addressing the issue of uncalibrated suggestions from these models. The study presents a method to dynamically calibrate LLM priors based on downstream objective values, improving robustness over fixed LLM priors. This approach was tested across synthetic stress tests and three molecule optimization benchmarks using \\qwenflash{}-generated expert priors.",
-    "score": 12
-  },
-  {
-    "title": "Physics-Based vs AI-Based Free Energy Prediction for Protein-Ligand Potency: Public Benchmarks and Internal Project Evidence",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15002526/v2",
-    "topic": "Computational Chemistry",
-    "tldr": "This paper investigates the factors influencing the accuracy and robustness of modern Reaction-Based Free Energy (RBFE) workflows for predicting protein-ligand potency. It compares the performance of physics-based and AI methods, finding that while AI methods excel on curated benchmarks, physics-based free energy calculations are crucial for decision-making in unseen chemical matter. The study also highlights improvements through localized force field refinements, protein conformational control, and alchemical schedule design.",
+    "title": "A General-Purpose Molecular Foundation Model Transfers Across Diverse Olfactory Tasks",
+    "url": "http://arxiv.org/abs/2608.25893v1",
+    "topic": "Molecular Representation Learning",
+    "tldr": "Uni-Mol2, fine-tuned on the GS-LF benchmark, demonstrates versatility in diverse olfactory tasks. The model, without further deep-learning training, performs well in cross-dataset odor descriptor prediction, odorous-versus-odorless classification, enantiomer evaluation, and odor mixture discriminability. These findings suggest a 'train-once, transfer-across-tasks' approach for machine olfaction, implying chemically pretrained molecular representations as a robust foundation for transferable olfactory prediction.",
+    "brief": false,
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
+    "cluster_overview": "Structure-Based Modeling & Docking is represented by 28 paper(s) in this batch. Representative work includes: MolEmb: Multimodal Large Language Models Can Be Strong Molecular Embedding Models; Hit-Triage Pretrained Transformer (Hit-TPT), an Interaction-Agnostic Graph-Transformer for Post-docking Enrichment; A General-Purpose Molecular Foundation Model Transfers Across Diverse Olfactory Tasks.",
+    "provenance": [
+      {
+        "claim_id": "C1",
+        "claim": "Uni-Mol2, fine-tuned on the GS-LF benchmark, demonstrates versatility in diverse olfactory tasks.",
+        "evidence": [
+          {
+            "evidence_id": "E1",
+            "summary_role": "overview",
+            "role": "dataset",
+            "section": "abstract",
+            "text": "We investigate this question by fine-tuning Uni-Mol2 on the GS-LF benchmark for multi-label odor descriptor prediction and evaluating the resulting model, without additional deep-learning training, on four complementary downstream settings: cross-dataset odor descriptor prediction, odorous-versus-odorless classification, enantiomer evaluation, and odor mixture discriminability.",
+            "score": 0.2
+          }
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "claim": "The model, without further deep-learning training, performs well in cross-dataset odor descriptor prediction, odorous-versus-odorless classification, enantiomer evaluation, and odor mixture discriminability.",
+        "evidence": [
+          {
+            "evidence_id": "E3",
+            "summary_role": "result",
+            "role": "supporting",
+            "section": "abstract",
+            "text": "Together, these results support a train-once, transfer-across-tasks paradigm for machine olfaction and suggest that chemically pretrained molecular representations provide a strong foundation for transferable olfactory prediction.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "claim_id": "C3",
+        "claim": "These findings suggest a 'train-once, transfer-across-tasks' approach for machine olfaction, implying chemically pretrained molecular representations as a robust foundation for transferable olfactory prediction.",
+        "evidence": [
+          {
+            "evidence_id": "E2",
+            "summary_role": "approach",
+            "role": "problem",
+            "section": "abstract",
+            "text": "Foundation models have transformed molecular property prediction, yet it remains unclear whether a molecular foundation model, fine-tuned on a single canonical olfactory prediction task, can learn representations that transfer across diverse machine olfaction problems.",
+            "score": 0
+          }
+        ]
+      }
+    ],
     "score": 11
   },
   {
-    "title": "Fairness Definitions and Metrics in Deep Reinforcement Learning for Drug Discovery in Healthcare: A Rapid Evidence Review",
-    "url": "http://arxiv.org/abs/2606.02902v1",
-    "topic": "Generative Chemistry & Molecular Design",
-    "tldr": "This paper focuses on fairness definitions and metrics in Deep Reinforcement Learning (DRL) for drug discovery, specifically in molecule generation within healthcare. The study presents a concise set of fairness criteria, including distributional balance in physicochemical descriptors, scaffold/chemotype diversity, groupwise validity, toxicity, and synthetic accessibility as key metrics. These findings offer valuable guidance for ensuring equitable outcomes in DRL-driven drug discovery processes.",
-    "score": 11
-  },
-  {
-    "title": "ChemDistill: Hierarchical Graph Attention Distillation with Parameter-Efficient Multi-Task Adapters for Molecular Property Prediction and Chemical Reaction Analysis",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004323/v1",
+    "title": "External Evaluation of Multi-Agent AI Systems in Drug Discovery: A PRISMA-Informed Scoping Review of the External-Evaluation Gap",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007866/v1",
     "topic": "QSAR & ADMET",
-    "tldr": "This paper introduces ChemDistill, a framework for chemical knowledge distillation utilizing hierarchical graph attention and parameter-efficient multi-task adapters. The proposed method aims to address challenges in molecular property prediction and chemical reaction analysis, particularly cross-domain knowledge transfer, multi-task learning for diverse endpoints, and the integration of spectral data with molecular graph representations. On the Tox21 benchmark, ChemDistill achieves a ROCAUC of 0.879, outperforming the teacher model ChemBERTa while being significantly more compact, demonstrating its potential for efficient and effective drug discovery and cheminformatics applications.",
+    "tldr": "This PRISMA-informed scoping review highlights a gap in external evaluations of multi-agent AI systems in drug discovery. Only two systems, TrialGPT and Biomni, have been independently evaluated, but they fall outside the strict multi-agent boundary. This suggests that independent evaluation primarily focuses on single-agent, modular, and general-purpose systems rather than complex multi-agent architectures.",
+    "brief": false,
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
+    "cluster_overview": "Structure-Based Modeling & Docking is represented by 28 paper(s) in this batch. Representative work includes: MolEmb: Multimodal Large Language Models Can Be Strong Molecular Embedding Models; Hit-Triage Pretrained Transformer (Hit-TPT), an Interaction-Agnostic Graph-Transformer for Post-docking Enrichment; A General-Purpose Molecular Foundation Model Transfers Across Diverse Olfactory Tasks.",
+    "provenance": [
+      {
+        "claim_id": "C1",
+        "claim": "This PRISMA-informed scoping review highlights a gap in external evaluations of multi-agent AI systems in drug discovery.",
+        "evidence": [
+          {
+            "evidence_id": "E1",
+            "summary_role": "overview",
+            "role": "supporting",
+            "section": "abstract",
+            "text": "This PRISMA-informed scoping review examines a narrower question than capability surveys: whether reported system performance has been evaluated by investigators independent of the original developers.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "claim": "Only two systems, TrialGPT and Biomni, have been independently evaluated, but they fall outside the strict multi-agent boundary.",
+        "evidence": [
+          {
+            "evidence_id": "E3",
+            "summary_role": "result",
+            "role": "findings",
+            "section": "abstract",
+            "text": "A pre-specified sensitivity analysis shows that the two additional systems with documented independent external evaluation — TrialGPT and Biomni — both fall outside the strict multi-agent boundary, indicating that independent evaluation currently concentrates in single-agent, modular, and general-purpose systems rather than in strict multiagent architectures.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "claim_id": "C3",
+        "claim": "This suggests that independent evaluation primarily focuses on single-agent, modular, and general-purpose systems rather than complex multi-agent architectures.",
+        "evidence": [
+          {
+            "evidence_id": "E2",
+            "summary_role": "approach",
+            "role": "method",
+            "section": "abstract",
+            "text": "Multi-agent large-language-model (LLM) systems are increasingly proposed for tasks across drug discovery and development.",
+            "score": 0
+          }
+        ]
+      }
+    ],
     "score": 10
   },
   {
-    "title": "VALIDITY IS NOT ENOUGH: QUANTIFYING STRUCTURAL COLLAPSE AND INHERITANCE LOSS IN SELFIES-BASED MOLECULAR CROSSOVER",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004274/v1",
-    "topic": "Generative Chemistry & Molecular Design",
-    "tldr": "This paper investigates the impact of SELFIES correction on molecular crossover in genetic algorithms (GAs), using drug-like molecules from the ZINC20 database. Through 10,000 large-scale simulations and multi-generational experiments, it reveals that while SELFIES ensures chemically valid generations, its correction mechanism may unintentionally alter crossover semantics and limit structural diversity during evolutionary exploration. This finding highlights the need for a better understanding of SELFIES' effects on molecular evolution in drug discovery and cheminformatics.",
-    "score": 10
+    "title": "Hit-Triage Pretrained Transformer (Hit-TPT), an Interaction-Agnostic Graph-Transformer for Post-docking Enrichment",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007932/v1",
+    "topic": "Structure-Based Modeling & Docking",
+    "tldr": "The paper addresses the challenge of post-docking enrichment in drug discovery by introducing Hit-Triage Pretrained Transformer (Hit-TPT), an interaction-agnostic graph-transformer model. This physics-oriented architecture, demonstrated through experimental results, significantly reduces false positives in virtual screening, offering a practical and generalizable approach to enhance hit-finding efficiency by prioritizing compounds with genuine, target-specific activity. However, the evidence presented is abstract-level, and further studies may be required to quantify its performance improvement compared to existing methods.",
+    "brief": false,
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
+    "cluster_overview": "Structure-Based Modeling & Docking is represented by 28 paper(s) in this batch. Representative work includes: MolEmb: Multimodal Large Language Models Can Be Strong Molecular Embedding Models; Hit-Triage Pretrained Transformer (Hit-TPT), an Interaction-Agnostic Graph-Transformer for Post-docking Enrichment; A General-Purpose Molecular Foundation Model Transfers Across Diverse Olfactory Tasks.",
+    "provenance": [
+      {
+        "claim_id": "C1",
+        "claim": "The paper addresses the challenge of post-docking enrichment in drug discovery by introducing Hit-Triage Pretrained Transformer (Hit-TPT), an interaction-agnostic graph-transformer model.",
+        "evidence": [
+          {
+            "evidence_id": "E1",
+            "summary_role": "overview",
+            "role": "method",
+            "section": "abstract",
+            "text": "Here we present the Hit-Triage Pretrained Transformer (Hit-TPT), a graph neural network operating on protein-ligand interaction graphs to recognize true protein binders from decoys.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "claim": "This physics-oriented architecture, demonstrated through experimental results, significantly reduces false positives in virtual screening, offering a practical and generalizable approach to enhance hit-finding efficiency by prioritizing compounds with genuine, target-specific activity.",
+        "evidence": [
+          {
+            "evidence_id": "E3",
+            "summary_role": "result",
+            "role": "findings",
+            "section": "abstract",
+            "text": "Our results demonstrate that this physics-oriented architecture can markedly reduce false positives in virtual screening, offering a practical and generalizable approach to improve hit-finding efficiency by prioritizing compounds with genuine, target specific activity.",
+            "score": 0.4
+          }
+        ]
+      },
+      {
+        "claim_id": "C3",
+        "claim": "However, the evidence presented is abstract-level, and further studies may be required to quantify its performance improvement compared to existing methods.",
+        "evidence": [
+          {
+            "evidence_id": "E2",
+            "summary_role": "approach",
+            "role": "method",
+            "section": "abstract",
+            "text": "This underscores the need for more selective and reliable triage methods.",
+            "score": 0
+          }
+        ]
+      }
+    ],
+    "score": 8
   },
   {
-    "title": "Towards Automated Discovery: A Review of Generative Models, Multimodal Learning and Closed-Loop Workflows in Inverse Materials Design",
-    "url": "http://arxiv.org/abs/2606.02507v1",
+    "title": "Rescuable Stagnation: A Diagnostic for Benchmark Suitability in LLM-Guided Materials Optimization",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007890/v1",
     "topic": "Bayesian Optimization & Active Learning",
-    "tldr": "This paper reviews advancements in generative crystal structure modeling, multimodal learning, and closed-loop design pipelines for crystalline solids within the context of inverse materials design. The approach aims to transition materials discovery from predictive models to targeted proposals that meet physical constraints. Notably, the review highlights the potential of multimodal learning to integrate various materials modalities, such as crystal structures, thermodynamic, electronic information, microscopy, spectroscopy, processing context, and scientific text, creating a more universal and transferable representation of chemical space.",
+    "tldr": "This paper proposes a diagnostic criterion, 'rescuable stagnation', to evaluate the suitability of benchmarks for materials optimization using LLM-guided methods. The approach is demonstrated on a benchmark derived from Materials Project data, revealing no statistically significant improvement by LLM-guided rescue over heuristic injection. This criterion allows for testing benchmark suitability before experiments commence, ensuring more reliable conclusions about the effectiveness of LLM-guided discovery.",
+    "brief": false,
+    "cluster_id": 4,
+    "cluster_label": "Bayesian Optimization & Active Learning",
+    "cluster_size": 1,
+    "cluster_overview": "Bayesian Optimization & Active Learning is represented by 1 paper(s) in this batch. Representative work includes: Rescuable Stagnation: A Diagnostic for Benchmark Suitability in LLM-Guided Materials Optimization.",
+    "provenance": [
+      {
+        "claim_id": "C1",
+        "claim": "This paper proposes a diagnostic criterion, 'rescuable stagnation', to evaluate the suitability of benchmarks for materials optimization using LLM-guided methods.",
+        "evidence": [
+          {
+            "evidence_id": "E1",
+            "summary_role": "overview",
+            "role": "findings",
+            "section": "abstract",
+            "text": "We introduce a benchmark qualification criterion for rescue experiments—which we term rescuable stagnation—for determining, before the optimization comparison is run, whether a benchmark stalls while meaningful improvement remains available.",
+            "score": 0.35
+          }
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "claim": "The approach is demonstrated on a benchmark derived from Materials Project data, revealing no statistically significant improvement by LLM-guided rescue over heuristic injection.",
+        "evidence": [
+          {
+            "evidence_id": "E3",
+            "summary_role": "result",
+            "role": "dataset",
+            "section": "abstract",
+            "text": "More broadly, conclusions about LLM-guided discovery hinge on benchmark suitability—which qualifying the benchmark makes testable before experiments begin.",
+            "score": 0.2
+          }
+        ]
+      },
+      {
+        "claim_id": "C3",
+        "claim": "This criterion allows for testing benchmark suitability before experiments commence, ensuring more reliable conclusions about the effectiveness of LLM-guided discovery.",
+        "evidence": [
+          {
+            "evidence_id": "E2",
+            "summary_role": "approach",
+            "role": "findings",
+            "section": "abstract",
+            "text": "We demonstrate the approach on a benchmark constructed from Materials Project shear-modulus data, on which LLM-guided rescue gives no statistically significant improvement over heuristic injection—including a heuristic control provided with the same search information.",
+            "score": 0.35
+          }
+        ]
+      }
+    ],
     "score": 8
   },
   {
-    "title": "Generative Glide: A De Novo Workflow for Ultra-large Library Screening",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004314/v1",
+    "title": "Fragment-Based Virtual Screening and Experimental Validation of MMP-9 Hemopexinlike Domain Inhibitors",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007867/v1",
+    "topic": "Structure-Based Modeling & Docking",
+    "tldr": "This paper presents an integrated fragment-based drug discovery (FBDD) approach that combines pharmacophore modeling, structure-based virtual screening, molecular dynamics simulations, and extensive biological validation to identify novel MMP-9 PEX domain inhibitors. The study focuses on matrix metalloproteinase-9 (MMP-9), a key mediator of extracellular matrix remodeling and cancer metastasis, for which the development of selective inhibitors has been challenging due to high conservation of its catalytic domain. The work highlights the discovery of potential novel MMP-9 PEX domain inhibitors, offering a promising chemical scaffold for further preclinical development, although the specific efficacy and selectivity of these compounds remain to be determined in more detailed studies.",
+    "brief": false,
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
+    "cluster_overview": "Structure-Based Modeling & Docking is represented by 28 paper(s) in this batch. Representative work includes: MolEmb: Multimodal Large Language Models Can Be Strong Molecular Embedding Models; Hit-Triage Pretrained Transformer (Hit-TPT), an Interaction-Agnostic Graph-Transformer for Post-docking Enrichment; A General-Purpose Molecular Foundation Model Transfers Across Diverse Olfactory Tasks.",
+    "provenance": [
+      {
+        "claim_id": "C1",
+        "claim": "This paper presents an integrated fragment-based drug discovery (FBDD) approach that combines pharmacophore modeling, structure-based virtual screening, molecular dynamics simulations, and extensive biological validation to identify novel MMP-9 PEX domain inhibitors.",
+        "evidence": [
+          {
+            "evidence_id": "E1",
+            "summary_role": "overview",
+            "role": "method",
+            "section": "abstract",
+            "text": "Here, we report an integrated fragment-based drug discovery (FBDD) approach combining pharmacophore modelling, structure-based virtual screening, molecular dynamics (MD) simulations and extensive biological validation to identify novel MMP-9 PEX domain inhibitors.",
+            "score": 0.25
+          }
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "claim": "The study focuses on matrix metalloproteinase-9 (MMP-9), a key mediator of extracellular matrix remodeling and cancer metastasis, for which the development of selective inhibitors has been challenging due to high conservation of its catalytic domain.",
+        "evidence": [
+          {
+            "evidence_id": "E3",
+            "summary_role": "result",
+            "role": "dataset",
+            "section": "abstract",
+            "text": "Overall, this work highlights the effectiveness of integrated computational modelling, synthesis and experimental validation for the discovery of novel MMP-9 PEX domain inhibitors and provides a promising chemical scaffold for further preclinical development.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "claim_id": "C3",
+        "claim": "The work highlights the discovery of potential novel MMP-9 PEX domain inhibitors, offering a promising chemical scaffold for further preclinical development, although the specific efficacy and selectivity of these compounds remain to be determined in more detailed studies.",
+        "evidence": [
+          {
+            "evidence_id": "E2",
+            "summary_role": "approach",
+            "role": "supporting",
+            "section": "abstract",
+            "text": "Matrix metalloproteinase-9 (MMP-9) is a key mediator of extracellular matrix remodeling and cancer metastasis, yet the development of selective inhibitors remains challenging due to high conservation of its catalytic domain.",
+            "score": 0
+          }
+        ]
+      }
+    ],
+    "score": 8
+  },
+  {
+    "title": "Gromov-Monge Flow Matching for Equivariant Graph Generation",
+    "url": "http://arxiv.org/abs/2608.26961v1",
     "topic": "Generative Chemistry & Molecular Design",
-    "tldr": "The Generative Glide workflow, an integrated framework linking in silico generation to physical acquisition, utilizes active learning to enhance its predictive accuracy within high-potency domains. This refinement allows for effective navigation and exploitation of underrepresented low-scoring compounds in the initial training data. Deployed across various protein targets and multiple ultra-large libraries, it consistently achieves a significant improvement in docking score distributions towards better scoring compounds while maintaining scaffold diversity.",
-    "score": 8
+    "tldr": "This paper introduces Gromov-Monge Flow Matching for generating equivariant graphs, improving sample quality in continuous and categorical data generation at small integration budgets. Notably, this approach excels in flow matching, where symmetry in source-target coupling is considered within the graph quotient space, leading to improved model performance compared to conventional many-step sampling.",
+    "brief": false,
+    "cluster_id": 2,
+    "cluster_label": "Generative Chemistry & Molecular Design",
+    "cluster_size": 1,
+    "cluster_overview": "Generative Chemistry & Molecular Design is represented by 1 paper(s) in this batch. Representative work includes: Gromov-Monge Flow Matching for Equivariant Graph Generation.",
+    "provenance": [
+      {
+        "claim_id": "C1",
+        "claim": "This paper introduces Gromov-Monge Flow Matching for generating equivariant graphs, improving sample quality in continuous and categorical data generation at small integration budgets.",
+        "evidence": [
+          {
+            "evidence_id": "E1",
+            "summary_role": "overview",
+            "role": "method",
+            "section": "abstract",
+            "text": "We develop this perspective theoretically, showing that quotient couplings can be lifted to aligned representatives without additional cost and that symmetrization yields equivariant flow-matching minimizers, including for categorical endpoint prediction.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "claim": "Notably, this approach excels in flow matching, where symmetry in source-target coupling is considered within the graph quotient space, leading to improved model performance compared to conventional many-step sampling.",
+        "evidence": [
+          {
+            "evidence_id": "E3",
+            "summary_role": "result",
+            "role": "supporting",
+            "section": "abstract",
+            "text": "In flow matching, however, symmetry may also enter the source--target coupling: once graph pairs are compared up to node relabeling, the natural Wasserstein geometry is that of the graph quotient space.",
+            "score": 0
+          }
+        ]
+      }
+    ],
+    "score": 6
   },
   {
-    "title": "Using Relative Binding Free Energy Calculations for Rank Ordering of Endocrine Disrupting Compounds to the Human Estrogen Receptor Alpha",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004264/v1",
+    "title": "Temperature-induced Changes to the Nucleation Mechanism of MOF-5-inspired Crystals through the Lens of Multiscale Simulation",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007786/v1",
     "topic": "Computational Chemistry",
-    "tldr": "This paper explores the application of alchemical relative binding free energy (RBFE) calculations for ranking endocrine disrupting compounds (EDCs) towards the human Estrogen Receptor Alpha (ERα). The study demonstrates that molecular docking, particularly with receptor flexibility taken into account, can accurately predict EDC binding poses to ERα, potentially enhancing computational predictions in risk assessment for EDCs.",
+    "tldr": "This study employs molecular simulation to investigate the impact of temperature on the nucleation mechanism of MOF-5-inspired crystals. A multiscale approach, including coarse-grained molecular dynamics simulations enhanced with Hamiltonian replica exchange, is used to construct free energy surfaces and minimum free energy pathway analysis. The results suggest that the temperature of 413 K, as typically used in MOF-5's solvothermal synthesis in DMF, is more kinetically favorable compared to both 300 K and 500 K, offering valuable insights for optimizing crystal growth processes.",
+    "brief": false,
+    "cluster_id": 0,
+    "cluster_label": "Computational Chemistry",
+    "cluster_size": 9,
+    "cluster_overview": "Computational Chemistry is represented by 9 paper(s) in this batch. Representative work includes: Temperature-induced Changes to the Nucleation Mechanism of MOF-5-inspired Crystals through the Lens of Multiscale Simulation; Sulfated Prism[6]arene Binds One Guest Internally and One Guest Externally; Development of the 12-6-4-3B Model: Incorporating Nonadditive Three-Body Interactions into Metal Ion Simulations.",
+    "provenance": [
+      {
+        "claim_id": "C1",
+        "claim": "This study employs molecular simulation to investigate the impact of temperature on the nucleation mechanism of MOF-5-inspired crystals.",
+        "evidence": [
+          {
+            "evidence_id": "E1",
+            "summary_role": "overview",
+            "role": "problem",
+            "section": "abstract",
+            "text": "In response to this challenge, this work uses molecular simulation to isolate the effect of temperature, one of the most common processing conditions used to optimize MOF solvothermal synthesis, on the nucleation mechanism of porous, cubic crystals representative of the prototypical material MOF-5.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "claim": "A multiscale approach, including coarse-grained molecular dynamics simulations enhanced with Hamiltonian replica exchange, is used to construct free energy surfaces and minimum free energy pathway analysis.",
+        "evidence": [
+          {
+            "evidence_id": "E3",
+            "summary_role": "result",
+            "role": "supporting",
+            "section": "abstract",
+            "text": "Critically, consistent with the well-established solvothermal synthesis of MOF-5 in DMF at ~ 413 K, our analysis identifies this temperature as more kinetically favorable than 300 K and 500 K.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "claim_id": "C3",
+        "claim": "The results suggest that the temperature of 413 K, as typically used in MOF-5's solvothermal synthesis in DMF, is more kinetically favorable compared to both 300 K and 500 K, offering valuable insights for optimizing crystal growth processes.",
+        "evidence": [
+          {
+            "evidence_id": "E2",
+            "summary_role": "approach",
+            "role": "method",
+            "section": "abstract",
+            "text": "The simulation framework used herein is multiscale, culminating with coarse-grained (CG) molecular dynamics (MD) simulations enhanced with Hamiltonian replica exchange (HREX), enabling the construction of free energy surfaces (FESs) and minimum free energy pathway (MFEP) analysis.",
+            "score": 0
+          }
+        ]
+      }
+    ],
     "score": 4
   },
   {
-    "title": "Do Frozen SMILES Foundation Embeddings Beat Fingerprints? A Split- and Low-Data Benchmark on ADMET and CNS Bioactivity Tasks",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004188/v1",
-    "topic": "QSAR & ADMET",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Are Atoms Enough? An Explainable Graph Neural Network for Carbon Capture and Gas Separation in Metal-Organic Frameworks",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004189/v1",
-    "topic": "Uncertainty Quantification",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "ChemCorr: A Unified Framework for Molecular Property Prediction and Chemical Knowledge Graph Reasoning via Correlation-Aware Pre-training",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004122/v1",
-    "topic": "QSAR & ADMET",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "Stein Kernelized Molecular Dynamics for Active Learning of Interatomic Potentials",
-    "url": "http://arxiv.org/abs/2606.04100v1",
+    "title": "Development of the 12-6-4-3B Model: Incorporating Nonadditive Three-Body Interactions into Metal Ion Simulations",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007864/v1",
     "topic": "Computational Chemistry",
-    "tldr": "",
-    "brief": true,
-    "score": 0
+    "tldr": "The 12-6-4-3B model, a refined classical force field, is proposed based on Extended Discrete Averaging Potentials (EDA) and physical reasoning. This model introduces three-body interactions, significantly improving its accuracy in simulating [Zn(H2O)n]2+ clusters (n = 2 - 6), particularly in reproducing the water exchange mechanism and associated free energy barrier. This enhancement underscores the practical benefit of considering nonadditive three-body effects in metal ion simulations.",
+    "brief": false,
+    "cluster_id": 0,
+    "cluster_label": "Computational Chemistry",
+    "cluster_size": 9,
+    "cluster_overview": "Computational Chemistry is represented by 9 paper(s) in this batch. Representative work includes: Temperature-induced Changes to the Nucleation Mechanism of MOF-5-inspired Crystals through the Lens of Multiscale Simulation; Sulfated Prism[6]arene Binds One Guest Internally and One Guest Externally; Development of the 12-6-4-3B Model: Incorporating Nonadditive Three-Body Interactions into Metal Ion Simulations.",
+    "provenance": [
+      {
+        "claim_id": "C1",
+        "claim": "The 12-6-4-3B model, a refined classical force field, is proposed based on Extended Discrete Averaging Potentials (EDA) and physical reasoning.",
+        "evidence": [
+          {
+            "evidence_id": "E1",
+            "summary_role": "overview",
+            "role": "method",
+            "section": "abstract",
+            "text": "Using EDA throughout the scan and reasoning from the physical origins of each term, we proposed and parameterized three-body terms, yielding the 12-6-4-3B model, which explicitly incorporates three-body effects into a classical force field.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "claim_id": "C2",
+        "claim": "This model introduces three-body interactions, significantly improving its accuracy in simulating [Zn(H2O)n]2+ clusters (n = 2 - 6), particularly in reproducing the water exchange mechanism and associated free energy barrier.",
+        "evidence": [
+          {
+            "evidence_id": "E3",
+            "summary_role": "result",
+            "role": "findings",
+            "section": "abstract",
+            "text": "By contrast, after adjusting the C4 term, the 12-6-4-3B model correctly reproduces both the water exchange mechanism and the associated free energy barrier, demonstrating the benefit of explicitly incorporating three-body terms in metal ion force fields.",
+            "score": 0
+          }
+        ]
+      },
+      {
+        "claim_id": "C3",
+        "claim": "This enhancement underscores the practical benefit of considering nonadditive three-body effects in metal ion simulations.",
+        "evidence": [
+          {
+            "evidence_id": "E2",
+            "summary_role": "approach",
+            "role": "method",
+            "section": "abstract",
+            "text": "By combining SobEDA with many-body expansion (MBE) framework, we systematically investigated the many-body EDA components for the [Zn(H2O)n]2+ (n = 2 − 6) clusters.",
+            "score": 0
+          }
+        ]
+      }
+    ],
+    "score": 4
   },
   {
-    "title": "Uncertainty-Calibrated Diffusion for Reliable 3D Molecular Graph Generation",
-    "url": "http://arxiv.org/abs/2606.01595v1",
-    "topic": "Uncertainty Quantification",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "A Machine Learning Crowdsourcing Initiative to Accelerate DEL-ML Hit Finding in Drug Discovery",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004205/v2",
-    "topic": "Drug Discovery & Cheminformatics",
-    "tldr": "",
-    "brief": true,
-    "score": 0
-  },
-  {
-    "title": "PyChemTools: An Open-Source Workflow for Computational Chemistry, Spectral Analysis, and Reaction Modelling Huma Basheer, Imran A. Khan",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004357/v1",
+    "title": "What Cycle Closure Can and Cannot See in a Relative Binding Free Energy Network",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007931/v1",
     "topic": "Computational Chemistry",
+    "cluster_id": 5,
+    "cluster_label": "Computational Chemistry",
+    "cluster_size": 1,
     "tldr": "",
     "brief": true,
-    "score": 0
+    "score": 0,
+    "provenance": []
   },
   {
-    "title": "Predicting PROTAC Oral Bioavailability with Physics-Based Foundation Model Finetuning",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004114/v1",
+    "title": "Population-Specific H-Antigen Chain-Type Variation and Its Potential Impact on Enzymatic Universal-Blood Conversion: A Computational Pilot Study",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007953/v1",
+    "topic": "Uncertainty Quantification",
+    "cluster_id": 3,
+    "cluster_label": "Uncertainty Quantification",
+    "cluster_size": 1,
+    "tldr": "",
+    "brief": true,
+    "score": 0,
+    "provenance": []
+  },
+  {
+    "title": "Sulfated Prism[6]arene Binds One Guest Internally and One Guest Externally",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007937/v1",
+    "topic": "Structure-Based Modeling & Docking",
+    "cluster_id": 0,
+    "cluster_label": "Computational Chemistry",
+    "cluster_size": 9,
+    "tldr": "",
+    "brief": true,
+    "score": 0,
+    "provenance": []
+  },
+  {
+    "title": "Mol-JEPA: A multimodal Joint Embedding Predictive Architecture for Molecules",
+    "url": "http://arxiv.org/abs/2608.22642v2",
+    "topic": "Molecular Representation Learning",
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
+    "tldr": "",
+    "brief": true,
+    "score": 0,
+    "provenance": []
+  },
+  {
+    "title": "Docking-Score Landscapes Shape Active-Learning Performance across Vina, Glide, and SILCS",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv-2025-3t356/v2",
+    "topic": "Structure-Based Modeling & Docking",
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
+    "tldr": "",
+    "brief": true,
+    "score": 0,
+    "provenance": []
+  },
+  {
+    "title": "Bridging Food Chemistry and Computational Approaches with Agentic AI: Plant Protein Solubility and Bioactive-Enzyme Interactions",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007938/v1",
+    "topic": "Uncertainty Quantification",
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
+    "tldr": "",
+    "brief": true,
+    "score": 0,
+    "provenance": []
+  },
+  {
+    "title": "DNA Directed Chemistry: Scalable Programmed DNA-Encoded Library Synthesis for More Chemically Diverse and Drug-Like Libraries",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007812/v1",
     "topic": "Drug Discovery & Cheminformatics",
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
     "tldr": "",
     "brief": true,
-    "score": 0
+    "score": 0,
+    "provenance": []
   },
   {
-    "title": "ALINC: Active Learning for Inductive Node Classification via Graph Sampling",
-    "url": "http://arxiv.org/abs/2606.04647v1",
-    "topic": "Bayesian Optimization & Active Learning",
+    "title": "Virtual screening of approved drugs nominates tofogliflozin for the SHP2 allosteric pocket",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007828/v1",
+    "topic": "Structure-Based Modeling & Docking",
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
     "tldr": "",
     "brief": true,
-    "score": 0
+    "score": 0,
+    "provenance": []
   },
   {
-    "title": "Clustered Self-Assessment: A Simple yet Effective Method for Uncertainty Quantification in Large Language Models",
-    "url": "http://arxiv.org/abs/2606.03846v1",
-    "topic": "Uncertainty Quantification",
+    "title": "Artificial Intelligence in Antifungal Drug Discovery Against WHO Critical-Priority Pathogens: Toward a WHO-Aligned, Selectivity-Integrated Discovery Pipeline",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007860/v1",
+    "topic": "Generative Chemistry & Molecular Design",
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
     "tldr": "",
     "brief": true,
-    "score": 0
+    "score": 0,
+    "provenance": []
   },
   {
-    "title": "Feature Attribution in Graph Neural Networks and Its Connection to Chemical Group Contributions",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15004175/v1",
+    "title": "Vector-Guided Drug Action via Active-Site Electric Fields: A Theoretical Framework Combining Quantum-Mechanical/Molecular-Mechanical Modeling and Vibrational Stark Tuning Principles",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007856/v1",
+    "topic": "Computational Chemistry",
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
+    "tldr": "",
+    "brief": true,
+    "score": 0,
+    "provenance": []
+  },
+  {
+    "title": "Differential Learning for Robust Prediction of Thermal Stability with Application to Energetic Materials",
+    "url": "http://arxiv.org/abs/2608.23874v1",
     "topic": "Molecular Representation Learning",
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
     "tldr": "",
     "brief": true,
-    "score": 0
+    "score": 0,
+    "provenance": []
   },
   {
-    "title": "Mixed Quantum-Classical Dynamics for Molecular Excited States: Reliability, Scalability, and Representation",
-    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15000086/v2",
-    "topic": "Uncertainty Quantification",
+    "title": "Real-time NMR analysis of glutamine metabolism for screening anti-cancer agents in living cells.",
+    "url": "https://pubmed.ncbi.nlm.nih.gov/42518517/",
+    "topic": "Structure-Based Modeling & Docking",
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
     "tldr": "",
     "brief": true,
-    "score": 0
+    "score": 0,
+    "provenance": []
   },
   {
-    "title": "Structure-Aware Prediction of PROTAC-Mediated Protein Degradability via Graph Neural Networks",
-    "url": "http://arxiv.org/abs/2606.04021v1",
+    "title": "Cross-mixture-size graph neural network for CO2 solubility prediction in multicomponent amine solvents",
+    "url": "https://chemrxiv.org/doi/full/10.26434/chemrxiv.15007799/v1",
     "topic": "Molecular Representation Learning",
+    "cluster_id": 1,
+    "cluster_label": "Structure-Based Modeling & Docking",
+    "cluster_size": 28,
     "tldr": "",
     "brief": true,
-    "score": 0
+    "score": 0,
+    "provenance": []
   }
 ]

@@ -1,4 +1,4 @@
-from security import is_suspicious_text, sanitize_llm_input
+from evidence.security import is_suspicious_text, sanitize_llm_input
 
 
 def test_sanitize_llm_input_removes_prompt_injection_lines():

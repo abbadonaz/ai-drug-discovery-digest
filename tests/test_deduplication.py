@@ -1,9 +1,9 @@
-from deduplicate_papers import mark_papers_seen, split_new_and_seen_papers
+from pipeline.deduplication import mark_papers_seen, split_new_and_seen_papers
 
 
 def test_split_new_and_seen_papers_separates_already_seen_entries(tmp_path, monkeypatch):
     archive_path = tmp_path / "paper_archive.json"
-    monkeypatch.setattr("deduplicate_papers.ARCHIVE_FILE", str(archive_path))
+    monkeypatch.setattr("pipeline.deduplication.ARCHIVE_FILE", str(archive_path))
 
     seen = [{"url": "https://example.org/seen", "title": "Seen"}]
     mark_papers_seen(seen)

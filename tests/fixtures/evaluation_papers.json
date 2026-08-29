@@ -1,0 +1,39 @@
+{
+  "papers": [
+    {
+      "title": "Active learning for molecular property optimization",
+      "abstract": "A cheminformatics workflow combines uncertainty quantification, graph neural networks, and active learning for molecular property prediction in drug discovery.",
+      "url": "https://example.org/eval/active-learning",
+      "source": "fixture",
+      "expected_relevant": true
+    },
+    {
+      "title": "Docking benchmark for ligand design",
+      "abstract": "This virtual screening study evaluates protein-ligand docking and molecular dynamics refinement for lead optimization.",
+      "url": "https://example.org/eval/docking",
+      "source": "fixture",
+      "expected_relevant": true
+    },
+    {
+      "title": "Medical image segmentation with conformal prediction",
+      "abstract": "A general machine learning method improves uncertainty estimates for clinical image segmentation.",
+      "url": "https://example.org/eval/imaging",
+      "source": "fixture",
+      "expected_relevant": false
+    }
+  ],
+  "summaries": [
+    {
+      "title": "Active learning for molecular property optimization",
+      "url": "https://example.org/eval/active-learning",
+      "topic": "Bayesian Optimization & Active Learning",
+      "tldr": "The study evaluates active learning for molecular property prediction in drug discovery. It combines graph neural networks with uncertainty estimates to prioritize compounds."
+    },
+    {
+      "title": "Docking benchmark for ligand design",
+      "url": "https://example.org/eval/docking",
+      "topic": "Drug Discovery & Cheminformatics",
+      "tldr": "The paper studies docking and molecular dynamics refinement for virtual screening. The benchmark evidence focuses on lead optimization workflows."
+    }
+  ]
+}

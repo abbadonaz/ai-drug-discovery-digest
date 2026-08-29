@@ -1,5 +1,5 @@
-from filter_papers import filter_relevant_papers
-from paper_scoring import rank_papers
+from triage.filtering import filter_relevant_papers
+from triage.scoring import rank_papers
 
 
 def test_filter_relevant_papers_keeps_top_candidates_when_strict_gate_is_empty(monkeypatch):
@@ -17,11 +17,11 @@ def test_filter_relevant_papers_keeps_top_candidates_when_strict_gate_is_empty(m
     ]
 
     monkeypatch.setattr(
-        "filter_papers.encode_texts",
+        "triage.filtering.encode_texts",
         lambda texts: [[0.1], [0.09], [0.2]] if len(texts) == 2 else [[0.2]],
     )
     monkeypatch.setattr(
-        "filter_papers.cosine_similarity",
+        "triage.filtering.cosine_similarity",
         lambda a, b: float(a[0]),
     )
 
@@ -51,11 +51,11 @@ def test_filter_relevant_papers_prefers_field_relevance_over_generic_biomedical_
     ]
 
     monkeypatch.setattr(
-        "filter_papers.encode_texts",
+        "triage.filtering.encode_texts",
         lambda texts: [[0.31], [0.24]] if len(texts) == 2 else [[0.3]],
     )
     monkeypatch.setattr(
-        "filter_papers.cosine_similarity",
+        "triage.filtering.cosine_similarity",
         lambda a, b: float(a[0]),
     )
 
@@ -81,11 +81,11 @@ def test_filter_relevant_papers_prioritizes_ai_cheminformatics_over_broad_chemis
     ]
 
     monkeypatch.setattr(
-        "filter_papers.encode_texts",
+        "triage.filtering.encode_texts",
         lambda texts: [[0.28], [0.26]] if len(texts) == 2 else [[0.3]],
     )
     monkeypatch.setattr(
-        "filter_papers.cosine_similarity",
+        "triage.filtering.cosine_similarity",
         lambda a, b: float(a[0]),
     )
 

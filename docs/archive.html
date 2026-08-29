@@ -443,6 +443,352 @@
             margin-bottom: 8px;
         }
 
+        .briefing-panel, .comparison-section {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.94);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .briefing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 18px;
+        }
+
+        .briefing-block {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #ffffff;
+            padding: 16px;
+        }
+
+        .briefing-block h3 {
+            margin: 0 0 10px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1rem;
+            color: var(--ink);
+        }
+
+        .signal-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 8px;
+        }
+
+        .signal-list li {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 8px;
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .signal-list li:last-child {
+            border-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .signal-list span {
+            color: var(--muted);
+            white-space: nowrap;
+        }
+
+        .cluster-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .cluster-row {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 14px;
+            align-items: start;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #ffffff;
+            padding: 16px;
+        }
+
+        .cluster-row h3 {
+            margin: 0 0 6px;
+            color: var(--teal);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1rem;
+        }
+
+        .cluster-row p {
+            margin: 0;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.95rem;
+        }
+
+        .cluster-row span, .paper-meta-line span {
+            display: inline-flex;
+            align-items: center;
+            min-height: 28px;
+            padding: 4px 8px;
+            border-radius: 8px;
+            background: #e8ebf6;
+            color: #4d5c91;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.82rem;
+            font-weight: 700;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #ffffff;
+        }
+
+        .comparison-table {
+            width: 100%;
+            min-width: 760px;
+            border-collapse: collapse;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.92rem;
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--line);
+            vertical-align: top;
+            text-align: left;
+        }
+
+        .comparison-table th {
+            background: #f7fafb;
+            color: var(--muted);
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .comparison-table tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .paper-meta-line {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .evidence-box {
+            margin-top: 16px;
+            border-top: 1px solid var(--line);
+            padding-top: 14px;
+        }
+
+        .evidence-box h5 {
+            margin: 0 0 8px;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.82rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .evidence-detail {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            margin-top: 8px;
+            background: #fbfcfc;
+        }
+
+        .evidence-detail summary {
+            cursor: pointer;
+            padding: 10px 12px;
+            font-family: "Segoe UI", sans-serif;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .evidence-detail ul {
+            margin: 0;
+            padding: 0 12px 12px 28px;
+        }
+
+        .evidence-detail li {
+            margin: 8px 0;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .evidence-detail li span {
+            display: inline-block;
+            margin-right: 8px;
+            color: #9c4558;
+            font-weight: 700;
+        }
+
+        .hero, .content-frame, .must-read-paper, .insights-container, .optional-section, .paper-card, .paper-card-featured, .stat-card {
+            border-radius: 10px;
+        }
+
+        .hero h1, .section-headline, .section-title {
+            letter-spacing: 0;
+        }
+
+        .topic-tabs-section {
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            background: rgba(255,255,255,0.94);
+            padding: 24px;
+            margin-top: 28px;
+        }
+
+        .topic-tabs {
+            display: grid;
+            gap: 18px;
+        }
+
+        .topic-tab-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 14px;
+        }
+
+        .topic-tab-input {
+            position: absolute;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .topic-tab-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            min-height: 42px;
+            padding: 8px 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #ffffff;
+            color: var(--muted);
+            cursor: pointer;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.9rem;
+            font-weight: 700;
+        }
+
+        .topic-tab-label strong {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 34px;
+            min-height: 24px;
+            padding: 2px 7px;
+            border-radius: 999px;
+            background: #f1f5f7;
+            color: var(--ink);
+            font-size: 0.78rem;
+        }
+
+        .topic-tab-input:checked + .topic-tab-label {
+            border-color: rgba(12, 107, 99, 0.45);
+            background: var(--teal-soft);
+            color: var(--teal);
+        }
+
+        .topic-tab-input:focus-visible + .topic-tab-label {
+            outline: 3px solid rgba(12, 107, 99, 0.22);
+            outline-offset: 2px;
+        }
+
+        .topic-tab-panel {
+            display: none;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #ffffff;
+            padding: 18px;
+        }
+
+        .topic-tab-controls:has(#topic-tab-0:checked) ~ .topic-tab-panels #topic-panel-0,
+        .topic-tab-controls:has(#topic-tab-1:checked) ~ .topic-tab-panels #topic-panel-1,
+        .topic-tab-controls:has(#topic-tab-2:checked) ~ .topic-tab-panels #topic-panel-2,
+        .topic-tab-controls:has(#topic-tab-3:checked) ~ .topic-tab-panels #topic-panel-3,
+        .topic-tab-controls:has(#topic-tab-4:checked) ~ .topic-tab-panels #topic-panel-4,
+        .topic-tab-controls:has(#topic-tab-5:checked) ~ .topic-tab-panels #topic-panel-5,
+        .topic-tab-controls:has(#topic-tab-6:checked) ~ .topic-tab-panels #topic-panel-6,
+        .topic-tab-controls:has(#topic-tab-7:checked) ~ .topic-tab-panels #topic-panel-7,
+        .topic-tab-controls:has(#topic-tab-8:checked) ~ .topic-tab-panels #topic-panel-8,
+        .topic-tab-controls:has(#topic-tab-9:checked) ~ .topic-tab-panels #topic-panel-9 {
+            display: block;
+        }
+
+        .topic-panel-header {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 16px;
+            align-items: start;
+            margin-bottom: 18px;
+        }
+
+        .topic-panel-header h3 {
+            margin: 0 0 4px;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 1.25rem;
+        }
+
+        .topic-panel-header p {
+            margin: 0;
+            color: var(--muted);
+            font-family: "Segoe UI", sans-serif;
+        }
+
+        .topic-panel-header > span {
+            display: inline-flex;
+            align-items: center;
+            min-height: 32px;
+            padding: 5px 10px;
+            border-radius: 8px;
+            background: var(--gold-soft);
+            color: #7b5b18;
+            font-family: "Segoe UI", sans-serif;
+            font-size: 0.82rem;
+            font-weight: 800;
+        }
+
+        .topic-panel-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) minmax(260px, 0.38fr);
+            gap: 18px;
+            align-items: start;
+        }
+
+        .topic-panel-grid h4, .topic-reference-panel h4 {
+            margin: 0 0 12px;
+            font-family: "Segoe UI", sans-serif;
+            color: var(--ink);
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+        }
+
+        .topic-reference-panel {
+            position: sticky;
+            top: 16px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #f9fbfc;
+            padding: 14px;
+        }
+
+        .compact-reference-list {
+            gap: 0;
+        }
+
         @media (max-width: 900px) {
             .hero-inner {
                 grid-template-columns: 1fr;
@@ -465,6 +811,23 @@
             .footer {
                 flex-direction: column;
             }
+
+            .cluster-row {
+                grid-template-columns: 1fr;
+            }
+
+            .signal-list li {
+                flex-direction: column;
+                gap: 2px;
+            }
+
+            .topic-panel-header, .topic-panel-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .topic-reference-panel {
+                position: static;
+            }
         }
     </style>
 </head>
@@ -477,7 +840,7 @@
                     <h1>AI Drug Discovery Digest Archive</h1>
                     <p>An index of weekly digests focused on drug discovery, computational chemistry, and molecular machine learning.</p>
                     <div class="meta-strip">
-                        <div class="meta-chip">Published June 07, 2026</div>
+                        <div class="meta-chip">Published August 29, 2026</div>
                         <div class="meta-chip">Sources: arXiv, PubMed, ChemRxiv</div>
                         <div class="meta-chip">Local summarization with Ollama</div>
                     </div>
@@ -493,68 +856,76 @@
 
         <main class="content-frame">
             
-        <div class="section-title">
-        Digest Archive
-        </div>
-
-        
-        <div class="paper-card">
-            <div class="paper-title">
-                Weekly Digest - 2026-06-07
+            <div class="section-title">
+            Digest Archive
             </div>
 
-            <a href="posts/2026-06-07.html">Read digest -></a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">
-                Weekly Digest - 2026-05-16
-            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">
+                    Weekly Digest - 2026-08-29
+                </div>
 
-            <a href="posts/2026-05-16.html">Read digest -></a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">
-                Weekly Digest - 2026-05-10
+                <a href="posts/2026-08-29.html">Read digest -&gt;</a>
             </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">
+                    Weekly Digest - 2026-06-07
+                </div>
 
-            <a href="posts/2026-05-10.html">Read digest -></a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">
-                Weekly Digest - 2026-04-25
+                <a href="posts/2026-06-07.html">Read digest -&gt;</a>
             </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">
+                    Weekly Digest - 2026-05-16
+                </div>
 
-            <a href="posts/2026-04-25.html">Read digest -></a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">
-                Weekly Digest - 2026-04-18
+                <a href="posts/2026-05-16.html">Read digest -&gt;</a>
             </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">
+                    Weekly Digest - 2026-05-10
+                </div>
 
-            <a href="posts/2026-04-18.html">Read digest -></a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">
-                Weekly Digest - 2026-04-06
+                <a href="posts/2026-05-10.html">Read digest -&gt;</a>
             </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">
+                    Weekly Digest - 2026-04-25
+                </div>
 
-            <a href="posts/2026-04-06.html">Read digest -></a>
-        </div>
-        
-        <div class="paper-card">
-            <div class="paper-title">
-                Weekly Digest - 2026-03-15
+                <a href="posts/2026-04-25.html">Read digest -&gt;</a>
             </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">
+                    Weekly Digest - 2026-04-18
+                </div>
 
-            <a href="posts/2026-03-15.html">Read digest -></a>
-        </div>
-        
-        
+                <a href="posts/2026-04-18.html">Read digest -&gt;</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">
+                    Weekly Digest - 2026-04-06
+                </div>
+
+                <a href="posts/2026-04-06.html">Read digest -&gt;</a>
+            </div>
+            
+            <div class="paper-card">
+                <div class="paper-title">
+                    Weekly Digest - 2026-03-15
+                </div>
+
+                <a href="posts/2026-03-15.html">Read digest -&gt;</a>
+            </div>
+            
+            
             <footer class="footer">
                 <div>Curated pipeline for recent literature triage, evidence extraction, and scientific summarization.</div>
                 <div>Built for GitHub Pages and local LLM workflows.</div>
