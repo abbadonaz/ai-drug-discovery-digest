@@ -1,4 +1,6 @@
 from digest_core.utils import load_json, save_json
+import json
+from pathlib import Path
 
 
 ARCHIVE_FILE = "data/paper_archive.json"
@@ -31,15 +33,23 @@ def split_new_and_seen_papers(papers):
     return new_papers, seen_papers
 
 
-def mark_papers_seen(papers):
-    archive = load_archive()
+def archive_with_seen(papers):
+    """Prepare state without writing; never overwrite unreadable prior history."""
+    path = Path(ARCHIVE_FILE)
+    archive = json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
+    if not isinstance(archive, dict):
+        raise ValueError("Seen-paper history must be a JSON object")
 
     for paper in papers:
         url = paper.get("url")
         if url:
             archive[url] = True
 
-    save_archive(archive)
+    return archive
+
+
+def mark_papers_seen(papers):
+    save_archive(archive_with_seen(papers))
 
 
 def filter_new_papers(papers):

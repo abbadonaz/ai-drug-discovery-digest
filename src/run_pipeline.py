@@ -24,6 +24,9 @@ from sources.retrieval import LiteratureRetriever, PaperSource
 from summarization.llm import summarize_papers
 from summarization.narrative import generate_weekly_narrative
 from web.publishing import DigestPublisher
+import os
+from triage.embeddings import get_embedding_model
+from digest_core.atomic import PublicationRollbackError
 
 
 RAW_PATH = "data/raw_papers.json"
@@ -94,6 +97,11 @@ def build_pipeline():
     paths = _default_paths()
     settings = _default_settings()
     logger = RunLogger()
+    embedding_backend = "minilm" if get_embedding_model() is not None else "hashed_fallback"
+    if os.getenv("DIGEST_REQUIRE_EMBEDDINGS", "false").lower() == "true" and embedding_backend != "minilm":
+        raise RuntimeError("Required local embedding model is unavailable")
+    runtime_metadata = {"embedding_backend": embedding_backend, "generation_policy": "fallback_allowed"}
+    logger.info("runtime", "capabilities", **runtime_metadata)
 
     retriever = LiteratureRetriever(
         [
@@ -154,12 +162,23 @@ def build_pipeline():
         summarizer=summarize_papers,
         narrative_generator=generate_weekly_narrative,
         logger=logger,
+        runtime_metadata=runtime_metadata,
     )
 
 
 def main():
-    build_pipeline().run()
+    try:
+        result = build_pipeline().run()
+    except Exception as error:
+        RunLogger(run_id=os.getenv("DIGEST_RUN_ID")).error(
+            "pipeline", "fatal", error_type=type(error).__name__,
+            recovery_required=isinstance(error, PublicationRollbackError),
+        )
+        return 1
+    if result.retrieval.get("outcome") == "failed" or result.status == "failed":
+        return 1
+    return 0 if result.weekly_post and result.status == "published" else 2
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

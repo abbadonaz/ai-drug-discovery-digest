@@ -1,5 +1,12 @@
 import os
-from datetime import date
+from datetime import date, datetime, timezone
+from collections import Counter
+import json
+from pathlib import Path
+import uuid
+
+from digest_core.atomic import atomic_write_text, publication_lock, replace_files
+from digest_core.publication import content_hash, validate_artifact
 from html import escape
 
 from web.blog_template import render_blog
@@ -18,14 +25,12 @@ class DigestPublisher:
         today = date.today().isoformat()
         filename = f"{self.paths.posts_dir}/{today}.html"
 
-        with open(filename, "w", encoding="utf-8") as file:
-            file.write(html)
+        atomic_write_text(filename, html)
 
         return filename
 
     def save_latest_post(self, html):
-        with open(self.paths.index, "w", encoding="utf-8") as file:
-            file.write(html)
+        atomic_write_text(self.paths.index, html)
 
     def build_navigation_index(self, summaries, latest_post_filename):
         featured = [paper for paper in summaries if not paper.get("brief", False)]
@@ -101,7 +106,13 @@ class DigestPublisher:
         )
 
     def rebuild_archive(self):
-        posts = sorted(os.listdir(self.paths.posts_dir), reverse=True)
+        atomic_write_text(self.paths.archive, self.build_archive())
+
+    def build_archive(self, new_post=None):
+        posts = set(os.listdir(self.paths.posts_dir)) if os.path.isdir(self.paths.posts_dir) else set()
+        if new_post:
+            posts.add(Path(new_post).name)
+        posts = sorted(posts, reverse=True)
         links = ""
 
         for post_name in posts:
@@ -131,13 +142,47 @@ class DigestPublisher:
             page_tagline="An index of weekly digests focused on drug discovery, computational chemistry, and molecular machine learning.",
         )
 
-        with open(self.paths.archive, "w", encoding="utf-8") as file:
-            file.write(page)
+        return page
 
-    def publish(self, summaries, narrative):
+    def publish(self, summaries, narrative, *, artifacts=None, metadata=None, run_id=None):
+        with publication_lock(Path(self.paths.index).parent / ".publication.lock"):
+            return self._publish(summaries, narrative, artifacts, metadata, run_id)
+
+    def _publish(self, summaries, narrative, artifacts, metadata, run_id):
+        if not any(not paper.get("brief") for paper in summaries):
+            raise ValueError("Publication requires featured summaries")
+        if any(paper.get("generation_mode") == "unavailable" for paper in summaries if not paper.get("brief")):
+            raise ValueError("Cannot publish failure placeholders as summaries")
+        filename = f"{self.paths.posts_dir}/{date.today().isoformat()}.html"
         content_html = generate_digest_html(summaries, narrative)
         page = render_blog(content_html, publication_date=date.today())
-        filename = self.save_weekly_post(page)
-        self.save_latest_post(self.build_navigation_index(summaries, filename))
-        self.rebuild_archive()
+        navigation = self.build_navigation_index(summaries, filename)
+        archive = self.build_archive(filename)
+        if f"posts/{Path(filename).name}" not in navigation or f"posts/{Path(filename).name}" not in archive:
+            raise ValueError("Navigation does not reference the staged post")
+        outputs = {Path(path): text for path, text in (artifacts or {}).items()}
+        outputs[Path(self.paths.summaries)] = json.dumps(summaries, indent=2, ensure_ascii=False)
+        outputs[Path(filename)] = page
+        outputs[Path(self.paths.index)] = navigation
+        outputs[Path(self.paths.archive)] = archive
+        manifest_path = Path(self.paths.index).parent / "publication.json"
+        required_paths = [filename, self.paths.index, self.paths.archive, self.paths.summaries, manifest_path]
+        if len({Path(path).resolve() for path in required_paths}) != len(required_paths):
+            raise ValueError("Publication paths must be distinct")
+        roles = {Path(filename): "post", Path(self.paths.index): "index",
+                 Path(self.paths.archive): "archive", Path(self.paths.summaries): "summaries"}
+        manifest = {
+            "status": "published", "run_id": run_id or uuid.uuid4().hex,
+            "created_at": datetime.now(timezone.utc).isoformat(),
+            "metadata": metadata or {},
+            "generation_modes": dict(Counter(paper.get("generation_mode", "unknown") for paper in summaries)),
+            "artifacts": [
+                {"path": os.path.relpath(path.resolve(), manifest_path.parent.resolve()),
+                 "role": roles.get(path, "state"), "sha256": content_hash(text.encode("utf-8"))}
+                for path, text in outputs.items()
+            ],
+        }
+        # The marker is replaced last. Its hashes detect incomplete/mixed state.
+        outputs[manifest_path] = json.dumps(manifest, indent=2, ensure_ascii=False)
+        replace_files(outputs, validate_artifact)
         return filename

@@ -1,11 +1,16 @@
-from pipeline.deduplication import mark_papers_seen, split_new_and_seen_papers
+from pipeline import deduplication
+from pipeline.deduplication import split_new_and_seen_papers
+from digest_core.atomic import publication_lock
+from pathlib import Path
+import json
+import os
+import uuid
 from triage.filtering import filter_relevant_papers
 from summarization.narrative import generate_weekly_narrative
 from triage.clustering import build_cluster_overviews, cluster_and_select_papers
 from triage.scoring import rank_papers
 from digest_core.logging import NullRunLogger
 from digest_core.models import PipelineRunResult
-from digest_core.utils import save_json
 
 
 class ResearchDigestPipeline:
@@ -22,6 +27,7 @@ class ResearchDigestPipeline:
         narrative_generator=generate_weekly_narrative,
         cluster_selector=cluster_and_select_papers,
         logger=None,
+        runtime_metadata=None,
     ):
         self.retriever = retriever
         self.evidence_pipeline = evidence_pipeline
@@ -34,8 +40,19 @@ class ResearchDigestPipeline:
         self.narrative_generator = narrative_generator
         self.cluster_selector = cluster_selector
         self.logger = logger or NullRunLogger()
+        self.runtime_metadata = runtime_metadata or {}
 
     def run(self):
+        with publication_lock(Path(self.paths.index).parent / ".publication.lock"):
+            return self._run()
+
+    def _run(self):
+        run_id = os.getenv("DIGEST_RUN_ID") or uuid.uuid4().hex
+        if hasattr(self.logger, "run_id"):
+            self.logger.run_id = run_id
+        artifacts = {}
+        def stage_json(data, path):
+            artifacts[path] = json.dumps(data, indent=2, ensure_ascii=False)
         run_timer = self.logger.timer("pipeline")
         self.publisher.ensure_dirs()
 
@@ -44,16 +61,17 @@ class ResearchDigestPipeline:
         self.logger.info("retrieval", "papers_fetched", count=len(fetched_papers), health=retrieval)
         if retrieval["outcome"] == "failed":
             self.logger.error("pipeline", "halted_retrieval_failed")
-            result = PipelineRunResult(0, 0, 0, 0, 0, retrieval=retrieval)
+            result = PipelineRunResult(0, 0, 0, 0, 0, retrieval=retrieval, status="failed", run_id=run_id)
             run_timer.finish(**result.__dict__)
             return result
 
         papers_to_process, new_count = self._select_papers_to_process(fetched_papers)
-        save_json(papers_to_process, self.paths.raw_papers)
+        stage_json(papers_to_process, self.paths.raw_papers)
 
         if not papers_to_process:
             self.logger.warning("pipeline", "halted_no_papers")
             result = PipelineRunResult(
+                status="no_publication", run_id=run_id,
                 retrieval=retrieval,
                 fetched_count=len(fetched_papers),
                 new_count=new_count,
@@ -67,7 +85,7 @@ class ResearchDigestPipeline:
         filter_timer = self.logger.timer("filtering")
         filtered = self.relevance_filter(papers_to_process)
         filter_timer.finish(input_count=len(papers_to_process), output_count=len(filtered))
-        save_json(filtered, self.paths.filtered_papers)
+        stage_json(filtered, self.paths.filtered_papers)
 
         selection_input = filtered
         cluster_overviews = {}
@@ -76,17 +94,18 @@ class ResearchDigestPipeline:
             clustered, selection_input = self.cluster_selector(filtered, self.settings)
             cluster_overviews = build_cluster_overviews(clustered)
             cluster_timer.finish(cluster_count=len(cluster_overviews), selected_count=min(len(selection_input), self.settings.max_featured_papers))
-            save_json(clustered, self.paths.clustered_papers)
+            stage_json(clustered, self.paths.clustered_papers)
 
         evidence_timer = self.logger.timer("evidence")
         featured, brief = self.evidence_pipeline.prepare(selection_input)
         self._attach_cluster_overviews(featured, cluster_overviews)
         evidence_timer.finish(featured_count=len(featured), brief_count=len(brief))
-        save_json(featured, self.paths.paper_sentences)
+        stage_json(featured, self.paths.paper_sentences)
 
         if not featured:
             self.logger.warning("pipeline", "halted_no_featured_evidence")
             result = PipelineRunResult(
+                status="no_publication", run_id=run_id,
                 retrieval=retrieval,
                 fetched_count=len(fetched_papers),
                 new_count=new_count,
@@ -98,17 +117,24 @@ class ResearchDigestPipeline:
             return result
 
         summaries = self._summarize_and_rank(featured, brief)
-        save_json(summaries, self.paths.summaries)
+        stage_json(summaries, self.paths.summaries)
 
         narrative_timer = self.logger.timer("narrative")
         narrative = self.narrative_generator(summaries)
         narrative_timer.finish(summary_count=len(summaries), chars=len(narrative or ""))
 
         publish_timer = self.logger.timer("publishing")
-        weekly_post = self.publisher.publish(summaries, narrative)
+        # Only papers actually included in this digest become seen. Stage the
+        # merged history in the same rollback boundary as HTML and snapshots.
+        stage_json(deduplication.archive_with_seen(summaries), deduplication.ARCHIVE_FILE)
+        weekly_post = self.publisher.publish(
+            summaries, narrative, artifacts=artifacts, run_id=run_id,
+            metadata={"retrieval": retrieval, **self.runtime_metadata},
+        )
         publish_timer.finish(weekly_post=weekly_post)
 
         result = PipelineRunResult(
+            status="published", run_id=run_id,
             retrieval=retrieval,
             fetched_count=len(fetched_papers),
             new_count=new_count,
@@ -131,7 +157,6 @@ class ResearchDigestPipeline:
         self.logger.info("deduplication", "completed", new_count=len(new_papers), seen_count=len(seen_papers))
 
         if new_papers:
-            mark_papers_seen(new_papers)
             return new_papers, len(new_papers)
 
         if self.settings.process_all_when_no_new:

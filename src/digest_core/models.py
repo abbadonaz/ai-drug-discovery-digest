@@ -40,6 +40,8 @@ class PipelineRunResult:
     brief_count: int
     weekly_post: str | None = None
     retrieval: dict[str, Any] = field(default_factory=dict)
+    status: str = "unknown"
+    run_id: str | None = None
 
 
 class PaperRecord(BaseModel):

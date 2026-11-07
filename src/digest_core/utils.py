@@ -1,13 +1,10 @@
 import json
 from pathlib import Path
+from digest_core.atomic import atomic_write_text
 
 
 def save_json(data, path):
-    target = Path(path)
-    target.parent.mkdir(parents=True, exist_ok=True)
-
-    with target.open("w", encoding="utf-8") as f:
-        json.dump(data, f, indent=2, ensure_ascii=False)
+    atomic_write_text(path, json.dumps(data, indent=2, ensure_ascii=False))
 
 
 def load_json(path, default=None):
