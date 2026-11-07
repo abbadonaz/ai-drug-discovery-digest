@@ -1,0 +1,597 @@
+{
+  "description": "Synthetic fixture regression baseline only; not a production scientific-quality score. Fixed timestamp for reproducibility.",
+  "runs": {
+    "accurate": {
+      "schema_version": "1.0",
+      "benchmark_version": "synthetic-starter-1.0",
+      "evaluator_version": "1.0",
+      "evaluation_timestamp": "2026-11-07T00:00:00Z",
+      "benchmark_sha256": "30f5d0660f6197ea3e36bfabce78f877d1ef782de65a34e09cc36a1e696ba2fb",
+      "summaries_sha256": "79d0843bce692c4c13241eab1d6630d75c54fd16b3de0180e3ffb9c208252564",
+      "assessments_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "case_count": 7,
+      "evaluated_count": 7,
+      "authoritative_benchmark_available": false,
+      "cohorts": {
+        "verified": {
+          "case_count": 0,
+          "evaluated_count": 0,
+          "coverage_proxy": {
+            "finding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "method": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "result": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "comparison": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "limitation": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "overall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          },
+          "quantitative_reference_agreement": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "quantitative_counts": {
+            "reference_match": 0,
+            "failed": 0,
+            "not_assessed": 0
+          },
+          "cases_with_known_errors": 0,
+          "evidence_support_counts": {
+            "supported": 0,
+            "contradicted": 0,
+            "insufficient_evidence": 0,
+            "not_assessed": 0
+          },
+          "human_supported_fraction": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          }
+        },
+        "synthetic": {
+          "case_count": 7,
+          "evaluated_count": 7,
+          "coverage_proxy": {
+            "finding": {
+              "numerator": 7,
+              "denominator": 7,
+              "value": 1.0
+            },
+            "method": {
+              "numerator": 7,
+              "denominator": 7,
+              "value": 1.0
+            },
+            "result": {
+              "numerator": 7,
+              "denominator": 7,
+              "value": 1.0
+            },
+            "comparison": {
+              "numerator": 7,
+              "denominator": 7,
+              "value": 1.0
+            },
+            "limitation": {
+              "numerator": 7,
+              "denominator": 7,
+              "value": 1.0
+            },
+            "overall": {
+              "numerator": 35,
+              "denominator": 35,
+              "value": 1.0
+            }
+          },
+          "quantitative_reference_agreement": {
+            "numerator": 3,
+            "denominator": 3,
+            "value": 1.0
+          },
+          "quantitative_counts": {
+            "reference_match": 3,
+            "failed": 0,
+            "not_assessed": 0
+          },
+          "cases_with_known_errors": 0,
+          "evidence_support_counts": {
+            "supported": 0,
+            "contradicted": 0,
+            "insufficient_evidence": 0,
+            "not_assessed": 35
+          },
+          "human_supported_fraction": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          }
+        },
+        "unreviewed": {
+          "case_count": 0,
+          "evaluated_count": 0,
+          "coverage_proxy": {
+            "finding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "method": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "result": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "comparison": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "limitation": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "overall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          },
+          "quantitative_reference_agreement": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "quantitative_counts": {
+            "reference_match": 0,
+            "failed": 0,
+            "not_assessed": 0
+          },
+          "cases_with_known_errors": 0,
+          "evidence_support_counts": {
+            "supported": 0,
+            "contradicted": 0,
+            "insufficient_evidence": 0,
+            "not_assessed": 0
+          },
+          "human_supported_fraction": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          }
+        }
+      },
+      "cases": [
+        {
+          "case_id": "synthetic-qsar",
+          "generation_mode": "fixture",
+          "evidence_mode": "pdf_full_text",
+          "coverage_proxy": {
+            "numerator": 5,
+            "denominator": 5,
+            "value": 1.0
+          },
+          "negative_control_status": "no_known_violation",
+          "failed_control_ids": [],
+          "unassessed_evidence_claims": 5
+        },
+        {
+          "case_id": "synthetic-gnn",
+          "generation_mode": "fixture",
+          "evidence_mode": "pdf_full_text",
+          "coverage_proxy": {
+            "numerator": 5,
+            "denominator": 5,
+            "value": 1.0
+          },
+          "negative_control_status": "no_known_violation",
+          "failed_control_ids": [],
+          "unassessed_evidence_claims": 5
+        },
+        {
+          "case_id": "synthetic-uncertainty",
+          "generation_mode": "fixture",
+          "evidence_mode": "abstract_only",
+          "coverage_proxy": {
+            "numerator": 5,
+            "denominator": 5,
+            "value": 1.0
+          },
+          "negative_control_status": "no_known_violation",
+          "failed_control_ids": [],
+          "unassessed_evidence_claims": 5
+        },
+        {
+          "case_id": "synthetic-active",
+          "generation_mode": "fixture",
+          "evidence_mode": "pdf_full_text",
+          "coverage_proxy": {
+            "numerator": 5,
+            "denominator": 5,
+            "value": 1.0
+          },
+          "negative_control_status": "no_known_violation",
+          "failed_control_ids": [],
+          "unassessed_evidence_claims": 5
+        },
+        {
+          "case_id": "synthetic-design",
+          "generation_mode": "fixture",
+          "evidence_mode": "pdf_full_text",
+          "coverage_proxy": {
+            "numerator": 5,
+            "denominator": 5,
+            "value": 1.0
+          },
+          "negative_control_status": "no_known_violation",
+          "failed_control_ids": [],
+          "unassessed_evidence_claims": 5
+        },
+        {
+          "case_id": "synthetic-docking",
+          "generation_mode": "fixture",
+          "evidence_mode": "pdf_full_text",
+          "coverage_proxy": {
+            "numerator": 5,
+            "denominator": 5,
+            "value": 1.0
+          },
+          "negative_control_status": "no_known_violation",
+          "failed_control_ids": [],
+          "unassessed_evidence_claims": 5
+        },
+        {
+          "case_id": "synthetic-foundation",
+          "generation_mode": "fixture",
+          "evidence_mode": "abstract_only",
+          "coverage_proxy": {
+            "numerator": 5,
+            "denominator": 5,
+            "value": 1.0
+          },
+          "negative_control_status": "no_known_violation",
+          "failed_control_ids": [],
+          "unassessed_evidence_claims": 5
+        }
+      ]
+    },
+    "negative": {
+      "schema_version": "1.0",
+      "benchmark_version": "synthetic-starter-1.0",
+      "evaluator_version": "1.0",
+      "evaluation_timestamp": "2026-11-07T00:00:00Z",
+      "benchmark_sha256": "30f5d0660f6197ea3e36bfabce78f877d1ef782de65a34e09cc36a1e696ba2fb",
+      "summaries_sha256": "86220d8c03d5a8be645eb0313dda2d4c8b487fd51c9a55789d4c729a51266d61",
+      "assessments_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "case_count": 7,
+      "evaluated_count": 7,
+      "authoritative_benchmark_available": false,
+      "cohorts": {
+        "verified": {
+          "case_count": 0,
+          "evaluated_count": 0,
+          "coverage_proxy": {
+            "finding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "method": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "result": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "comparison": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "limitation": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "overall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          },
+          "quantitative_reference_agreement": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "quantitative_counts": {
+            "reference_match": 0,
+            "failed": 0,
+            "not_assessed": 0
+          },
+          "cases_with_known_errors": 0,
+          "evidence_support_counts": {
+            "supported": 0,
+            "contradicted": 0,
+            "insufficient_evidence": 0,
+            "not_assessed": 0
+          },
+          "human_supported_fraction": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          }
+        },
+        "synthetic": {
+          "case_count": 7,
+          "evaluated_count": 7,
+          "coverage_proxy": {
+            "finding": {
+              "numerator": 0,
+              "denominator": 7,
+              "value": 0.0
+            },
+            "method": {
+              "numerator": 0,
+              "denominator": 7,
+              "value": 0.0
+            },
+            "result": {
+              "numerator": 0,
+              "denominator": 7,
+              "value": 0.0
+            },
+            "comparison": {
+              "numerator": 0,
+              "denominator": 7,
+              "value": 0.0
+            },
+            "limitation": {
+              "numerator": 0,
+              "denominator": 7,
+              "value": 0.0
+            },
+            "overall": {
+              "numerator": 0,
+              "denominator": 35,
+              "value": 0.0
+            }
+          },
+          "quantitative_reference_agreement": {
+            "numerator": 0,
+            "denominator": 3,
+            "value": 0.0
+          },
+          "quantitative_counts": {
+            "reference_match": 0,
+            "failed": 3,
+            "not_assessed": 0
+          },
+          "cases_with_known_errors": 7,
+          "evidence_support_counts": {
+            "supported": 0,
+            "contradicted": 0,
+            "insufficient_evidence": 0,
+            "not_assessed": 23
+          },
+          "human_supported_fraction": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          }
+        },
+        "unreviewed": {
+          "case_count": 0,
+          "evaluated_count": 0,
+          "coverage_proxy": {
+            "finding": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "method": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "result": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "comparison": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "limitation": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            },
+            "overall": {
+              "numerator": 0,
+              "denominator": 0,
+              "value": null
+            }
+          },
+          "quantitative_reference_agreement": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          },
+          "quantitative_counts": {
+            "reference_match": 0,
+            "failed": 0,
+            "not_assessed": 0
+          },
+          "cases_with_known_errors": 0,
+          "evidence_support_counts": {
+            "supported": 0,
+            "contradicted": 0,
+            "insufficient_evidence": 0,
+            "not_assessed": 0
+          },
+          "human_supported_fraction": {
+            "numerator": 0,
+            "denominator": 0,
+            "value": null
+          }
+        }
+      },
+      "cases": [
+        {
+          "case_id": "synthetic-qsar",
+          "generation_mode": "fixture",
+          "evidence_mode": "unknown",
+          "coverage_proxy": {
+            "numerator": 0,
+            "denominator": 5,
+            "value": 0.0
+          },
+          "negative_control_status": "failed",
+          "failed_control_ids": [
+            "N1",
+            "N2",
+            "N3",
+            "N4",
+            "N5",
+            "N6",
+            "N7",
+            "N8",
+            "N9"
+          ],
+          "unassessed_evidence_claims": 9
+        },
+        {
+          "case_id": "synthetic-gnn",
+          "generation_mode": "fixture",
+          "evidence_mode": "unknown",
+          "coverage_proxy": {
+            "numerator": 0,
+            "denominator": 5,
+            "value": 0.0
+          },
+          "negative_control_status": "failed",
+          "failed_control_ids": [
+            "N1",
+            "N2",
+            "N3"
+          ],
+          "unassessed_evidence_claims": 3
+        },
+        {
+          "case_id": "synthetic-uncertainty",
+          "generation_mode": "fixture",
+          "evidence_mode": "unknown",
+          "coverage_proxy": {
+            "numerator": 0,
+            "denominator": 5,
+            "value": 0.0
+          },
+          "negative_control_status": "failed",
+          "failed_control_ids": [
+            "N1",
+            "N2"
+          ],
+          "unassessed_evidence_claims": 2
+        },
+        {
+          "case_id": "synthetic-active",
+          "generation_mode": "fixture",
+          "evidence_mode": "unknown",
+          "coverage_proxy": {
+            "numerator": 0,
+            "denominator": 5,
+            "value": 0.0
+          },
+          "negative_control_status": "failed",
+          "failed_control_ids": [
+            "N1",
+            "N2"
+          ],
+          "unassessed_evidence_claims": 2
+        },
+        {
+          "case_id": "synthetic-design",
+          "generation_mode": "fixture",
+          "evidence_mode": "unknown",
+          "coverage_proxy": {
+            "numerator": 0,
+            "denominator": 5,
+            "value": 0.0
+          },
+          "negative_control_status": "failed",
+          "failed_control_ids": [
+            "N1",
+            "N2"
+          ],
+          "unassessed_evidence_claims": 2
+        },
+        {
+          "case_id": "synthetic-docking",
+          "generation_mode": "fixture",
+          "evidence_mode": "unknown",
+          "coverage_proxy": {
+            "numerator": 0,
+            "denominator": 5,
+            "value": 0.0
+          },
+          "negative_control_status": "failed",
+          "failed_control_ids": [
+            "N1",
+            "N2",
+            "N3"
+          ],
+          "unassessed_evidence_claims": 3
+        },
+        {
+          "case_id": "synthetic-foundation",
+          "generation_mode": "fixture",
+          "evidence_mode": "unknown",
+          "coverage_proxy": {
+            "numerator": 0,
+            "denominator": 5,
+            "value": 0.0
+          },
+          "negative_control_status": "failed",
+          "failed_control_ids": [
+            "N1",
+            "N2"
+          ],
+          "unassessed_evidence_claims": 2
+        }
+      ]
+    }
+  }
+}

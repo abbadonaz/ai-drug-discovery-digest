@@ -1,0 +1,44 @@
+[
+  {
+    "case_id": "synthetic-qsar",
+    "tldr": "On SolToy scaffold test data, RMSE decreased from 1.2 to 0.1 log mol/L relative to a random forest. On SolToy scaffold test data, RMSE decreased from 1.2 to 1.0 mg/mL relative to a random forest. On SolToy scaffold test data, AUROC decreased from 1.2 to 1.0 log mol/L relative to a random forest. On SolToy scaffold test data, RMSE increased from 1.2 to 1.0 log mol/L relative to a random forest. On LipToy scaffold test data, RMSE decreased from 1.2 to 1.0 log mol/L relative to a random forest. On SolToy random test data, RMSE decreased from 1.2 to 1.0 log mol/L relative to a random forest. The graph model beat the random forest on every dataset. External validation confirmed generalization to new chemical series. The improvement was statistically significant.",
+    "generation_mode": "fixture",
+    "evidence_mode": "unknown"
+  },
+  {
+    "case_id": "synthetic-gnn",
+    "tldr": "The model was externally validated on an independent cohort. On ClassToy random cross-validation, RMSE was 0.8 for the graph model versus 0.7 for fingerprints. The graph advantage persisted under a scaffold split.",
+    "generation_mode": "fixture",
+    "evidence_mode": "unknown"
+  },
+  {
+    "case_id": "synthetic-uncertainty",
+    "tldr": "The predictive intervals were demonstrably calibrated. The uncertainty method significantly improved calibration.",
+    "generation_mode": "fixture",
+    "evidence_mode": "unknown"
+  },
+  {
+    "case_id": "synthetic-active",
+    "tldr": "Prospective biological assays confirmed the selected compounds were active. The method outperformed all acquisition strategies.",
+    "generation_mode": "fixture",
+    "evidence_mode": "unknown"
+  },
+  {
+    "case_id": "synthetic-design",
+    "tldr": "Synthesized molecules showed improved measured potency and solubility. The generator eliminated all predictor bias.",
+    "generation_mode": "fixture",
+    "evidence_mode": "unknown"
+  },
+  {
+    "case_id": "synthetic-docking",
+    "tldr": "Experimental binding assays confirmed stronger affinity for the candidate. On DockToy, the candidate docking score was -8 nM versus -6 nM for the reference ligand. Pose stability proved target inhibition in cells.",
+    "generation_mode": "fixture",
+    "evidence_mode": "unknown"
+  },
+  {
+    "case_id": "synthetic-foundation",
+    "tldr": "Pretraining improved every task regardless of label availability. The study ruled out all pretraining data leakage.",
+    "generation_mode": "fixture",
+    "evidence_mode": "unknown"
+  }
+]

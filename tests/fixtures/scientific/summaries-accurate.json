@@ -1,0 +1,58 @@
+[
+  {
+    "case_id": "synthetic-qsar",
+    "url": "https://example.org/scientific/qsar",
+    "title": "SYNTHETIC: Toy QSAR under scaffold shift",
+    "tldr": "The toy study predicts small-molecule solubility with a graph model. Evaluation used a scaffold split of the fictional SolToy dataset. On SolToy scaffold test data, RMSE decreased from 1.2 to 1.0 log mol/L relative to a random forest. The graph model beat the random forest on SolToy but not on fictional LipToy. No external validation was performed and scaffold coverage was limited.",
+    "generation_mode": "fixture",
+    "evidence_mode": "pdf_full_text"
+  },
+  {
+    "case_id": "synthetic-gnn",
+    "url": "https://example.org/scientific/gnn",
+    "title": "SYNTHETIC: Toy GNN classification benchmark",
+    "tldr": "The toy graph representation predicts a binary ADMET endpoint. Five-fold internal cross-validation used a random split of fictional ClassToy. On ClassToy random cross-validation, AUROC was 0.8 for the graph model versus 0.7 for fingerprints. The graph advantage disappeared under a scaffold split. Label imbalance and absence of external validation limit generalizability.",
+    "generation_mode": "fixture",
+    "evidence_mode": "pdf_full_text"
+  },
+  {
+    "case_id": "synthetic-uncertainty",
+    "url": "https://example.org/scientific/uncertainty",
+    "title": "SYNTHETIC: Toy uncertainty without calibration",
+    "tldr": "The toy ensemble estimates uncertainty for small-molecule potency predictions. Ensemble disagreement ranked compounds in fictional UncertainToy. Prediction errors were larger among compounds with high disagreement. The study did not compare calibration against a calibrated baseline. No interval coverage or calibration experiment was reported.",
+    "generation_mode": "fixture",
+    "evidence_mode": "abstract_only"
+  },
+  {
+    "case_id": "synthetic-active",
+    "url": "https://example.org/scientific/active",
+    "title": "SYNTHETIC: Toy retrospective compound selection",
+    "tldr": "The toy active learner prioritizes compounds for predicted activity. Retrospective replay used a fixed labeled pool from fictional ActiveToy. The selection policy recovered more labeled actives early in the replay. The comparator was random acquisition within the same fixed pool. No prospective assay was run and selection bias limits transfer.",
+    "generation_mode": "fixture",
+    "evidence_mode": "pdf_full_text"
+  },
+  {
+    "case_id": "synthetic-design",
+    "url": "https://example.org/scientific/design",
+    "title": "SYNTHETIC: Toy multi-objective molecular generation",
+    "tldr": "The toy generator optimizes predicted potency and solubility jointly. A fixed predictor scored generated small-molecule structures. Generated candidates improved the predicted Pareto frontier. The comparator sampled structures without multi-objective optimization. No molecules were synthesized and predictor bias limits the result.",
+    "generation_mode": "fixture",
+    "evidence_mode": "pdf_full_text"
+  },
+  {
+    "case_id": "synthetic-docking",
+    "url": "https://example.org/scientific/docking",
+    "title": "SYNTHETIC: Toy docking and molecular dynamics",
+    "tldr": "The toy workflow ranks small molecules using docking and molecular dynamics. A single receptor conformation from fictional DockToy was used for docking. On DockToy, the candidate docking score was -8 kcal/mol versus -6 kcal/mol for the reference ligand. Molecular dynamics examined pose stability rather than binding affinity. No experimental binding assay was performed and receptor sampling was limited.",
+    "generation_mode": "fixture",
+    "evidence_mode": "pdf_full_text"
+  },
+  {
+    "case_id": "synthetic-foundation",
+    "url": "https://example.org/scientific/foundation",
+    "title": "SYNTHETIC: Toy molecular transfer learning",
+    "tldr": "The toy pretrained molecular model transfers to small-molecule ADMET prediction. Fine-tuning used low-label subsets of fictional TransferToy. Transfer helped the low-label task but did not improve the high-label task. The baseline used the same architecture trained without pretraining. Pretraining overlap was not audited and applicability outside the tested series is unknown.",
+    "generation_mode": "fixture",
+    "evidence_mode": "abstract_only"
+  }
+]

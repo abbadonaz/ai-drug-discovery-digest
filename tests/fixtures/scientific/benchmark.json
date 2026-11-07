@@ -1,0 +1,810 @@
+{
+  "schema_version": "1.0",
+  "benchmark_version": "synthetic-starter-1.0",
+  "cases": [
+    {
+      "id": "synthetic-qsar",
+      "kind": "synthetic",
+      "title": "SYNTHETIC: Toy QSAR under scaffold shift",
+      "identifier": null,
+      "url": "https://example.org/scientific/qsar",
+      "domain": "qsar_admet",
+      "source_ref": "inline:E1 (fictional toy study; not a publication)",
+      "evidence_scope": "full_text",
+      "passages": [
+        {
+          "id": "E1",
+          "section": "synthetic study description",
+          "page": null,
+          "text": "The toy study predicts small-molecule solubility with a graph model. Evaluation used a scaffold split of the fictional SolToy dataset. On SolToy scaffold test data, RMSE decreased from 1.2 to 1.0 log mol/L relative to a random forest. The graph model beat the random forest on SolToy but not on fictional LipToy. No external validation was performed and scaffold coverage was limited."
+        }
+      ],
+      "annotations": [
+        {
+          "id": "finding",
+          "category": "finding",
+          "statement": "The toy study predicts small-molecule solubility with a graph model.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "method",
+          "category": "method",
+          "statement": "Evaluation used a scaffold split of the fictional SolToy dataset.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "result",
+          "category": "result",
+          "statement": "On SolToy scaffold test data, RMSE decreased from 1.2 to 1.0 log mol/L relative to a random forest.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "comparison",
+          "category": "comparison",
+          "statement": "The graph model beat the random forest on SolToy but not on fictional LipToy.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "limitation",
+          "category": "limitation",
+          "statement": "No external validation was performed and scaffold coverage was limited.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        }
+      ],
+      "quantities": [
+        {
+          "annotation_id": "result",
+          "value": "1.0",
+          "unit": "log mol/L",
+          "metric": "RMSE",
+          "dataset": "SolToy",
+          "direction": "decreased from 1.2",
+          "conditions": "scaffold test split",
+          "baseline": "random forest"
+        }
+      ],
+      "must_not_infer": [
+        {
+          "id": "N1",
+          "statement": "On SolToy scaffold test data, RMSE decreased from 1.2 to 0.1 log mol/L relative to a random forest.",
+          "error_type": "value",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "result"
+        },
+        {
+          "id": "N2",
+          "statement": "On SolToy scaffold test data, RMSE decreased from 1.2 to 1.0 mg/mL relative to a random forest.",
+          "error_type": "unit",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "result"
+        },
+        {
+          "id": "N3",
+          "statement": "On SolToy scaffold test data, AUROC decreased from 1.2 to 1.0 log mol/L relative to a random forest.",
+          "error_type": "metric",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "result"
+        },
+        {
+          "id": "N4",
+          "statement": "On SolToy scaffold test data, RMSE increased from 1.2 to 1.0 log mol/L relative to a random forest.",
+          "error_type": "direction",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "result"
+        },
+        {
+          "id": "N5",
+          "statement": "On LipToy scaffold test data, RMSE decreased from 1.2 to 1.0 log mol/L relative to a random forest.",
+          "error_type": "dataset",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "result"
+        },
+        {
+          "id": "N6",
+          "statement": "On SolToy random test data, RMSE decreased from 1.2 to 1.0 log mol/L relative to a random forest.",
+          "error_type": "conditions",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "result"
+        },
+        {
+          "id": "N7",
+          "statement": "The graph model beat the random forest on every dataset.",
+          "error_type": "superiority",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "comparison"
+        },
+        {
+          "id": "N8",
+          "statement": "External validation confirmed generalization to new chemical series.",
+          "error_type": "validation",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "limitation"
+        },
+        {
+          "id": "N9",
+          "statement": "The improvement was statistically significant.",
+          "error_type": "significance",
+          "support": "insufficient_evidence",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "result"
+        }
+      ],
+      "reference_summary": "The toy study predicts small-molecule solubility with a graph model. Evaluation used a scaffold split of the fictional SolToy dataset. On SolToy scaffold test data, RMSE decreased from 1.2 to 1.0 log mol/L relative to a random forest. The graph model beat the random forest on SolToy but not on fictional LipToy. No external validation was performed and scaffold coverage was limited.",
+      "review": {
+        "status": "synthetic",
+        "annotator": "Codex synthetic fixture author",
+        "notes": "Invented solely to exercise evaluation behavior. No real paper, human verification, or scientific baseline is claimed."
+      }
+    },
+    {
+      "id": "synthetic-gnn",
+      "kind": "synthetic",
+      "title": "SYNTHETIC: Toy GNN classification benchmark",
+      "identifier": null,
+      "url": "https://example.org/scientific/gnn",
+      "domain": "representations_gnn",
+      "source_ref": "inline:E1 (fictional toy study; not a publication)",
+      "evidence_scope": "full_text",
+      "passages": [
+        {
+          "id": "E1",
+          "section": "synthetic study description",
+          "page": null,
+          "text": "The toy graph representation predicts a binary ADMET endpoint. Five-fold internal cross-validation used a random split of fictional ClassToy. On ClassToy random cross-validation, AUROC was 0.8 for the graph model versus 0.7 for fingerprints. The graph advantage disappeared under a scaffold split. Label imbalance and absence of external validation limit generalizability."
+        }
+      ],
+      "annotations": [
+        {
+          "id": "finding",
+          "category": "finding",
+          "statement": "The toy graph representation predicts a binary ADMET endpoint.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "method",
+          "category": "method",
+          "statement": "Five-fold internal cross-validation used a random split of fictional ClassToy.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "result",
+          "category": "result",
+          "statement": "On ClassToy random cross-validation, AUROC was 0.8 for the graph model versus 0.7 for fingerprints.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "comparison",
+          "category": "comparison",
+          "statement": "The graph advantage disappeared under a scaffold split.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "limitation",
+          "category": "limitation",
+          "statement": "Label imbalance and absence of external validation limit generalizability.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        }
+      ],
+      "quantities": [
+        {
+          "annotation_id": "result",
+          "value": "0.8",
+          "unit": "dimensionless",
+          "metric": "AUROC",
+          "dataset": "ClassToy",
+          "direction": "higher than 0.7",
+          "conditions": "random five-fold internal cross-validation",
+          "baseline": "fingerprints"
+        }
+      ],
+      "must_not_infer": [
+        {
+          "id": "N1",
+          "statement": "The model was externally validated on an independent cohort.",
+          "error_type": "validation",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "method"
+        },
+        {
+          "id": "N2",
+          "statement": "On ClassToy random cross-validation, RMSE was 0.8 for the graph model versus 0.7 for fingerprints.",
+          "error_type": "metric",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "result"
+        },
+        {
+          "id": "N3",
+          "statement": "The graph advantage persisted under a scaffold split.",
+          "error_type": "qualification",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "comparison"
+        }
+      ],
+      "reference_summary": "The toy graph representation predicts a binary ADMET endpoint. Five-fold internal cross-validation used a random split of fictional ClassToy. On ClassToy random cross-validation, AUROC was 0.8 for the graph model versus 0.7 for fingerprints. The graph advantage disappeared under a scaffold split. Label imbalance and absence of external validation limit generalizability.",
+      "review": {
+        "status": "synthetic",
+        "annotator": "Codex synthetic fixture author",
+        "notes": "Invented solely to exercise evaluation behavior. No real paper, human verification, or scientific baseline is claimed."
+      }
+    },
+    {
+      "id": "synthetic-uncertainty",
+      "kind": "synthetic",
+      "title": "SYNTHETIC: Toy uncertainty without calibration",
+      "identifier": null,
+      "url": "https://example.org/scientific/uncertainty",
+      "domain": "uncertainty",
+      "source_ref": "inline:E1 (fictional toy study; not a publication)",
+      "evidence_scope": "abstract_only",
+      "passages": [
+        {
+          "id": "E1",
+          "section": "synthetic study description",
+          "page": null,
+          "text": "The toy ensemble estimates uncertainty for small-molecule potency predictions. Ensemble disagreement ranked compounds in fictional UncertainToy. Prediction errors were larger among compounds with high disagreement. The study did not compare calibration against a calibrated baseline. No interval coverage or calibration experiment was reported."
+        }
+      ],
+      "annotations": [
+        {
+          "id": "finding",
+          "category": "finding",
+          "statement": "The toy ensemble estimates uncertainty for small-molecule potency predictions.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "method",
+          "category": "method",
+          "statement": "Ensemble disagreement ranked compounds in fictional UncertainToy.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "result",
+          "category": "result",
+          "statement": "Prediction errors were larger among compounds with high disagreement.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "comparison",
+          "category": "comparison",
+          "statement": "The study did not compare calibration against a calibrated baseline.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "limitation",
+          "category": "limitation",
+          "statement": "No interval coverage or calibration experiment was reported.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        }
+      ],
+      "quantities": [],
+      "must_not_infer": [
+        {
+          "id": "N1",
+          "statement": "The predictive intervals were demonstrably calibrated.",
+          "error_type": "unsupported_result",
+          "support": "insufficient_evidence",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "limitation"
+        },
+        {
+          "id": "N2",
+          "statement": "The uncertainty method significantly improved calibration.",
+          "error_type": "significance",
+          "support": "insufficient_evidence",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "result"
+        }
+      ],
+      "reference_summary": "The toy ensemble estimates uncertainty for small-molecule potency predictions. Ensemble disagreement ranked compounds in fictional UncertainToy. Prediction errors were larger among compounds with high disagreement. The study did not compare calibration against a calibrated baseline. No interval coverage or calibration experiment was reported.",
+      "review": {
+        "status": "synthetic",
+        "annotator": "Codex synthetic fixture author",
+        "notes": "Invented solely to exercise evaluation behavior. No real paper, human verification, or scientific baseline is claimed."
+      }
+    },
+    {
+      "id": "synthetic-active",
+      "kind": "synthetic",
+      "title": "SYNTHETIC: Toy retrospective compound selection",
+      "identifier": null,
+      "url": "https://example.org/scientific/active",
+      "domain": "active_learning",
+      "source_ref": "inline:E1 (fictional toy study; not a publication)",
+      "evidence_scope": "full_text",
+      "passages": [
+        {
+          "id": "E1",
+          "section": "synthetic study description",
+          "page": null,
+          "text": "The toy active learner prioritizes compounds for predicted activity. Retrospective replay used a fixed labeled pool from fictional ActiveToy. The selection policy recovered more labeled actives early in the replay. The comparator was random acquisition within the same fixed pool. No prospective assay was run and selection bias limits transfer."
+        }
+      ],
+      "annotations": [
+        {
+          "id": "finding",
+          "category": "finding",
+          "statement": "The toy active learner prioritizes compounds for predicted activity.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "method",
+          "category": "method",
+          "statement": "Retrospective replay used a fixed labeled pool from fictional ActiveToy.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "result",
+          "category": "result",
+          "statement": "The selection policy recovered more labeled actives early in the replay.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "comparison",
+          "category": "comparison",
+          "statement": "The comparator was random acquisition within the same fixed pool.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "limitation",
+          "category": "limitation",
+          "statement": "No prospective assay was run and selection bias limits transfer.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        }
+      ],
+      "quantities": [],
+      "must_not_infer": [
+        {
+          "id": "N1",
+          "statement": "Prospective biological assays confirmed the selected compounds were active.",
+          "error_type": "experimental_confirmation",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "limitation"
+        },
+        {
+          "id": "N2",
+          "statement": "The method outperformed all acquisition strategies.",
+          "error_type": "superiority",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "comparison"
+        }
+      ],
+      "reference_summary": "The toy active learner prioritizes compounds for predicted activity. Retrospective replay used a fixed labeled pool from fictional ActiveToy. The selection policy recovered more labeled actives early in the replay. The comparator was random acquisition within the same fixed pool. No prospective assay was run and selection bias limits transfer.",
+      "review": {
+        "status": "synthetic",
+        "annotator": "Codex synthetic fixture author",
+        "notes": "Invented solely to exercise evaluation behavior. No real paper, human verification, or scientific baseline is claimed."
+      }
+    },
+    {
+      "id": "synthetic-design",
+      "kind": "synthetic",
+      "title": "SYNTHETIC: Toy multi-objective molecular generation",
+      "identifier": null,
+      "url": "https://example.org/scientific/design",
+      "domain": "generative_design",
+      "source_ref": "inline:E1 (fictional toy study; not a publication)",
+      "evidence_scope": "full_text",
+      "passages": [
+        {
+          "id": "E1",
+          "section": "synthetic study description",
+          "page": null,
+          "text": "The toy generator optimizes predicted potency and solubility jointly. A fixed predictor scored generated small-molecule structures. Generated candidates improved the predicted Pareto frontier. The comparator sampled structures without multi-objective optimization. No molecules were synthesized and predictor bias limits the result."
+        }
+      ],
+      "annotations": [
+        {
+          "id": "finding",
+          "category": "finding",
+          "statement": "The toy generator optimizes predicted potency and solubility jointly.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "method",
+          "category": "method",
+          "statement": "A fixed predictor scored generated small-molecule structures.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "result",
+          "category": "result",
+          "statement": "Generated candidates improved the predicted Pareto frontier.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "comparison",
+          "category": "comparison",
+          "statement": "The comparator sampled structures without multi-objective optimization.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "limitation",
+          "category": "limitation",
+          "statement": "No molecules were synthesized and predictor bias limits the result.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        }
+      ],
+      "quantities": [],
+      "must_not_infer": [
+        {
+          "id": "N1",
+          "statement": "Synthesized molecules showed improved measured potency and solubility.",
+          "error_type": "experimental_confirmation",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "limitation"
+        },
+        {
+          "id": "N2",
+          "statement": "The generator eliminated all predictor bias.",
+          "error_type": "qualification",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "limitation"
+        }
+      ],
+      "reference_summary": "The toy generator optimizes predicted potency and solubility jointly. A fixed predictor scored generated small-molecule structures. Generated candidates improved the predicted Pareto frontier. The comparator sampled structures without multi-objective optimization. No molecules were synthesized and predictor bias limits the result.",
+      "review": {
+        "status": "synthetic",
+        "annotator": "Codex synthetic fixture author",
+        "notes": "Invented solely to exercise evaluation behavior. No real paper, human verification, or scientific baseline is claimed."
+      }
+    },
+    {
+      "id": "synthetic-docking",
+      "kind": "synthetic",
+      "title": "SYNTHETIC: Toy docking and molecular dynamics",
+      "identifier": null,
+      "url": "https://example.org/scientific/docking",
+      "domain": "structure_based",
+      "source_ref": "inline:E1 (fictional toy study; not a publication)",
+      "evidence_scope": "full_text",
+      "passages": [
+        {
+          "id": "E1",
+          "section": "synthetic study description",
+          "page": null,
+          "text": "The toy workflow ranks small molecules using docking and molecular dynamics. A single receptor conformation from fictional DockToy was used for docking. On DockToy, the candidate docking score was -8 kcal/mol versus -6 kcal/mol for the reference ligand. Molecular dynamics examined pose stability rather than binding affinity. No experimental binding assay was performed and receptor sampling was limited."
+        }
+      ],
+      "annotations": [
+        {
+          "id": "finding",
+          "category": "finding",
+          "statement": "The toy workflow ranks small molecules using docking and molecular dynamics.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "method",
+          "category": "method",
+          "statement": "A single receptor conformation from fictional DockToy was used for docking.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "result",
+          "category": "result",
+          "statement": "On DockToy, the candidate docking score was -8 kcal/mol versus -6 kcal/mol for the reference ligand.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "comparison",
+          "category": "comparison",
+          "statement": "Molecular dynamics examined pose stability rather than binding affinity.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "limitation",
+          "category": "limitation",
+          "statement": "No experimental binding assay was performed and receptor sampling was limited.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        }
+      ],
+      "quantities": [
+        {
+          "annotation_id": "result",
+          "value": "-8",
+          "unit": "kcal/mol",
+          "metric": "docking score",
+          "dataset": "DockToy",
+          "direction": "more negative than -6",
+          "conditions": "single receptor conformation",
+          "baseline": "reference ligand"
+        }
+      ],
+      "must_not_infer": [
+        {
+          "id": "N1",
+          "statement": "Experimental binding assays confirmed stronger affinity for the candidate.",
+          "error_type": "experimental_confirmation",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "limitation"
+        },
+        {
+          "id": "N2",
+          "statement": "On DockToy, the candidate docking score was -8 nM versus -6 nM for the reference ligand.",
+          "error_type": "unit",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "result"
+        },
+        {
+          "id": "N3",
+          "statement": "Pose stability proved target inhibition in cells.",
+          "error_type": "unsupported_result",
+          "support": "insufficient_evidence",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "comparison"
+        }
+      ],
+      "reference_summary": "The toy workflow ranks small molecules using docking and molecular dynamics. A single receptor conformation from fictional DockToy was used for docking. On DockToy, the candidate docking score was -8 kcal/mol versus -6 kcal/mol for the reference ligand. Molecular dynamics examined pose stability rather than binding affinity. No experimental binding assay was performed and receptor sampling was limited.",
+      "review": {
+        "status": "synthetic",
+        "annotator": "Codex synthetic fixture author",
+        "notes": "Invented solely to exercise evaluation behavior. No real paper, human verification, or scientific baseline is claimed."
+      }
+    },
+    {
+      "id": "synthetic-foundation",
+      "kind": "synthetic",
+      "title": "SYNTHETIC: Toy molecular transfer learning",
+      "identifier": null,
+      "url": "https://example.org/scientific/foundation",
+      "domain": "foundation_models",
+      "source_ref": "inline:E1 (fictional toy study; not a publication)",
+      "evidence_scope": "abstract_only",
+      "passages": [
+        {
+          "id": "E1",
+          "section": "synthetic study description",
+          "page": null,
+          "text": "The toy pretrained molecular model transfers to small-molecule ADMET prediction. Fine-tuning used low-label subsets of fictional TransferToy. Transfer helped the low-label task but did not improve the high-label task. The baseline used the same architecture trained without pretraining. Pretraining overlap was not audited and applicability outside the tested series is unknown."
+        }
+      ],
+      "annotations": [
+        {
+          "id": "finding",
+          "category": "finding",
+          "statement": "The toy pretrained molecular model transfers to small-molecule ADMET prediction.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "method",
+          "category": "method",
+          "statement": "Fine-tuning used low-label subsets of fictional TransferToy.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "result",
+          "category": "result",
+          "statement": "Transfer helped the low-label task but did not improve the high-label task.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "comparison",
+          "category": "comparison",
+          "statement": "The baseline used the same architecture trained without pretraining.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        },
+        {
+          "id": "limitation",
+          "category": "limitation",
+          "statement": "Pretraining overlap was not audited and applicability outside the tested series is unknown.",
+          "evidence_ids": [
+            "E1"
+          ],
+          "accepted_statements": []
+        }
+      ],
+      "quantities": [],
+      "must_not_infer": [
+        {
+          "id": "N1",
+          "statement": "Pretraining improved every task regardless of label availability.",
+          "error_type": "superiority",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "result"
+        },
+        {
+          "id": "N2",
+          "statement": "The study ruled out all pretraining data leakage.",
+          "error_type": "qualification",
+          "support": "contradicted",
+          "evidence_ids": [
+            "E1"
+          ],
+          "rationale": "This is a deliberately incorrect synthetic control; compare the qualified source statements in E1.",
+          "annotation_id": "limitation"
+        }
+      ],
+      "reference_summary": "The toy pretrained molecular model transfers to small-molecule ADMET prediction. Fine-tuning used low-label subsets of fictional TransferToy. Transfer helped the low-label task but did not improve the high-label task. The baseline used the same architecture trained without pretraining. Pretraining overlap was not audited and applicability outside the tested series is unknown.",
+      "review": {
+        "status": "synthetic",
+        "annotator": "Codex synthetic fixture author",
+        "notes": "Invented solely to exercise evaluation behavior. No real paper, human verification, or scientific baseline is claimed."
+      }
+    }
+  ]
+}
