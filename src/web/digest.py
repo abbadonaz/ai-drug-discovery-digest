@@ -4,6 +4,8 @@ import re
 
 import markdown
 
+from web.markdown_safety import SafeURLExtension
+
 
 def clean_llm_output(text):
     if not text:
@@ -37,7 +39,9 @@ def render_markdown(text):
     cleaned = clean_llm_output(text)
     if not cleaned:
         return "<p>No summary available.</p>"
-    return markdown.markdown(escape(cleaned), extensions=["extra", "sane_lists"])
+    return markdown.markdown(
+        escape(cleaned), extensions=["extra", "sane_lists", SafeURLExtension()]
+    )
 
 
 def slugify_title(title):
