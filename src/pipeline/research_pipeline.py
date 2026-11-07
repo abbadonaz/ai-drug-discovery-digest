@@ -148,6 +148,8 @@ class ResearchDigestPipeline:
                     "cluster_size": paper.get("cluster_size"),
                     "cluster_overview": paper.get("cluster_overview"),
                     "provenance": [],
+                    "generation_mode": "unavailable",
+                    "evidence_mode": paper.get("evidence_mode", "unknown"),
                 }
                 for paper in featured
             ]
@@ -166,6 +168,8 @@ class ResearchDigestPipeline:
                 "brief": True,
                 "score": 0,
                 "provenance": [],
+                "generation_mode": "not_generated",
+                "evidence_mode": paper.get("evidence_mode", "unknown"),
             })
 
         summary_timer.finish(featured_count=len(featured), brief_count=len(brief), total_count=len(summaries))

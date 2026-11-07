@@ -198,6 +198,8 @@ def _render_comparison_table(featured):
 
 
 def _render_provenance(paper):
+    # No verification contract exists: even an imported status cannot establish
+    # support. Missing legacy status and arbitrary status strings stay unverified.
     provenance = paper.get("provenance") or []
     if not provenance:
         return ""
@@ -215,6 +217,7 @@ def _render_provenance(paper):
         items += f"""
         <details class="evidence-detail">
             <summary>{escape(claim.get("claim", "Evidence"))}</summary>
+            <p>Support status: Unverified</p>
             <ul>{evidence_lines}</ul>
         </details>
         """
@@ -224,10 +227,25 @@ def _render_provenance(paper):
 
     return f"""
     <div class="evidence-box">
-        <h5>Evidence trace</h5>
+        <h5>Candidate source passages</h5>
+        <p>Passages are associated by position and role. Factual support has not been verified.</p>
         {items}
     </div>
     """
+
+
+def _render_summary_modes(paper):
+    generation = {
+        "llm": "LLM-generated",
+        "extractive_fallback": "Extractive fallback",
+        "unavailable": "Unavailable (failure notice)",
+        "not_generated": "Not generated (reference only)",
+    }.get(paper.get("generation_mode"), "Unknown")
+    evidence = {
+        "pdf_full_text": "PDF/full text available (selected passages may be abstract-only)",
+        "abstract_only": "Abstract only",
+    }.get(paper.get("evidence_mode"), "Unknown")
+    return f'<p class="summary-modes">Summary generation: {generation}. Evidence available: {evidence}.</p>'
 
 
 def _render_topic_card(paper, rank):
@@ -242,6 +260,7 @@ def _render_topic_card(paper, rank):
             <span>selection {_paper_metric(paper, 'selection_score')}</span>
         </div>
         <div class="paper-summary-featured">
+            {_render_summary_modes(paper)}
             {render_markdown(paper.get("tldr", ""))}
         </div>
         {_render_provenance(paper)}
@@ -261,6 +280,7 @@ def _render_reference_list(papers):
         links += f"""
         <div class="brief-item">
             <a href="{escape(paper['url'])}" class="brief-link">{escape(paper['title'])}</a>
+            {_render_summary_modes(paper)}
         </div>
         """
 

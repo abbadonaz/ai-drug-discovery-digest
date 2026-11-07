@@ -37,6 +37,9 @@ def build_summary_provenance(summary_text, evidence):
         provenance.append({
             "claim_id": f"C{claim_index}",
             "claim": claim,
+            # Role/position matching is not a factual support check. Existing
+            # role and score fields describe selection, never verification.
+            "support_status": "unverified",
             "evidence": [
                 {
                     "evidence_id": item["evidence_id"],

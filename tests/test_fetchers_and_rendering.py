@@ -170,7 +170,7 @@ def test_generate_digest_html_and_blog_template_render_scientific_layout():
     assert "Structure-Based Design" in digest
     assert "At-a-glance comparison" in digest
     assert "<th>Selection</th>" not in digest
-    assert "Evidence trace" in digest
+    assert "Candidate source passages" in digest
     assert "Explore by research category" in digest
     assert "topic-tab-label" in digest
     assert "GitHub avatar for abbadonaz" in page

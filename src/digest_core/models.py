@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_serializer, field_validator
 
@@ -68,6 +68,10 @@ class PaperRecord(BaseModel):
         return self.model_dump(mode="json", exclude_none=True)
 
 
+GenerationMode = Literal["llm", "extractive_fallback", "unavailable", "not_generated", "unknown"]
+EvidenceMode = Literal["pdf_full_text", "abstract_only", "unknown"]
+
+
 class SummaryRecord(BaseModel):
     model_config = ConfigDict(extra="allow")
 
@@ -82,6 +86,14 @@ class SummaryRecord(BaseModel):
     cluster_size: int | None = None
     cluster_overview: str | None = None
     provenance: list[dict[str, Any]] = Field(default_factory=list)
+    generation_mode: GenerationMode = "unknown"
+    evidence_mode: EvidenceMode = "unknown"
+
+    @field_validator("provenance")
+    @classmethod
+    def mark_candidate_associations_unverified(cls, value):
+        # No verifier is implemented, including for imported/legacy records.
+        return [{**claim, "support_status": "unverified"} for claim in value]
 
     @field_serializer("url")
     def serialize_url(self, value):

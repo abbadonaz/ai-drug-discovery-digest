@@ -1,5 +1,6 @@
 import re
 import logging
+from dataclasses import dataclass
 
 from digest_core.config import (
     ENABLE_SUMMARY_QA,
@@ -7,7 +8,7 @@ from digest_core.config import (
     MODEL_NAME,
     OLLAMA_NUM_PREDICT,
 )
-from digest_core.models import SummaryRecord
+from digest_core.models import GenerationMode, SummaryRecord
 from evidence.provenance import build_summary_provenance
 from evidence.selector import build_summary_payload
 from summarization.ollama_client import chat_with_model_fallbacks, ollama
@@ -180,7 +181,17 @@ def _summary_sentence_key(text):
     return re.sub(r"\W+", " ", (text or "").lower()).strip()
 
 
+@dataclass(frozen=True)
+class _SummaryGeneration:
+    text: str
+    mode: GenerationMode
+
+
 def _extractive_fallback_summary(paper):
+    return _extractive_fallback_result(paper).text
+
+
+def _extractive_fallback_result(paper):
     try:
         payload = build_summary_payload(paper)
         evidence = payload.get("evidence", [])
@@ -231,12 +242,12 @@ def _extractive_fallback_summary(paper):
             break
 
     if not summary_sentences:
-        return "Automatic summarization failed. Review the original paper for details."
+        return _SummaryGeneration("Automatic summarization failed. Review the original paper for details.", "unavailable")
 
     if len(summary_sentences) == 1:
         summary_sentences.append("The available evidence was limited, so this digest entry is intentionally brief.")
 
-    return " ".join(summary_sentences[:3])
+    return _SummaryGeneration(" ".join(summary_sentences[:3]), "extractive_fallback")
 
 
 def score_paper_abstract(title, abstract):
@@ -346,46 +357,53 @@ def summarize_with_llm(title, summary_input):
 
 
 def summarize_paper(paper):
+    # Retain the public string-returning API; records consume the typed outcome.
+    return _summarize_paper_result(paper).text
+
+
+def _summarize_paper_result(paper):
     payload = build_summary_payload(paper)
     summary_input = payload["summary_input"] or "\n".join(paper.get("sentences", []))
 
     if not summary_input.strip():
-        return _extractive_fallback_summary(paper)
+        return _extractive_fallback_result(paper)
 
     full_summary = summarize_with_llm(payload["title"], summary_input)
     quality_issues = summary_quality_issues(full_summary)
 
     if quality_issues:
-        return _extractive_fallback_summary(paper)
+        return _extractive_fallback_result(paper)
 
     if not ENABLE_SUMMARY_QA:
-        return full_summary
+        return _SummaryGeneration(full_summary, "llm")
 
     check_result = hallucination_check(full_summary, payload["context"])
 
     if "POTENTIAL_HALLUCINATION" in check_result.upper():
-        return f"{full_summary}\n\nPotential hallucinations were flagged in the optional QA pass, so please verify the paper directly."
+        return _SummaryGeneration(f"{full_summary}\n\nPotential hallucinations were flagged in the optional QA pass, so please verify the paper directly.", "llm")
 
-    return full_summary
+    return _SummaryGeneration(full_summary, "llm")
 
 
 def summarize_paper_record(paper):
     payload = build_summary_payload(paper)
     try:
-        summary_text = summarize_paper(paper)
+        generated = _summarize_paper_result(paper)
     except Exception:
-        summary_text = _extractive_fallback_summary(paper)
+        generated = _extractive_fallback_result(paper)
 
     return SummaryRecord(
         title=paper["title"],
         url=paper["url"],
         topic=paper.get("topic", "Other"),
-        tldr=summary_text,
+        tldr=generated.text,
+        generation_mode=generated.mode,
+        evidence_mode=paper.get("evidence_mode", "unknown"),
         cluster_id=paper.get("cluster_id"),
         cluster_label=paper.get("cluster_label"),
         cluster_size=paper.get("cluster_size"),
         cluster_overview=paper.get("cluster_overview"),
-        provenance=build_summary_provenance(summary_text, payload.get("evidence", [])),
+        provenance=build_summary_provenance(generated.text, payload.get("evidence", [])),
     ).to_dict()
 
 
@@ -398,15 +416,17 @@ def summarize_papers(papers):
         except Exception as error:
             logger.warning("Evidence-based summarization failed for %s: %s", paper["title"], error)
             try:
-                summary_text = _extractive_fallback_summary(paper)
+                generated = _extractive_fallback_result(paper)
             except Exception as fallback_error:
                 logger.warning("Extractive fallback failed for %s: %s", paper["title"], fallback_error)
-                summary_text = "Automatic summarization failed for this paper, so please review the original source directly."
+                generated = _SummaryGeneration("Automatic summarization failed for this paper, so please review the original source directly.", "unavailable")
             summaries.append(SummaryRecord(
                 title=paper["title"],
                 url=paper["url"],
                 topic=paper.get("topic", "Other"),
-                tldr=summary_text,
+                tldr=generated.text,
+                generation_mode=generated.mode,
+                evidence_mode=paper.get("evidence_mode", "unknown"),
                 cluster_id=paper.get("cluster_id"),
                 cluster_label=paper.get("cluster_label"),
                 cluster_size=paper.get("cluster_size"),

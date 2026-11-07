@@ -5,8 +5,8 @@ from digest_core.config import OLLAMA_FALLBACK_NUM_PREDICT, SECONDARY_FALLBACK_M
 
 def test_summarize_papers_uses_extractive_fallback_when_ollama_fails(monkeypatch):
     monkeypatch.setattr(
-        "summarization.llm.summarize_paper",
-        lambda paper: (_ for _ in ()).throw(RuntimeError("runner crashed")),
+        "summarization.llm.summarize_with_llm",
+        lambda *args: (_ for _ in ()).throw(RuntimeError("runner crashed")),
     )
 
     papers = [{

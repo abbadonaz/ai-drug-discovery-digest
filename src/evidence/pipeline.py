@@ -59,6 +59,7 @@ def build_abstract_record(
         "sentences": abstract_sentences[:10],
         "context": abstract,
         "sections": {"abstract": abstract},
+        "evidence_mode": "abstract_only",
     }
 
     if not evidence_validator(record):
@@ -118,6 +119,13 @@ class FeaturedPaperEvidenceBuilder:
             "sentences": ranked,
             "context": combined_text,
             "sections": sections,
+            # Describe available prepared evidence, not which snippets the
+            # later abstract-first selector will choose for the summary.
+            "evidence_mode": (
+                "pdf_full_text" if any(value.strip() for key, value in sections.items() if key != "abstract")
+                else "abstract_only" if sections.get("abstract", "").strip()
+                else "unknown"
+            ),
         }
 
         if not self.dependencies.evidence_validator(record):
