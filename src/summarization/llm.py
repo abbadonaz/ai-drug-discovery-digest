@@ -315,9 +315,9 @@ def summary_quality_issues(summary_text):
     return issues
 
 
-def summarize_with_llm(title, summary_input):
+def summarize_with_llm(title, summary_input, *, max_context_chars=None):
     safe_title = safe_source_block(title, max_chars=300)
-    text_block = safe_source_block(truncate_text(summary_input, 2200))
+    text_block = safe_source_block(truncate_text(summary_input, max_context_chars or 2200), max_chars=max_context_chars or 2200)
 
     prompts = [
         (
@@ -327,7 +327,7 @@ def summarize_with_llm(title, summary_input):
         (
             COMPACT_PROMPT_TEMPLATE.format(
                 title=safe_title,
-                sentences=safe_source_block(truncate_text(text_block, 1200)),
+                sentences=safe_source_block(truncate_text(text_block, max_context_chars or 1200), max_chars=max_context_chars or 1200),
             ),
             min(max(OLLAMA_NUM_PREDICT, 180), 240),
         ),
@@ -368,7 +368,10 @@ def _summarize_paper_result(paper):
     if not summary_input.strip():
         return _extractive_fallback_result(paper)
 
-    full_summary = summarize_with_llm(payload["title"], summary_input)
+    if payload.get("evidence_strategy") == "section_aware":
+        full_summary = summarize_with_llm(payload["title"], summary_input, max_context_chars=payload["char_budget"])
+    else:
+        full_summary = summarize_with_llm(payload["title"], summary_input)
     quality_issues = summary_quality_issues(full_summary)
 
     if quality_issues:
@@ -393,6 +396,7 @@ def summarize_paper_record(paper):
         generated = _extractive_fallback_result(paper)
 
     return SummaryRecord(
+        **_selection_metadata(paper, payload),
         title=paper["title"],
         url=paper["url"],
         topic=paper.get("topic", "Other"),
@@ -405,6 +409,15 @@ def summarize_paper_record(paper):
         cluster_overview=paper.get("cluster_overview"),
         provenance=build_summary_provenance(generated.text, payload.get("evidence", [])),
     ).to_dict()
+
+
+def _selection_metadata(paper, payload=None):
+    if paper.get("evidence_strategy") != "section_aware" and not (payload or {}).get("evidence_strategy"):
+        return {}
+    return {"evidence_strategy": "section_aware",
+            "selected_evidence": (payload or {}).get("evidence", paper.get("selected_evidence", [])),
+            "selection_diagnostics": (payload or {}).get("selection_diagnostics", paper.get("selection_diagnostics", {})),
+            "extraction_diagnostics": paper.get("extraction_diagnostics", {})}
 
 
 def summarize_papers(papers):
@@ -421,6 +434,7 @@ def summarize_papers(papers):
                 logger.warning("Extractive fallback failed for %s: %s", paper["title"], fallback_error)
                 generated = _SummaryGeneration("Automatic summarization failed for this paper, so please review the original source directly.", "unavailable")
             summaries.append(SummaryRecord(
+                **_selection_metadata(paper),
                 title=paper["title"],
                 url=paper["url"],
                 topic=paper.get("topic", "Other"),

@@ -5,6 +5,8 @@ from typing import Callable
 from evidence.clean_sentences import clean_sentences
 from evidence.selector import has_sufficient_summary_evidence
 from evidence.pdf_extract import split_sentences
+from evidence.pdf_document import extract_pdf_document
+from digest_core.config import EVIDENCE_SELECTION_STRATEGY
 
 
 def normalize_text(text):
@@ -39,6 +41,7 @@ def build_abstract_record(
     paper,
     abstract,
     evidence_validator=has_sufficient_summary_evidence,
+    strategy=None,
 ):
     abstract = (abstract or "").strip()
     if not is_informative_abstract(paper.get("title", ""), abstract):
@@ -61,6 +64,8 @@ def build_abstract_record(
         "sections": {"abstract": abstract},
         "evidence_mode": "abstract_only",
     }
+    if strategy is not None:
+        record["evidence_strategy"] = strategy
 
     if not evidence_validator(record):
         return None
@@ -76,19 +81,26 @@ class EvidenceBuilderDependencies:
     build_paper_context: Callable[[dict], str]
     rank_sentences: Callable[[list[str], int], list[str]]
     evidence_validator: Callable[[dict], bool] = has_sufficient_summary_evidence
+    extract_pdf_document: Callable[[object], dict] = extract_pdf_document
 
 
 class FeaturedPaperEvidenceBuilder:
-    def __init__(self, dependencies: EvidenceBuilderDependencies):
+    def __init__(self, dependencies: EvidenceBuilderDependencies, strategy=None):
         self.dependencies = dependencies
+        self.strategy = strategy or EVIDENCE_SELECTION_STRATEGY
+        if self.strategy not in {"legacy", "section_aware"}:
+            raise ValueError("Unknown evidence selection strategy")
 
     def build_featured_record(self, paper):
+        if self.strategy == "section_aware":
+            return self._build_section_record(paper)
         pdf_path = self.dependencies.download_pdf(paper)
         if not pdf_path:
             return build_abstract_record(
                 paper,
                 paper.get("abstract"),
                 evidence_validator=self.dependencies.evidence_validator,
+                strategy="legacy",
             )
 
         text = self.dependencies.extract_pdf_text(pdf_path)
@@ -97,6 +109,7 @@ class FeaturedPaperEvidenceBuilder:
                 paper,
                 paper.get("abstract"),
                 evidence_validator=self.dependencies.evidence_validator,
+                strategy="legacy",
             )
 
         sections = self.dependencies.extract_sections(text)
@@ -109,6 +122,7 @@ class FeaturedPaperEvidenceBuilder:
         ranked = self.dependencies.rank_sentences(sentences, top_k=25)
 
         record = {
+            "evidence_strategy": "legacy",
             "title": paper["title"],
             "url": paper["url"],
             "topic": paper.get("topic", "Other"),
@@ -133,9 +147,39 @@ class FeaturedPaperEvidenceBuilder:
                 paper,
                 paper.get("abstract"),
                 evidence_validator=self.dependencies.evidence_validator,
+                strategy="legacy",
             )
 
         return record
+
+    def _build_section_record(self, paper):
+        from evidence.scientific_sections import abstract_passages, build_passages, detect_sections
+        from evidence.section_selection import build_section_payload
+        pdf_path = self.dependencies.download_pdf(paper)
+        document = self.dependencies.extract_pdf_document(pdf_path) if pdf_path else {
+            "status": "unavailable", "pages": [], "text": "", "raw_text": "",
+            "limitations": ["pdf_unavailable"],
+        }
+        sections = detect_sections(document) if document["status"] == "success" else []
+        passages = build_passages(document, paper["url"]) if sections else []
+        passages += abstract_passages(paper)
+        record = {**paper, "evidence_strategy": "section_aware", "passages": passages,
+                  "document": document, "scientific_sections": sections,
+                  "sections": {}, "context": document["text"], "sentences": [],
+                  "extraction_diagnostics": {"status": document["status"], "page_count": len(document["pages"]),
+                                             "limitations": document["limitations"]}}
+        for section in sections:
+            name = section["category"]
+            record["sections"][name] = record["sections"].get(name, "") + section["text"]
+        if paper.get("abstract"):
+            record["sections"]["abstract"] = paper["abstract"]
+        payload = build_section_payload(record)
+        selected = payload["evidence"]
+        record.update(selected_evidence=selected, selection_diagnostics=payload["selection_diagnostics"],
+                      sentences=[item["text"] for item in selected], context=payload["context"],
+                      evidence_mode="pdf_full_text" if any(p["source_type"] == "pdf" and p["section"] not in {"abstract", "references"} for p in passages)
+                      else "abstract_only" if any(p["section"] == "abstract" for p in passages) else "unknown")
+        return record if self.dependencies.evidence_validator(record) else None
 
 
 class EvidencePreparationPipeline:

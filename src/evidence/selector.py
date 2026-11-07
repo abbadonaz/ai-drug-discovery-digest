@@ -4,6 +4,14 @@ from evidence.clean_sentences import clean_sentences
 from triage.embeddings import cosine_similarity, encode_texts
 from evidence.pdf_extract import split_sentences
 from evidence.security import safe_source_block
+from digest_core.config import EVIDENCE_SELECTION_STRATEGY
+
+
+def evidence_strategy(paper):
+    strategy = paper.get("evidence_strategy", EVIDENCE_SELECTION_STRATEGY)
+    if strategy not in {"legacy", "section_aware"}:
+        raise ValueError("Unknown evidence selection strategy")
+    return strategy
 
 
 INTEREST_TEXT = """
@@ -407,6 +415,10 @@ def select_relevant_evidence(paper, top_k=12):
 
 
 def has_sufficient_summary_evidence(paper, min_sentences=3):
+    if evidence_strategy(paper) == "section_aware":
+        from evidence.section_selection import select_passages
+        evidence, _ = select_passages(paper)
+        return len(evidence) >= 2 and sum(len(item["text"]) for item in evidence) >= 160
     evidence = select_relevant_evidence(paper, top_k=6)
     informative = [item for item in evidence if item.get("role") in LOW_INFORMATION_ROLES]
 
@@ -609,6 +621,9 @@ def _pick_summary_item(candidates, summary_role, preferred_roles, preferred_sect
 
 
 def select_summary_evidence(paper, max_items=3):
+    if evidence_strategy(paper) == "section_aware":
+        from evidence.section_selection import SelectionSettings, select_passages
+        return select_passages(paper, SelectionSettings(max_passages=max_items))[0]
     title = paper.get("title", "")
     abstract_text = ((paper.get("sections") or {}).get("abstract") or "").strip()
     abstract_candidates = []
@@ -692,6 +707,9 @@ def select_summary_evidence(paper, max_items=3):
 
 
 def build_summary_payload(paper, top_k=12):
+    if evidence_strategy(paper) == "section_aware":
+        from evidence.section_selection import build_section_payload
+        return build_section_payload(paper)
     evidence = select_summary_evidence(paper, max_items=min(top_k, 4))
     lines = []
 

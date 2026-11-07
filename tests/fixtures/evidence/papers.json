@@ -1,0 +1,16 @@
+[
+  {
+    "title": "SYNTHETIC molecular prediction",
+    "url": "https://example.org/toy",
+    "abstract": "This synthetic study presents molecular prediction for drug discovery using graph models. The framework combines molecular descriptors with a learning approach for compound prioritization. The study evaluates prediction performance on a fictional benchmark for molecular screening.",
+    "pdf_path": "tests/fixtures/evidence/scientific-study.pdf",
+    "fixture_kind": "synthetic"
+  },
+  {
+    "title": "SYNTHETIC abstract only",
+    "url": "https://example.org/abstract",
+    "abstract": "This synthetic study presents molecular prediction for drug discovery using graph models. The framework combines molecular descriptors with a learning approach for compound prioritization. The study evaluates prediction performance on a fictional benchmark for molecular screening.",
+    "pdf_path": "tests/fixtures/evidence/abstract-only.pdf",
+    "fixture_kind": "synthetic"
+  }
+]

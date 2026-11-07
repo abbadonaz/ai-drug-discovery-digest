@@ -42,6 +42,11 @@ def build_summary_provenance(summary_text, evidence):
             "support_status": "unverified",
             "evidence": [
                 {
+                    **{key: item[key] for key in (
+                        "passage_id", "paper_id", "source_type", "section_title", "section_detection",
+                        "page_start", "page_end", "block_id", "start", "end", "selection_reasons",
+                        "extraction_status", "limitations", "table_id",
+                    ) if key in item},
                     "evidence_id": item["evidence_id"],
                     "summary_role": item.get("summary_role", item.get("role", "supporting")),
                     "role": item.get("role", "supporting"),

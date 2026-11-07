@@ -1,0 +1,510 @@
+{
+  "version": "1.0",
+  "scientific_comparison": "pending_human_verified_cases",
+  "pythonhashseed": "0",
+  "legacy_embedding_backend": "hashed_fallback",
+  "papers": [
+    {
+      "paper_id": "https://example.org/toy",
+      "fixture_kind": "synthetic",
+      "pdf_sha256": "05aa416b46144e42523a38897c027afd3bf8512b73d0fe7e05032875b6b0b7a6",
+      "extracted_pages": 3,
+      "detected_sections": 9,
+      "candidate_passages": 12,
+      "extraction_status": "success",
+      "extraction_limitations": [
+        "table_cells_not_reconstructed",
+        "reading_order_is_heuristic"
+      ],
+      "strategies": {
+        "legacy": {
+          "selected_count": 3,
+          "selected_categories": {
+            "abstract": 3
+          },
+          "category_proportions": {
+            "abstract": 1.0,
+            "methods": 0.0,
+            "results": 0.0,
+            "discussion": 0.0,
+            "limitations": 0.0
+          },
+          "quantitative_passages": 0,
+          "selected_text_chars": 279,
+          "prompt_input_chars": 360,
+          "selection_failed": false,
+          "selected_evidence_mode": "abstract_only",
+          "selection_diagnostics": null,
+          "evidence": [
+            {
+              "position": 0,
+              "role": "supporting",
+              "section": "abstract",
+              "text": "This synthetic study presents molecular prediction for drug discovery using graph models.",
+              "score": 0,
+              "summary_role": "overview",
+              "evidence_id": "E1"
+            },
+            {
+              "position": 1,
+              "role": "method",
+              "section": "abstract",
+              "text": "The framework combines molecular descriptors with a learning approach for compound prioritization.",
+              "score": 0,
+              "summary_role": "approach",
+              "evidence_id": "E2"
+            },
+            {
+              "position": 2,
+              "role": "dataset",
+              "section": "abstract",
+              "text": "The study evaluates prediction performance on a fictional benchmark for molecular screening.",
+              "score": 0.2,
+              "summary_role": "result",
+              "evidence_id": "E3"
+            }
+          ],
+          "annotation_coverage_proxy": null,
+          "annotation_cohort": null
+        },
+        "section_aware": {
+          "selected_count": 6,
+          "selected_categories": {
+            "methods": 1,
+            "results": 2,
+            "limitations": 1,
+            "abstract": 1,
+            "discussion": 1
+          },
+          "category_proportions": {
+            "abstract": 0.16666666666666666,
+            "methods": 0.16666666666666666,
+            "results": 0.3333333333333333,
+            "discussion": 0.16666666666666666,
+            "limitations": 0.16666666666666666
+          },
+          "quantitative_passages": 3,
+          "selected_text_chars": 908,
+          "prompt_input_chars": 1197,
+          "selection_failed": false,
+          "selected_evidence_mode": "pdf_full_text",
+          "selection_diagnostics": {
+            "strategy": "section_aware",
+            "candidate_count": 12,
+            "eligible_count": 10,
+            "selected_count": 6,
+            "input_chars": 1197,
+            "char_budget": 3600,
+            "excluded": {
+              "references": 1,
+              "unsafe": 0,
+              "numeric_block": 1,
+              "budget": 0,
+              "duplicate": 0
+            },
+            "missing_coverage": [],
+            "status": "selected"
+          },
+          "evidence": [
+            {
+              "passage_id": "Pdddf1046c4a65615930f",
+              "paper_id": "https://example.org/toy",
+              "source_type": "pdf",
+              "section_title": "2.1 Training and Validation",
+              "section": "training_validation",
+              "section_detection": "exact_heading",
+              "page_start": 2,
+              "page_end": 2,
+              "block_id": "p2-b3",
+              "start": 518,
+              "end": 702,
+              "text": "A graph neural network used molecular descriptors on fictional SolToy with 1000 compounds. Scaffold training and test splits were used; the protocol was retrospective, not prospective.",
+              "source_text": "A graph neural network used molecular\ndescriptors on fictional SolToy with 1000\ncompounds. Scaffold training and test\nsplits were used; the protocol was\nretrospective, not prospective.",
+              "table_id": null,
+              "extraction_status": "success",
+              "limitations": [
+                "table_cells_not_reconstructed",
+                "reading_order_is_heuristic"
+              ],
+              "support_status": "unverified",
+              "score": 4.0,
+              "selection_reasons": [
+                "section_prior:methods",
+                "protocol",
+                "domain",
+                "category_coverage"
+              ],
+              "evidence_id": "Pdddf1046c4a65615930f",
+              "role": "method",
+              "summary_role": "approach"
+            },
+            {
+              "passage_id": "Pb8c6b05b7de14099c517",
+              "paper_id": "https://example.org/toy",
+              "source_type": "pdf",
+              "section_title": "3.1 Ablation Analysis",
+              "section": "results",
+              "section_detection": "inherited_numbered_subsection",
+              "page_start": 2,
+              "page_end": 2,
+              "block_id": "p2-b7",
+              "start": 934,
+              "end": 1054,
+              "text": "Removing graph descriptors increased RMSE to 1.3 log mol/L on the same scaffold split, compared with the complete model.",
+              "source_text": "Removing graph descriptors increased RMSE\nto 1.3 log mol/L on the same scaffold\nsplit, compared with the complete model.",
+              "table_id": null,
+              "extraction_status": "success",
+              "limitations": [
+                "table_cells_not_reconstructed",
+                "reading_order_is_heuristic"
+              ],
+              "support_status": "unverified",
+              "score": 7.5,
+              "selection_reasons": [
+                "section_prior:results",
+                "quantitative_metric",
+                "protocol",
+                "comparison",
+                "domain",
+                "category_coverage"
+              ],
+              "evidence_id": "Pb8c6b05b7de14099c517",
+              "role": "findings",
+              "summary_role": "result"
+            },
+            {
+              "passage_id": "Pf2fb1d9b2fa86a2bee40",
+              "paper_id": "https://example.org/toy",
+              "source_type": "pdf",
+              "section_title": "4 Limitations",
+              "section": "limitations",
+              "section_detection": "exact_heading",
+              "page_start": 3,
+              "page_end": 3,
+              "block_id": "p3-b2",
+              "start": 1071,
+              "end": 1231,
+              "text": "No external validation or experimental binding assay was performed. Dataset bias and distribution shift limit generalization beyond the tested molecular series.",
+              "source_text": "No external validation or experimental binding assay was performed. Dataset bias and\ndistribution shift limit generalization beyond the tested molecular series.",
+              "table_id": null,
+              "extraction_status": "success",
+              "limitations": [
+                "table_cells_not_reconstructed",
+                "reading_order_is_heuristic"
+              ],
+              "support_status": "unverified",
+              "score": 5.0,
+              "selection_reasons": [
+                "section_prior:limitations",
+                "protocol",
+                "caveat",
+                "domain",
+                "category_coverage"
+              ],
+              "evidence_id": "Pf2fb1d9b2fa86a2bee40",
+              "role": "problem",
+              "summary_role": "context"
+            },
+            {
+              "passage_id": "P2bb7b11feef799c7fe48",
+              "paper_id": "https://example.org/toy",
+              "source_type": "abstract",
+              "section_title": "Source abstract",
+              "section": "abstract",
+              "section_detection": "source_metadata",
+              "page_start": null,
+              "page_end": null,
+              "start": 89,
+              "end": 188,
+              "text": "The framework combines molecular descriptors with a learning approach for compound prioritization.",
+              "extraction_status": "abstract_only",
+              "limitations": [
+                "abstract_only"
+              ],
+              "support_status": "unverified",
+              "score": 1.5,
+              "selection_reasons": [
+                "section_prior:abstract",
+                "domain",
+                "category_coverage"
+              ],
+              "evidence_id": "P2bb7b11feef799c7fe48",
+              "role": "problem",
+              "summary_role": "overview"
+            },
+            {
+              "passage_id": "P6abf45fc5096c2d0a9f8",
+              "paper_id": "https://example.org/toy",
+              "source_type": "pdf",
+              "section_title": "5 Discussion",
+              "section": "discussion",
+              "section_detection": "exact_heading",
+              "page_start": 3,
+              "page_end": 3,
+              "block_id": "p3-b4",
+              "start": 1247,
+              "end": 1399,
+              "text": "Table 1. RMSE on SolToy scaffold test data, comparing the graph model with the random forest baseline. Predictions are not measured biological activity.",
+              "source_text": "Table 1. RMSE on SolToy scaffold test data, comparing the graph model with the random forest\nbaseline. Predictions are not measured biological activity.",
+              "table_id": "Table 1",
+              "extraction_status": "success",
+              "limitations": [
+                "table_cells_not_reconstructed",
+                "reading_order_is_heuristic"
+              ],
+              "support_status": "unverified",
+              "score": 6.5,
+              "selection_reasons": [
+                "section_prior:discussion",
+                "quantitative_metric",
+                "protocol",
+                "comparison",
+                "caveat",
+                "category_coverage"
+              ],
+              "evidence_id": "P6abf45fc5096c2d0a9f8",
+              "role": "problem",
+              "summary_role": "overview"
+            },
+            {
+              "passage_id": "Pfeb7049336e0a4fb7ffe",
+              "paper_id": "https://example.org/toy",
+              "source_type": "pdf",
+              "section_title": "3 Results",
+              "section": "results",
+              "section_detection": "exact_heading",
+              "page_start": 2,
+              "page_end": 2,
+              "block_id": "p2-b5",
+              "start": 715,
+              "end": 909,
+              "text": "On the SolToy scaffold test split, RMSE decreased from 1.2 to 1.0 log mol/L versus a random forest baseline. No improvement occurred on LipToy, and no statistical significance test was reported.",
+              "source_text": "On the SolToy scaffold test split, RMSE\ndecreased from 1.2 to 1.0 log mol/L versus\na random forest baseline. No improvement\noccurred on LipToy, and no statistical\nsignificance test was reported.",
+              "table_id": null,
+              "extraction_status": "success",
+              "limitations": [
+                "table_cells_not_reconstructed",
+                "reading_order_is_heuristic"
+              ],
+              "support_status": "unverified",
+              "score": 7,
+              "selection_reasons": [
+                "section_prior:results",
+                "quantitative_metric",
+                "protocol",
+                "comparison"
+              ],
+              "evidence_id": "Pfeb7049336e0a4fb7ffe",
+              "role": "findings",
+              "summary_role": "result"
+            }
+          ],
+          "annotation_coverage_proxy": null,
+          "annotation_cohort": null
+        }
+      }
+    },
+    {
+      "paper_id": "https://example.org/abstract",
+      "fixture_kind": "synthetic",
+      "pdf_sha256": "8445e002edf96c0254705b382c6f4e12ae81c9842dbc19d583b0d5abb11513e9",
+      "extracted_pages": 1,
+      "detected_sections": 1,
+      "candidate_passages": 4,
+      "extraction_status": "success",
+      "extraction_limitations": [
+        "table_cells_not_reconstructed",
+        "reading_order_is_heuristic"
+      ],
+      "strategies": {
+        "legacy": {
+          "selected_count": 3,
+          "selected_categories": {
+            "abstract": 3
+          },
+          "category_proportions": {
+            "abstract": 1.0,
+            "methods": 0.0,
+            "results": 0.0,
+            "discussion": 0.0,
+            "limitations": 0.0
+          },
+          "quantitative_passages": 0,
+          "selected_text_chars": 279,
+          "prompt_input_chars": 360,
+          "selection_failed": false,
+          "selected_evidence_mode": "abstract_only",
+          "selection_diagnostics": null,
+          "evidence": [
+            {
+              "position": 0,
+              "role": "supporting",
+              "section": "abstract",
+              "text": "This synthetic study presents molecular prediction for drug discovery using graph models.",
+              "score": 0,
+              "summary_role": "overview",
+              "evidence_id": "E1"
+            },
+            {
+              "position": 1,
+              "role": "method",
+              "section": "abstract",
+              "text": "The framework combines molecular descriptors with a learning approach for compound prioritization.",
+              "score": 0,
+              "summary_role": "approach",
+              "evidence_id": "E2"
+            },
+            {
+              "position": 2,
+              "role": "dataset",
+              "section": "abstract",
+              "text": "The study evaluates prediction performance on a fictional benchmark for molecular screening.",
+              "score": 0.2,
+              "summary_role": "result",
+              "evidence_id": "E3"
+            }
+          ],
+          "annotation_coverage_proxy": null,
+          "annotation_cohort": null
+        },
+        "section_aware": {
+          "selected_count": 3,
+          "selected_categories": {
+            "abstract": 3
+          },
+          "category_proportions": {
+            "abstract": 1.0,
+            "methods": 0.0,
+            "results": 0.0,
+            "discussion": 0.0,
+            "limitations": 0.0
+          },
+          "quantitative_passages": 0,
+          "selected_text_chars": 279,
+          "prompt_input_chars": 431,
+          "selection_failed": false,
+          "selected_evidence_mode": "abstract_only",
+          "selection_diagnostics": {
+            "strategy": "section_aware",
+            "candidate_count": 4,
+            "eligible_count": 4,
+            "selected_count": 3,
+            "input_chars": 431,
+            "char_budget": 3600,
+            "excluded": {
+              "references": 0,
+              "unsafe": 0,
+              "numeric_block": 0,
+              "budget": 0,
+              "duplicate": 1
+            },
+            "missing_coverage": [
+              "methods",
+              "results",
+              "limitations",
+              "discussion"
+            ],
+            "status": "selected"
+          },
+          "evidence": [
+            {
+              "passage_id": "P16c6bbf799257f86ce98",
+              "paper_id": "https://example.org/abstract",
+              "source_type": "abstract",
+              "section_title": "Source abstract",
+              "section": "abstract",
+              "section_detection": "source_metadata",
+              "page_start": null,
+              "page_end": null,
+              "start": 89,
+              "end": 188,
+              "text": "The framework combines molecular descriptors with a learning approach for compound prioritization.",
+              "extraction_status": "abstract_only",
+              "limitations": [
+                "abstract_only"
+              ],
+              "support_status": "unverified",
+              "score": 1.5,
+              "selection_reasons": [
+                "section_prior:abstract",
+                "domain",
+                "category_coverage"
+              ],
+              "evidence_id": "P16c6bbf799257f86ce98",
+              "role": "problem",
+              "summary_role": "overview"
+            },
+            {
+              "passage_id": "P502f975c877cc1b73abd",
+              "paper_id": "https://example.org/abstract",
+              "source_type": "abstract",
+              "section_title": "Source abstract",
+              "section": "abstract",
+              "section_detection": "source_metadata",
+              "page_start": null,
+              "page_end": null,
+              "start": 0,
+              "end": 89,
+              "text": "This synthetic study presents molecular prediction for drug discovery using graph models.",
+              "extraction_status": "abstract_only",
+              "limitations": [
+                "abstract_only"
+              ],
+              "support_status": "unverified",
+              "score": 1.5,
+              "selection_reasons": [
+                "section_prior:abstract",
+                "domain"
+              ],
+              "evidence_id": "P502f975c877cc1b73abd",
+              "role": "problem",
+              "summary_role": "overview"
+            },
+            {
+              "passage_id": "P8717d65ed71f1f721f9c",
+              "paper_id": "https://example.org/abstract",
+              "source_type": "abstract",
+              "section_title": "Source abstract",
+              "section": "abstract",
+              "section_detection": "source_metadata",
+              "page_start": null,
+              "page_end": null,
+              "start": 188,
+              "end": 281,
+              "text": "The study evaluates prediction performance on a fictional benchmark for molecular screening.",
+              "extraction_status": "abstract_only",
+              "limitations": [
+                "abstract_only"
+              ],
+              "support_status": "unverified",
+              "score": 1.5,
+              "selection_reasons": [
+                "section_prior:abstract",
+                "domain"
+              ],
+              "evidence_id": "P8717d65ed71f1f721f9c",
+              "role": "problem",
+              "summary_role": "overview"
+            }
+          ],
+          "annotation_coverage_proxy": null,
+          "annotation_cohort": null
+        }
+      }
+    }
+  ],
+  "extraction_failures": 0,
+  "selection_failures": {
+    "legacy": 0,
+    "section_aware": 0
+  },
+  "evidence_mode_counts": {
+    "legacy": {
+      "abstract_only": 2
+    },
+    "section_aware": {
+      "pdf_full_text": 1,
+      "abstract_only": 1
+    }
+  }
+}

@@ -52,3 +52,8 @@ MAX_NARRATIVE_PAPERS = int(os.getenv("MAX_NARRATIVE_PAPERS", "8"))
 MAX_NARRATIVE_CONTEXT_CHARS = int(os.getenv("MAX_NARRATIVE_CONTEXT_CHARS", "6000"))
 MAX_NARRATIVE_SUMMARY_CHARS = int(os.getenv("MAX_NARRATIVE_SUMMARY_CHARS", "700"))
 MAX_PDF_BYTES = int(os.getenv("MAX_PDF_BYTES", str(25 * 1024 * 1024)))
+
+# A15 remains opt-in; legacy extraction and abstract-first selection are retained.
+EVIDENCE_SELECTION_STRATEGY = os.getenv("EVIDENCE_SELECTION_STRATEGY", "legacy")
+EVIDENCE_CHAR_BUDGET = int(os.getenv("EVIDENCE_CHAR_BUDGET", "3600"))
+EVIDENCE_MAX_PASSAGES = int(os.getenv("EVIDENCE_MAX_PASSAGES", "6"))
