@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field, HttpUrl, field_serializer, field_validator
@@ -39,6 +39,7 @@ class PipelineRunResult:
     featured_count: int
     brief_count: int
     weekly_post: str | None = None
+    retrieval: dict[str, Any] = field(default_factory=dict)
 
 
 class PaperRecord(BaseModel):

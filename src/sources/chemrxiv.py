@@ -1,5 +1,4 @@
-from datetime import datetime, timedelta
-from email.utils import parsedate_to_datetime
+from datetime import datetime
 import html
 import logging
 import re
@@ -7,6 +6,9 @@ import re
 import feedparser
 import requests
 from triage.taxonomy import COARSE_CHEMISTRY_TERMS, keyword_match
+from sources.dates import PublicationWindow, parse_publication_date
+from sources.outcomes import SourceResult, eligible_result, error_diagnostic
+from collections import Counter
 
 
 CHEMRXIV_RSS = "https://chemrxiv.org/engage/chemrxiv/rss"
@@ -59,10 +61,11 @@ def _fetch_feed_xml(url):
     return response.text
 
 
-def _fetch_crossref_items(days_back, rows=200):
+def _fetch_crossref_items(days_back, rows=200, *, reference_time=None):
     session = _make_session()
-    today = datetime.utcnow().date().isoformat()
-    from_date = (datetime.utcnow() - timedelta(days=days_back)).date().isoformat()
+    window = PublicationWindow.recent(days_back, reference_time)
+    today = window.end.date().isoformat()
+    from_date = window.start.date().isoformat()
     params = {
         "filter": f"from-pub-date:{from_date},until-pub-date:{today},prefix:10.26434",
         "rows": rows,
@@ -73,7 +76,7 @@ def _fetch_crossref_items(days_back, rows=200):
     response = session.get(CROSSREF_API_URL, params=params, timeout=30, headers=headers)
     response.raise_for_status()
     payload = response.json()
-    return payload.get("message", {}).get("items", [])
+    return payload["message"]["items"]
 
 
 def _is_block_page(feed_text):
@@ -81,22 +84,17 @@ def _is_block_page(feed_text):
     return "enable javascript and cookies to continue" in lowered or "just a moment" in lowered
 
 
-def _extract_datetime(entry):
-    published = getattr(entry, "get", lambda key, default=None: default)("published")
-    if not published:
-        published = getattr(entry, "get", lambda key, default=None: default)("updated")
-    if not published:
-        published = getattr(entry, "published", None) or getattr(entry, "updated", None)
-    if not published:
-        return None
+def _entry_value(entry, key):
+    if isinstance(entry, dict):
+        # Bypass feedparser's compatibility alias from updated to published.
+        return dict.get(entry, key)
+    getter = getattr(entry, "get", None)
+    return getter(key) if getter else getattr(entry, key, None)
 
-    try:
-        parsed = parsedate_to_datetime(published)
-        if parsed.tzinfo is None:
-            return parsed
-        return parsed.replace(tzinfo=None)
-    except Exception:
-        return None
+
+def _extract_datetime(entry):
+    # An update is never a substitute for publication.
+    return parse_publication_date(_entry_value(entry, "published"))[0]
 
 
 def _looks_like_chemrxiv_entry(entry):
@@ -134,19 +132,17 @@ def _matches_crossref_target_domain(title, abstract):
     return direct_hits >= 1 and (chemistry_hits >= 1 or "benchmark" in lowered_title)
 
 
-def _parse_feed_entries(feed_text, days_back, chemrxiv_only=False):
+def _parse_feed_entries(feed_text, days_back, chemrxiv_only=False, *, reference_time=None):
     feed = feedparser.parse(feed_text)
     entries = list(getattr(feed, "entries", []))
-    published_dates = [published for published in (_extract_datetime(entry) for entry in entries) if published]
-    reference_date = max(published_dates) if published_dates else datetime.utcnow()
-    cutoff = reference_date - timedelta(days=days_back)
+    if not getattr(feed, "version", ""):
+        raise ValueError("Invalid feed")
+    errors = ([error_diagnostic("chemrxiv.feed_parse", getattr(feed, "bozo_exception", ValueError()))]
+              if getattr(feed, "bozo", False) else [])
+    window = PublicationWindow.recent(days_back, reference_time)
     papers = []
 
     for entry in entries:
-        published = _extract_datetime(entry)
-        if published and published < cutoff:
-            continue
-
         getter = getattr(entry, "get", None)
         title = _strip_html((getter("title") if getter else getattr(entry, "title", "")) or "")
         summary = _strip_html((getter("summary") if getter else getattr(entry, "summary", "")) or "")
@@ -166,14 +162,15 @@ def _parse_feed_entries(feed_text, days_back, chemrxiv_only=False):
             "abstract": summary,
             "url": link,
             "source": "chemrxiv",
-            "published": (published or datetime.utcnow()).isoformat(),
+            "published": _entry_value(entry, "published") or "",
+            "updated": _entry_value(entry, "updated") or "",
         })
 
-    return papers
+    return eligible_result(papers, window, source="chemrxiv", errors=errors, completed=not errors)
 
 
 def _date_from_parts(parts):
-    if not parts:
+    if len(parts) != 3:
         return None
     try:
         year = parts[0]
@@ -184,19 +181,9 @@ def _date_from_parts(parts):
         return None
 
 
-def _parse_crossref_entries(days_back):
-    items = _fetch_crossref_items(days_back)
-    publication_dates = []
-
-    for item in items:
-        published_parts = ((item.get("published") or {}).get("date-parts") or [[]])[0]
-        posted_parts = ((item.get("posted") or {}).get("date-parts") or [[]])[0]
-        published = _date_from_parts(published_parts) or _date_from_parts(posted_parts)
-        if published:
-            publication_dates.append(published)
-
-    reference_date = max(publication_dates) if publication_dates else datetime.utcnow()
-    cutoff = reference_date - timedelta(days=days_back)
+def _parse_crossref_entries(days_back, *, reference_time=None):
+    window = PublicationWindow.recent(days_back, reference_time)
+    items = _fetch_crossref_items(days_back, reference_time=window.end)
     papers = []
 
     for item in items:
@@ -205,10 +192,7 @@ def _parse_crossref_entries(days_back):
             continue
 
         published_parts = ((item.get("published") or {}).get("date-parts") or [[]])[0]
-        posted_parts = ((item.get("posted") or {}).get("date-parts") or [[]])[0]
-        published = _date_from_parts(published_parts) or _date_from_parts(posted_parts) or datetime.utcnow()
-        if published < cutoff:
-            continue
+        published = _date_from_parts(published_parts)
 
         abstract = _strip_html(item.get("abstract") or "")
         if not abstract:
@@ -230,44 +214,34 @@ def _parse_crossref_entries(days_back):
             "abstract": abstract,
             "url": resource_url,
             "source": "chemrxiv",
-            "published": published.isoformat(),
+            "published": published.date().isoformat() if published else (str(published_parts) if published_parts else ""),
+            "publication_date_original": item.get("published"),
+            "posted_original": item.get("posted"),
         })
 
-    return papers
+    return eligible_result(papers, window, source="chemrxiv")
 
 
-def fetch_chemrxiv_papers(days_back=14):
-    try:
-        feed_text = _fetch_feed_xml(CHEMRXIV_RSS)
-        if _is_block_page(feed_text):
-            raise RuntimeError("ChemRxiv RSS is blocked by a challenge page")
-
-        papers = _parse_feed_entries(feed_text, days_back, chemrxiv_only=False)
-        if papers:
-            return papers
-    except Exception as error:
-        logger.warning("ChemRxiv RSS fetch failed: %s", error)
-
-    try:
-        papers = _parse_crossref_entries(days_back)
-        if papers:
-            logger.info("ChemRxiv fallback activated via Crossref: %s candidate papers", len(papers))
-            return papers
-        logger.info("ChemRxiv Crossref fallback reachable, but no target-domain preprints matched the keyword filter.")
-    except Exception as error:
-        logger.warning("ChemRxiv Crossref fallback failed: %s", error)
-
-    try:
-        fallback_text = _fetch_feed_xml(CAMBRIDGE_COE_RSS)
-        papers = _parse_feed_entries(fallback_text, days_back, chemrxiv_only=True)
-        if papers:
-            logger.info("ChemRxiv fallback activated via Cambridge Open Engage feed: %s candidate papers", len(papers))
-        else:
-            logger.info("ChemRxiv fallback feed reachable, but no ChemRxiv-like entries matched the target domains.")
-        return papers
-    except Exception as error:
-        logger.warning("ChemRxiv fallback fetch failed: %s", error)
-        return []
+def fetch_chemrxiv_papers(days_back=14, *, reference_time=None):
+    window = PublicationWindow.recent(days_back, reference_time)
+    errors, rejected = [], Counter()
+    completed = False
+    routes = [
+        ("chemrxiv.rss", lambda: _parse_feed_entries(_fetch_feed_xml(CHEMRXIV_RSS), days_back, reference_time=window.end)),
+        ("chemrxiv.crossref", lambda: _parse_crossref_entries(days_back, reference_time=window.end)),
+        ("chemrxiv.cambridge", lambda: _parse_feed_entries(_fetch_feed_xml(CAMBRIDGE_COE_RSS), days_back, chemrxiv_only=True, reference_time=window.end)),
+    ]
+    for stage, fetch in routes:
+        try:
+            papers = fetch()
+            completed = completed or papers.completed
+            errors.extend(papers.errors)
+            rejected.update(papers.date_rejections)
+            if papers:
+                return SourceResult(papers, source="chemrxiv", errors=errors, completed=papers.completed, date_rejections=rejected)
+        except Exception as error:
+            errors.append(error_diagnostic(stage, error))
+    return SourceResult(source="chemrxiv", errors=errors, completed=completed, date_rejections=rejected)
 
 
 if __name__ == "__main__":

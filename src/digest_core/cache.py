@@ -27,7 +27,9 @@ class JsonSourceCache:
 
         try:
             created_at = datetime.fromisoformat(payload.get("created_at", ""))
-        except ValueError:
+        except (ValueError, TypeError):
+            return None
+        if created_at.tzinfo is None or not isinstance(payload["value"], list):
             return None
 
         if ttl_hours is not None:

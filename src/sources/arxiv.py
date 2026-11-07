@@ -1,8 +1,9 @@
-from datetime import datetime, timedelta, timezone
 import logging
 
 import arxiv
 from triage.taxonomy import build_arxiv_query
+from sources.dates import PublicationWindow, parse_publication_date
+from sources.outcomes import eligible_result, error_diagnostic
 
 
 QUERY = build_arxiv_query()
@@ -10,27 +11,25 @@ logger = logging.getLogger(__name__)
 
 
 def _normalize_datetime(dt):
-    if dt.tzinfo is None:
-        return dt.replace(tzinfo=timezone.utc)
-    return dt.astimezone(timezone.utc)
+    parsed, error = parse_publication_date(dt)
+    if error:
+        raise ValueError(error)
+    return parsed
 
 
-def fetch_arxiv_papers(days_back=7, max_results=40):
-    client = arxiv.Client(page_size=25, delay_seconds=5, num_retries=3)
-    search = arxiv.Search(
-        query=QUERY,
-        max_results=max_results,
-        sort_by=arxiv.SortCriterion.SubmittedDate,
-    )
-
+def fetch_arxiv_papers(days_back=7, max_results=40, *, reference_time=None):
     papers = []
-    cutoff = datetime.now(timezone.utc) - timedelta(days=days_back)
+    window = PublicationWindow.recent(days_back, reference_time)
+    errors = []
 
     try:
+        client = arxiv.Client(page_size=25, delay_seconds=5, num_retries=3)
+        search = arxiv.Search(
+            query=QUERY, max_results=max_results,
+            sort_by=arxiv.SortCriterion.SubmittedDate,
+        )
         for result in client.results(search):
-            published = _normalize_datetime(result.published)
-            if published < cutoff:
-                continue
+            published = result.published
 
             title = (result.title or "").strip()
             abstract = (result.summary or "").strip().replace("\n", " ")
@@ -43,13 +42,14 @@ def fetch_arxiv_papers(days_back=7, max_results=40):
                 "abstract": abstract,
                 "url": result.entry_id,
                 "pdf_url": getattr(result, "pdf_url", None),
-                "published": published.isoformat(),
+                "published": published.isoformat() if hasattr(published, "isoformat") else published or "",
+                "updated": result.updated.isoformat() if getattr(result, "updated", None) else "",
                 "source": "arxiv",
             })
     except Exception as error:
-        logger.warning("Error fetching arXiv: %s", error)
+        errors.append(error_diagnostic("arxiv.results", error))
 
-    return papers
+    return eligible_result(papers, window, source="arxiv", errors=errors, completed=not errors)
 
 
 if __name__ == "__main__":

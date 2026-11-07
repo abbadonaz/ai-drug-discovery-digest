@@ -1,5 +1,5 @@
 from digest_core.cache import JsonSourceCache
-from digest_core.config import MAX_BRIEF_PAPERS, MAX_FEATURED_PAPERS, PROCESS_ALL_WHEN_NO_NEW
+from digest_core.config import LITERATURE_DAYS_BACK, MAX_BRIEF_PAPERS, MAX_FEATURED_PAPERS, PROCESS_ALL_WHEN_NO_NEW
 from digest_core.logging import RunLogger
 from digest_core.models import PipelinePaths, PipelineSettings
 from evidence.download_pdfs import download_pdf
@@ -83,6 +83,7 @@ def _default_paths():
 
 def _default_settings():
     return PipelineSettings(
+        days_back=LITERATURE_DAYS_BACK,
         max_featured_papers=MAX_FEATURED_PAPERS,
         max_brief_papers=MAX_BRIEF_PAPERS,
         process_all_when_no_new=PROCESS_ALL_WHEN_NO_NEW,
@@ -98,27 +99,33 @@ def build_pipeline():
         [
             PaperSource(
                 "arXiv",
-                lambda: fetch_arxiv_papers(
+                lambda window: fetch_arxiv_papers(
                     days_back=settings.days_back,
+                    reference_time=window.end,
                     max_results=settings.arxiv_max_results,
                 ),
                 cache_key="arxiv",
+                accepts_window=True,
             ),
             PaperSource(
                 "PubMed",
-                lambda: fetch_pubmed_papers(
+                lambda window: fetch_pubmed_papers(
                     days_back=settings.days_back,
+                    reference_time=window.end,
                     max_results=settings.pubmed_max_results,
                 ),
                 cache_key="pubmed",
+                accepts_window=True,
             ),
             PaperSource(
                 "ChemRxiv",
-                lambda: fetch_chemrxiv_papers(days_back=settings.days_back),
+                lambda window: fetch_chemrxiv_papers(days_back=settings.days_back, reference_time=window.end),
                 cache_key="chemrxiv",
+                accepts_window=True,
             ),
         ],
         cache=JsonSourceCache(),
+        days_back=settings.days_back,
         cache_ttl_hours=settings.source_cache_ttl_hours,
         retry_attempts=settings.source_retry_attempts,
         logger=logger,

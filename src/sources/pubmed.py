@@ -1,10 +1,12 @@
 import os
 import logging
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timezone
 from xml.etree import ElementTree
 
 from Bio import Entrez
 from triage.taxonomy import build_pubmed_query
+from sources.dates import PublicationWindow
+from sources.outcomes import SourceResult, eligible_result, error_diagnostic
 
 
 Entrez.email = os.getenv("ENTREZ_EMAIL", "your_email@example.com")
@@ -26,8 +28,8 @@ def _extract_abstract(article):
 
 def _extract_publication_date(article):
     year = article.findtext(".//PubDate/Year")
-    month = article.findtext(".//PubDate/Month", "1")
-    day = article.findtext(".//PubDate/Day", "1")
+    month = article.findtext(".//PubDate/Month", "")
+    day = article.findtext(".//PubDate/Day", "")
 
     month_lookup = {
         "jan": 1, "feb": 2, "mar": 3, "apr": 4, "may": 5, "jun": 6,
@@ -37,15 +39,16 @@ def _extract_publication_date(article):
     try:
         month_value = int(month)
     except ValueError:
-        month_value = month_lookup.get(month[:3].lower(), 1)
+        month_value = month_lookup.get(month.lower(), 0)
 
     try:
         return datetime(int(year), int(month_value), int(day), tzinfo=timezone.utc)
     except Exception:
-        return datetime.now(timezone.utc)
+        return None
 
 
-def fetch_pubmed_papers(days_back=14, max_results=200):
+def fetch_pubmed_papers(days_back=14, max_results=200, *, reference_time=None):
+    window = PublicationWindow.recent(days_back, reference_time)
     try:
         handle = Entrez.esearch(
             db="pubmed",
@@ -54,13 +57,12 @@ def fetch_pubmed_papers(days_back=14, max_results=200):
             sort="pub date",
         )
         record = Entrez.read(handle)
-        ids = record.get("IdList", [])
+        ids = record["IdList"]
     except Exception as error:
-        logger.warning("Error fetching PubMed IDs: %s", error)
-        return []
+        return SourceResult(source="pubmed", completed=False, errors=[error_diagnostic("pubmed.search", error)])
 
     if not ids:
-        return []
+        return SourceResult(source="pubmed")
 
     try:
         fetch_handle = Entrez.efetch(
@@ -71,9 +73,10 @@ def fetch_pubmed_papers(days_back=14, max_results=200):
         )
         xml_data = fetch_handle.read()
         root = ElementTree.fromstring(xml_data)
+        if root.tag != "PubmedArticleSet":
+            raise ValueError("Invalid PubMed response")
     except Exception as error:
-        logger.warning("Error fetching PubMed records: %s", error)
-        return []
+        return SourceResult(source="pubmed", completed=False, errors=[error_diagnostic("pubmed.fetch", error)])
 
     candidates = []
 
@@ -93,21 +96,15 @@ def fetch_pubmed_papers(days_back=14, max_results=200):
             "abstract": abstract,
             "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
             "source": "pubmed",
-            "published": published.isoformat(),
-            "_published_datetime": published,
+            "published": published.date().isoformat() if published else (
+                article.findtext(".//PubDate/MedlineDate") or
+                " ".join(article.findtext(f".//PubDate/{key}", "") for key in ("Year", "Month", "Day")).strip()
+            ),
+            "publication_date_original": {key: article.findtext(f".//PubDate/{key}") for key in ("Year", "Month", "Day", "MedlineDate")},
+            "updated_original": {key: article.findtext(f".//DateRevised/{key}") for key in ("Year", "Month", "Day")},
         })
 
-    if not candidates:
-        return []
-
-    reference_date = max(paper["_published_datetime"] for paper in candidates)
-    cutoff = reference_date - timedelta(days=days_back)
-
-    papers = []
-    for paper in candidates:
-        if paper["_published_datetime"] >= cutoff:
-            cleaned = dict(paper)
-            del cleaned["_published_datetime"]
-            papers.append(cleaned)
-
-    return papers
+    returned_ids = {node.text for node in root.findall(".//PubmedArticle//PMID")}
+    complete = set(ids).issubset(returned_ids)
+    errors = [] if complete else [{"stage": "pubmed.fetch", "error_type": "IncompleteResponse"}]
+    return eligible_result(candidates, window, source="pubmed", errors=errors, completed=complete)

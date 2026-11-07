@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -26,9 +28,10 @@ def test_fetch_chemrxiv_papers_handles_html_and_missing_entries(monkeypatch):
         lambda url: "<rss />",
     )
     feed = SimpleNamespace(
+        version="rss20", bozo=False,
         entries=[
             SimpleNamespace(
-                published_parsed=(2026, 4, 5, 0, 0, 0, 0, 0, 0),
+                published="2026-04-05T00:00:00Z",
                 title="<b>Docking benchmark</b>",
                 summary="<p>Virtual screening for drug discovery</p>",
                 link="https://chemrxiv.org/example",
@@ -43,7 +46,7 @@ def test_fetch_chemrxiv_papers_handles_html_and_missing_entries(monkeypatch):
     )
     monkeypatch.setattr("sources.chemrxiv.feedparser.parse", lambda _: feed)
 
-    papers = fetch_chemrxiv_papers(days_back=30)
+    papers = fetch_chemrxiv_papers(days_back=30, reference_time=datetime(2026, 4, 7, tzinfo=timezone.utc))
 
     assert len(papers) == 1
     assert papers[0]["title"] == "Docking benchmark"
@@ -88,7 +91,7 @@ def test_fetch_pubmed_papers_parses_labeled_abstract(monkeypatch):
         lambda **kwargs: SimpleNamespace(read=lambda: xml),
     )
 
-    papers = fetch_pubmed_papers(days_back=30, max_results=5)
+    papers = fetch_pubmed_papers(days_back=30, max_results=5, reference_time=datetime(2026, 4, 7, tzinfo=timezone.utc))
 
     assert len(papers) == 1
     assert "Background:" in papers[0]["abstract"]

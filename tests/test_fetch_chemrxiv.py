@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from sources.chemrxiv import fetch_chemrxiv_papers
 
 
@@ -17,7 +19,7 @@ def test_fetch_chemrxiv_papers_uses_direct_feed_and_parses_entries(monkeypatch):
 
     monkeypatch.setattr("sources.chemrxiv._fetch_feed_xml", lambda url: feed_xml)
 
-    papers = fetch_chemrxiv_papers(days_back=30)
+    papers = fetch_chemrxiv_papers(days_back=30, reference_time=datetime(2026, 4, 7, tzinfo=timezone.utc))
 
     assert len(papers) == 1
     assert papers[0]["source"] == "chemrxiv"
@@ -29,7 +31,7 @@ def test_fetch_chemrxiv_papers_falls_back_when_primary_feed_is_blocked(monkeypat
     monkeypatch.setattr("sources.chemrxiv._fetch_feed_xml", lambda url: blocked_html)
     monkeypatch.setattr(
         "sources.chemrxiv._fetch_crossref_items",
-        lambda days_back, rows=200: [
+        lambda days_back, rows=200, **kwargs: [
             {
                 "title": ["Docking benchmark for ligand design"],
                 "URL": "https://doi.org/10.26434/chemrxiv-2026-xyz",
@@ -38,7 +40,7 @@ def test_fetch_chemrxiv_papers_falls_back_when_primary_feed_is_blocked(monkeypat
         ],
     )
 
-    papers = fetch_chemrxiv_papers(days_back=30)
+    papers = fetch_chemrxiv_papers(days_back=30, reference_time=datetime(2026, 4, 7, tzinfo=timezone.utc))
 
     assert len(papers) == 1
     assert "Docking benchmark" in papers[0]["title"]

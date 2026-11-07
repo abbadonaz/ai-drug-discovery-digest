@@ -40,7 +40,13 @@ class ResearchDigestPipeline:
         self.publisher.ensure_dirs()
 
         fetched_papers = self.retriever.fetch_all()
-        self.logger.info("retrieval", "papers_fetched", count=len(fetched_papers))
+        retrieval = getattr(self.retriever, "last_report", None) or {"outcome": "unknown"}
+        self.logger.info("retrieval", "papers_fetched", count=len(fetched_papers), health=retrieval)
+        if retrieval["outcome"] == "failed":
+            self.logger.error("pipeline", "halted_retrieval_failed")
+            result = PipelineRunResult(0, 0, 0, 0, 0, retrieval=retrieval)
+            run_timer.finish(**result.__dict__)
+            return result
 
         papers_to_process, new_count = self._select_papers_to_process(fetched_papers)
         save_json(papers_to_process, self.paths.raw_papers)
@@ -48,6 +54,7 @@ class ResearchDigestPipeline:
         if not papers_to_process:
             self.logger.warning("pipeline", "halted_no_papers")
             result = PipelineRunResult(
+                retrieval=retrieval,
                 fetched_count=len(fetched_papers),
                 new_count=new_count,
                 filtered_count=0,
@@ -80,6 +87,7 @@ class ResearchDigestPipeline:
         if not featured:
             self.logger.warning("pipeline", "halted_no_featured_evidence")
             result = PipelineRunResult(
+                retrieval=retrieval,
                 fetched_count=len(fetched_papers),
                 new_count=new_count,
                 filtered_count=len(filtered),
@@ -101,6 +109,7 @@ class ResearchDigestPipeline:
         publish_timer.finish(weekly_post=weekly_post)
 
         result = PipelineRunResult(
+            retrieval=retrieval,
             fetched_count=len(fetched_papers),
             new_count=new_count,
             filtered_count=len(filtered),

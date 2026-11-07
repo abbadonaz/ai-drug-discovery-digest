@@ -41,6 +41,7 @@ ENABLE_SUMMARY_QA = os.getenv("ENABLE_SUMMARY_QA", "false").lower() == "true"
 
 MAX_FEATURED_PAPERS = int(os.getenv("MAX_FEATURED_PAPERS", "12"))
 MAX_BRIEF_PAPERS = int(os.getenv("MAX_BRIEF_PAPERS", "13"))
+LITERATURE_DAYS_BACK = int(os.getenv("LITERATURE_DAYS_BACK", "7"))
 PROCESS_ALL_WHEN_NO_NEW = os.getenv("PROCESS_ALL_WHEN_NO_NEW", "true").lower() == "true"
 
 MAX_SECTION_CHARS = int(os.getenv("MAX_SECTION_CHARS", "5000"))
