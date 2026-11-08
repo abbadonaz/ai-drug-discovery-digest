@@ -181,6 +181,14 @@ def _discover_installed_chat_models(installed_names):
     )
 
 
+class ChatText(str):
+    def __new__(cls, text, model, parameters):
+        value = super().__new__(cls, text)
+        value.model = model
+        value.parameters = parameters
+        return value
+
+
 def _chat_with_model(prompt, model_name, num_predict, max_retries):
     last_error = None
 
@@ -194,7 +202,8 @@ def _chat_with_model(prompt, model_name, num_predict, max_retries):
                     "num_predict": num_predict,
                 },
             )
-            return response["message"]["content"].strip()
+            return ChatText(response["message"]["content"].strip(), response.get("model") or model_name,
+                            {"temperature": 0.2, "num_predict": num_predict})
         except Exception as error:
             last_error = error
             if attempt == max_retries:

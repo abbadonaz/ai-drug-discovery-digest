@@ -1,6 +1,7 @@
 """Conservative line-anchored headings and traceable evidence passages."""
 import hashlib
 import re
+from digest_core.config import EVIDENCE_PASSAGE_MAX_CHARS
 
 
 HEADINGS = {
@@ -13,11 +14,52 @@ HEADINGS = {
     "training": "training_validation", "evaluation protocol": "training_validation",
     "results": "results", "results and discussion": "results_discussion",
     "discussion": "discussion", "limitations": "limitations", "limitations and future work": "limitations",
+    "discussion and limitations": "limitations", "experiments": "experimental_setup",
     "conclusion": "conclusion", "conclusions": "conclusion",
     "supplementary information": "supplementary", "supporting information": "supplementary",
     "references": "references", "bibliography": "references",
 }
 METHOD_CATEGORIES = {"methods", "experimental_setup", "datasets", "model_architecture", "training_validation"}
+
+
+def extract_document_abstract(document: dict) -> str:
+    """Keep available abstract prose in its column; budgeting happens at selection."""
+    pages = document.get("pages", [])
+    for page_index, page in enumerate(pages[:2]):
+        blocks = [b for b in page["blocks"] if b["text"].strip() and not b.get("excluded_margin")]
+        for block in blocks:
+            match = re.match(r"^Abstract(?:\s*[—–:-]\s*|\s*$)", block["text"], re.I)
+            if match is None:
+                continue
+            center = (block["bbox"][0] + block["bbox"][2]) / 2
+            content = [block["text"][match.end():]] if block["text"][match.end():].strip() else []
+            mid = page["width"] / 2
+            column = sorted((b for b in blocks if b is not block and (b["bbox"][0] <= center <= b["bbox"][2]
+                             or (heading(b["text"].splitlines()[0]) and ((b["bbox"][0] + b["bbox"][2]) / 2 < mid) == (center < mid)))
+                             and b["bbox"][3] <= block["bbox"][3]), key=lambda b: -b["bbox"][3])
+            for candidate in column:
+                first = candidate["text"].splitlines()[0].strip() if candidate["text"] else ""
+                if heading(first) or re.match(r"^(?:\d+\s+)?(?:Introduction|Impact Statement|Index Terms|Keywords)\b", first, re.I):
+                    break
+                if candidate["text"].strip():
+                    if re.fullmatch(r"[\d\s]+", candidate["text"]):
+                        continue
+                    content.append(candidate["text"])
+            else:
+                # An abstract may continue onto the next page; stop at its
+                # first real heading/keyword label rather than silently cut it.
+                if page_index + 1 < len(pages):
+                    following = sorted(pages[page_index + 1]["blocks"], key=lambda b: -b["bbox"][3])
+                    for candidate in following:
+                        if candidate.get("excluded_margin") or not candidate["text"].strip():
+                            continue
+                        first = candidate["text"].splitlines()[0].strip()
+                        if heading(first) or re.match(r"^(?:Keywords|Index Terms)\b", first, re.I):
+                            break
+                        if candidate["bbox"][0] <= center <= candidate["bbox"][2] and not re.fullmatch(r"[\d\s]+", candidate["text"]):
+                            content.append(candidate["text"])
+            return re.sub(r"\s+", " ", " ".join(content)).strip()
+    return ""
 
 
 def heading(line):
@@ -70,7 +112,23 @@ def passage_id(paper_id, source_type, start, end, text):
     return "P" + hashlib.sha256(material.encode("utf-8")).hexdigest()[:20]
 
 
-def build_passages(document: dict, paper_id: str) -> list[dict]:
+def sentence_spans(text: str, start: int, end: int, max_chars: int) -> list[tuple[int, int]]:
+    """Split oversized prose at sentence ends, never cut a value or a sentence."""
+    boundaries = [start + m.end() for m in re.finditer(r"[.!?](?=\s+[A-Z]|\s*$)", text[start:end])]
+    spans, cursor = [], start
+    while end - cursor > max_chars:
+        fitting = [b for b in boundaries if cursor < b <= cursor + max_chars]
+        boundary = max(fitting) if fitting else next((b for b in boundaries if b > cursor), end)
+        spans.append((cursor, boundary))
+        cursor = boundary
+    if cursor < end:
+        spans.append((cursor, end))
+    return spans
+
+
+def build_passages(document: dict, paper_id: str, max_chars: int = EVIDENCE_PASSAGE_MAX_CHARS) -> list[dict]:
+    if max_chars < 1:
+        raise ValueError("Passage character budget must be positive")
     sections = detect_sections(document)
     passages = []
     for section in sections:
@@ -79,15 +137,27 @@ def build_passages(document: dict, paper_id: str) -> list[dict]:
                 if block["start"] is None:
                     continue
                 start, end = max(section["content_start"], block["start"]), min(section["end"], block["end"])
-                raw_span = document["text"][start:end] if start < end else ""
-                text = re.sub(r"\s+", " ", raw_span).strip()
-                if not text:
-                    continue
-                table = re.search(r"\bTable\s+(\d+[A-Za-z]?)\b", text, re.I)
-                numeric_fragment = len(re.findall(r"\d+(?:\.\d+)?", text)) >= 4 and sum(c.isalpha() for c in text) < 35
-                passages.append({"passage_id": passage_id(paper_id, "pdf", start, end, text),
+                category = section["category"]
+                span_text = re.sub(r"\s+", " ", document["text"][start:end]).strip() if start < end else ""
+                if category != "references":
+                    if re.match(r"^Abstract[—–:-]", span_text, re.I):
+                        category = "abstract"
+                    elif re.match(r"^Limitations[.:]\s", span_text, re.I) or re.search(
+                        r"\bour (?:study|work) has (?:substantial )?room for improvement\b", span_text, re.I
+                    ):
+                        category = "limitations"
+                    elif re.match(r"^Results[.:]\s", span_text, re.I):
+                        category = "results"
+                for start, end in sentence_spans(document["text"], start, end, max_chars) if start < end else []:
+                    raw_span = document["text"][start:end]
+                    text = re.sub(r"\s+", " ", raw_span).strip()
+                    if not text:
+                        continue
+                    table = re.search(r"\bTable\s+(\d+[A-Za-z]?)\b", text, re.I)
+                    numeric_fragment = len(re.findall(r"\d+(?:\.\d+)?", text)) >= 4 and sum(c.isalpha() for c in text) < 35
+                    passages.append({"passage_id": passage_id(paper_id, "pdf", start, end, text),
                                  "paper_id": paper_id, "source_type": "pdf", "section_title": section["title"],
-                                 "section": section["category"], "section_detection": section["detection"],
+                                 "section": category, "section_detection": "run_in_label" if category != section["category"] else section["detection"],
                                  "page_start": page["page"], "page_end": page["page"], "block_id": block["block_id"],
                                  "start": start, "end": end, "text": text, "source_text": raw_span,
                                  "table_id": table.group(0) if table else None,

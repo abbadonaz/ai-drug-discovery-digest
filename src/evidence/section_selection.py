@@ -16,8 +16,8 @@ class SelectionSettings:
         "results": 3, "methods": 2.5, "limitations": 2.5, "discussion": 1.5,
         "abstract": 1, "conclusion": 1, "introduction": .2, "unknown": 0, "supplementary": .5})
     feature_weights: dict[str, float] = field(default_factory=lambda: {
-        "quantitative_metric": 2, "protocol": 1, "comparison": 1, "caveat": 1, "domain": .5})
-    coverage_order: tuple[str, ...] = ("methods", "results", "limitations", "abstract", "discussion")
+        "quantitative_metric": 2, "reported_outcome": 3, "validation_protocol": 2, "protocol": 1, "comparison": 1, "caveat": 1, "domain": .5})
+    coverage_order: tuple[str, ...] = ("results", "limitations", "methods", "abstract", "discussion")
 
     def __post_init__(self):
         if not 1 <= self.char_budget <= MAX_SUMMARY_CONTEXT_CHARS or self.max_passages < 1:
@@ -34,8 +34,11 @@ def family(section):
 
 def features(text):
     return {
-        "quantitative_metric": bool(re.search(r"\d", text) and re.search(r"\b(AUROC|AUC|RMSE|MAE|accuracy|coverage|sharpness|enrichment|score|validity|novelty|diversity|uniqueness|p\s*[<=>])\b", text, re.I)),
+        "quantitative_metric": bool(re.search(r"\d", text) and re.search(r"\b(AUROC|AUC|AULC|RMSE|MAE|accuracy|coverage|sharpness|enrichment|scores?|success rate|win rates?|queries|validity|novelty|diversity|uniqueness|p\s*[<=>])\b", text, re.I)),
+        "reported_outcome": bool(re.search(r"\d", text) and not re.search(r"\bdefined as\b", text, re.I)
+                                 and re.search(r"\b(achieves?|reaches?|yield(?:s|ing)?|sav(?:es?|ing)|gains?|speedups?|outperforms?|wins?\s+\d+|increases?|rising from)\b", text, re.I)),
         "protocol": bool(re.search(r"\b(scaffold|temporal|random split|external validation|cross.validation|prospective|retrospective|dataset|acquisition|calibrat|training|test set)", text, re.I)),
+        "validation_protocol": bool(re.search(r"\b(scaffold|train.test|locked set|held.out|five folds|cross.validation|random seeds|validation split)\b", text, re.I)),
         "comparison": bool(re.search(r"\b(versus|compared|baseline|relative to|ablation|outperform)", text, re.I)),
         "caveat": bool(re.search(r"\b(limit|bias|shift|not synthes|no experimental|not measured|applicability|uncertain|no external)", text, re.I)),
         "domain": bool(re.search(r"\b(molecul|compound|QSAR|ADMET|graph neural|descriptor|docking|binding|molecular dynamics|synthetic accessibility|multi.parameter)", text, re.I)),
@@ -63,7 +66,7 @@ def near_duplicate(left, right, threshold):
 def select_passages(paper: dict, settings: SelectionSettings | None = None) -> tuple[list[dict], dict]:
     settings = settings or SelectionSettings(char_budget=paper.get("evidence_char_budget", EVIDENCE_CHAR_BUDGET))
     candidates = paper.get("passages") or abstract_passages(paper)
-    ranked, excluded = [], {"references": 0, "unsafe": 0, "numeric_block": 0, "budget": 0, "duplicate": 0}
+    ranked, excluded = [], {"references": 0, "unsafe": 0, "numeric_block": 0, "font_glyphs": 0, "budget": 0, "duplicate": 0}
     for passage in candidates:
         item = dict(passage)
         if item["section"] == "references":
@@ -74,6 +77,9 @@ def select_passages(paper: dict, settings: SelectionSettings | None = None) -> t
             continue
         if "ambiguous_numeric_block" in item.get("limitations", []):
             excluded["numeric_block"] += 1
+            continue
+        if "(cid:" in item["text"]:
+            excluded["font_glyphs"] += 1
             continue
         if len(item["text"]) < 35:
             continue
@@ -110,7 +116,15 @@ def select_passages(paper: dict, settings: SelectionSettings | None = None) -> t
         return True
 
     for category in settings.coverage_order:
-        for item in ranked:
+        if category == "limitations":
+            category_ranked = sorted(ranked, key=lambda p: (not features(p["text"])["caveat"], -p["score"], p["passage_id"]))
+        elif category == "results":
+            category_ranked = sorted(ranked, key=lambda p: (
+                not (features(p["text"])["quantitative_metric"] and features(p["text"])["reported_outcome"]),
+                -p["score"], p["passage_id"]))
+        else:
+            category_ranked = ranked
+        for item in category_ranked:
             if family(item["section"]) == category and pick(item, True):
                 break
     for item in ranked:
@@ -118,6 +132,8 @@ def select_passages(paper: dict, settings: SelectionSettings | None = None) -> t
     return selected, {"strategy": "section_aware", "candidate_count": len(candidates),
                       "eligible_count": len(ranked), "selected_count": len(selected), "input_chars": used,
                       "char_budget": settings.char_budget, "excluded": excluded,
+                      "available_abstract_chars": len(paper.get("abstract", "")),
+                      "selected_abstract_chars": sum(len(p["text"]) for p in selected if p["section"] == "abstract"),
                       "missing_coverage": [category for category in settings.coverage_order
                                            if category not in {family(item['section']) for item in selected}],
                       "status": "selected" if selected else "no_eligible_evidence"}

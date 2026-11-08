@@ -1,0 +1,289 @@
+{
+  "description": "Observed local PDF/layout and model-output failure patterns. These are not human-verified scientific annotations.",
+  "papers": {
+    "kolta": {
+      "url": "http://arxiv.org/abs/2611.06394v1",
+      "pdf_sha256": "afb68d740c5e893da173a4af68b5c961802a2cce3298ea9b5b746a9ffdf69a9d",
+      "abstract_page": {
+        "page": 1,
+        "width": 612.0,
+        "height": 792.0,
+        "blocks": [
+          {
+            "bbox": [
+              48.95900000000005,
+              331.32045760000005,
+              300.0195296000001,
+              590.5374224000001
+            ],
+            "raw_text": "Abstract—Finding high-performing formulations is difficult\nwhen few have been measured and experimental budgets are\nlimited. We propose KolTa, an active learning framework that\nselects batches to discover the top 5% of formulations at a target\ntemperature under a fixed query budget. KolTa combines a three-\nstage predictor of component contributions, role-conditioned in-\nteractions, and anchored temperature response with task-specific\nsoft physics constraints. Its Physics-Residual-Calibrated Upper\nConfidence Bound (PRC-UCB) acquisition rule combines pre-\ndicted utility, ensemble disagreement, and a target-temperature\nphysics residual, with nonnegative exploration weights fitted to\nout-of-fold signed errors. We evaluate the framework on three\nmeasured tasks and one simulated task covering binary-mixture\nviscosity, drug solubility, ionic-liquid viscosity, and electrolyte\nconductivity. KolTa ranks first or second in mean area under\nthe learning curve (AULC) on every task and outperforms seven\nof the eight comparator strategies in paired tests, winning 75\nof 78 paired comparisons across tasks and seeds against those\nseven strategies. Across the three measured tasks, its largest gap\nto the best mean AULC is 0.032, compared with at least 0.056 for\nevery comparator. On Drug, reaching 80% average recovery of\nthe remaining targets across drugs requires an estimated median\nof 348 additional formulation queries, about 18% fewer than\nthe fastest comparator. Researchers can adapt the framework\nto diverse formulation problems through component roles and\nphysical constraints.\n"
+          },
+          {
+            "bbox": [
+              48.95900000000005,
+              186.71545760000006,
+              300.0195296000002,
+              326.38042240000004
+            ],
+            "raw_text": "Impact Statement—Developing multi-component formulations\nsuch as drug–solvent systems, ionic-liquid mixtures, and battery\nelectrolytes requires screening large candidate spaces under tight\nexperimental budgets. KolTa helps formulation teams prioritize\nwhich candidates to prepare and measure next by combining\nmulti-temperature records with component roles and governing\ntemperature relations. Across four campaigns spanning viscosity,\nsolubility, and conductivity, the framework consistently ranks in\nthe top two discovery strategies without retuning its acquisition\nrule for each domain, cutting median additional queries to\nrecover 80% of the remaining top-5% drug–solvent systems\nby nearly one-fifth relative to the fastest baseline. Practitioners\ncan adapt its role-conditioned interactions and soft physical\nconstraints to accelerate early-stage laboratory screening.\n"
+          },
+          {
+            "bbox": [
+              135.61500000000007,
+              143.08850940000005,
+              213.37125770000006,
+              153.05110940000006
+            ],
+            "raw_text": "I. INTRODUCTION\n"
+          }
+        ]
+      },
+      "font_marker_block": "Fig. 2. Three-stage predictor of KolTa, illustrated with three components in two roles. A shared GINE encoder maps each graph to hi ∈ R32 (forming\n¯hi = [hi; di]). Stage 1 applies the MLP gC to compute C(F ) in (2). Stage 2 applies role-pair message MLPs fρi←ρj , sums messages by sender role,\nupdates receivers via (cid:80)\ns Wρi←s → SiLU → Oρi , and maps GI (F ) through the MLP gI to I(F ) in (3)–(6). Stage 3 evaluates the MLP qϕ on H(F ) in\n(7) at t and 0 to obtain E(F, T ) with E(F, Tref ) = 0 in (8)–(9); H(F ) also feeds the linear physics head θ(F ) for r(F, T ) in (10).\n",
+      "original_evidence": [
+        {
+          "passage_id": "P051d34c97652b09cf020",
+          "paper_id": "http://arxiv.org/abs/2611.06394v1",
+          "source_type": "abstract",
+          "section_title": "Source abstract",
+          "section": "abstract",
+          "section_detection": "source_metadata",
+          "page_start": null,
+          "page_end": null,
+          "start": 451,
+          "end": 701,
+          "text": "Its Physics-Residual-Calibrated Upper Confidence Bound (PRC-UCB) acquisition rule combines predicted utility, ensemble disagreement, and a target-temperature physics residual, with nonnegative exploration weights fitted to out-of-fold signed errors.",
+          "extraction_status": "abstract_only",
+          "limitations": [
+            "abstract_only"
+          ],
+          "support_status": "unverified",
+          "score": 2,
+          "selection_reasons": [
+            "section_prior:abstract",
+            "protocol",
+            "category_coverage"
+          ],
+          "evidence_id": "P051d34c97652b09cf020",
+          "role": "problem",
+          "summary_role": "overview"
+        },
+        {
+          "passage_id": "P40ec45cf76d0a9a45d6e",
+          "paper_id": "http://arxiv.org/abs/2611.06394v1",
+          "source_type": "abstract",
+          "section_title": "Source abstract",
+          "section": "abstract",
+          "section_detection": "source_metadata",
+          "page_start": null,
+          "page_end": null,
+          "start": 1132,
+          "end": 1264,
+          "text": "Across the three measured tasks, its largest gap to the best mean AULC is 0.032, compared with at least 0.056 for every comparator.",
+          "extraction_status": "abstract_only",
+          "limitations": [
+            "abstract_only"
+          ],
+          "support_status": "unverified",
+          "score": 2,
+          "selection_reasons": [
+            "section_prior:abstract",
+            "comparison"
+          ],
+          "evidence_id": "P40ec45cf76d0a9a45d6e",
+          "role": "problem",
+          "summary_role": "overview"
+        },
+        {
+          "passage_id": "P81a59cacbec18d9d799d",
+          "paper_id": "http://arxiv.org/abs/2611.06394v1",
+          "source_type": "abstract",
+          "section_title": "Source abstract",
+          "section": "abstract",
+          "section_detection": "source_metadata",
+          "page_start": null,
+          "page_end": null,
+          "start": 880,
+          "end": 1132,
+          "text": "KolTa ranks first or second in mean area under the learning curve (AULC) on every task and outperforms seven of the eight comparator strategies in paired tests, winning 75 of 78 paired comparisons across tasks and seeds against those seven strategies.",
+          "extraction_status": "abstract_only",
+          "limitations": [
+            "abstract_only"
+          ],
+          "support_status": "unverified",
+          "score": 2,
+          "selection_reasons": [
+            "section_prior:abstract",
+            "comparison"
+          ],
+          "evidence_id": "P81a59cacbec18d9d799d",
+          "role": "problem",
+          "summary_role": "overview"
+        },
+        {
+          "passage_id": "Pe1514fbf5a0d10427739",
+          "paper_id": "http://arxiv.org/abs/2611.06394v1",
+          "source_type": "abstract",
+          "section_title": "Source abstract",
+          "section": "abstract",
+          "section_detection": "source_metadata",
+          "page_start": null,
+          "page_end": null,
+          "start": 0,
+          "end": 115,
+          "text": "Finding high-performing formulations is difficult when few have been measured and experimental budgets are limited.",
+          "extraction_status": "abstract_only",
+          "limitations": [
+            "abstract_only"
+          ],
+          "support_status": "unverified",
+          "score": 2,
+          "selection_reasons": [
+            "section_prior:abstract",
+            "caveat"
+          ],
+          "evidence_id": "Pe1514fbf5a0d10427739",
+          "role": "problem",
+          "summary_role": "overview"
+        },
+        {
+          "passage_id": "P8e272b3cf527e531836a",
+          "paper_id": "http://arxiv.org/abs/2611.06394v1",
+          "source_type": "abstract",
+          "section_title": "Source abstract",
+          "section": "abstract",
+          "section_detection": "source_metadata",
+          "page_start": null,
+          "page_end": null,
+          "start": 1454,
+          "end": 1572,
+          "text": "Researchers can adapt the framework to diverse formulation problems through component roles and physical constraints.",
+          "extraction_status": "abstract_only",
+          "limitations": [
+            "abstract_only"
+          ],
+          "support_status": "unverified",
+          "score": 1,
+          "selection_reasons": [
+            "section_prior:abstract"
+          ],
+          "evidence_id": "P8e272b3cf527e531836a",
+          "role": "problem",
+          "summary_role": "overview"
+        },
+        {
+          "passage_id": "P97f1991f48a0ca395698",
+          "paper_id": "http://arxiv.org/abs/2611.06394v1",
+          "source_type": "abstract",
+          "section_title": "Source abstract",
+          "section": "abstract",
+          "section_detection": "source_metadata",
+          "page_start": null,
+          "page_end": null,
+          "start": 274,
+          "end": 451,
+          "text": "KolTa combines a three-stage predictor of component contributions, role-conditioned interactions, and anchored temperature response with task-specific soft physics constraints.",
+          "extraction_status": "abstract_only",
+          "limitations": [
+            "abstract_only"
+          ],
+          "support_status": "unverified",
+          "score": 1,
+          "selection_reasons": [
+            "section_prior:abstract"
+          ],
+          "evidence_id": "P97f1991f48a0ca395698",
+          "role": "problem",
+          "summary_role": "overview"
+        }
+      ],
+      "raw_response": "{\n  \"research_question\": {\n    \"text\": \"How can a physics-informed active learning framework be developed to discover high-performing formulations with limited data?\",\n    \"passage_ids\": [\"Pe1514fbf5a0d10427739\"]\n  },\n  \"methodology\": {\n    \"text\": \"Development of KolTa, a framework that combines predicted utility, ensemble disagreement, and a target-temperature physics residual for formulation discovery.\",\n    \"passage_ids\": [\"P051d34c97652b09cf020\"]\n  },\n  \"quantitative_findings\": {\n    \"text\": \"KolTa outperforms seven of eight comparator strategies in mean area under the learning curve (AULC) on every task, with the largest gap to the best mean AULC being 0.032.\",\n    \"passage_ids\": [\"P40ec45cf76d0a9a45d6e\", \"P81a59cacbec18d9d799d\"]\n  },\n  \"validation\": {\n    \"text\": \"Validation is performed across three measured tasks, with KolTa ranking first or second in mean AULC on every task.\",\n    \"passage_ids\": [\"P81a59cacbec18d9d799d\"]\n  },\n  \"limitations\": {\n    \"text\": \"Not established in the selected evidence.\",\n    \"passage_ids\": []\n  },\n  \"relevance\": {\n    \"text\": \"The development of KolTa is relevant for formulation problems where experimental budgets are limited and high-performing formulations are difficult to find.\",\n    \"passage_ids\": [\"Finding high-performing formulations is difficult when few have been measured and experimental budgets are limited.\", \"P8e272b3cf527e531836a\"]\n  }\n}"
+    },
+    "cagenmol": {
+      "url": "https://arxiv.org/abs/2604.11483v1",
+      "pdf_sha256": "7cd9fce192d1b01b65fbdf5ac34b3e4b65d91093f848873500e84281fc72f6e6",
+      "abstract_page": {
+        "page": 1,
+        "width": 595.276,
+        "height": 841.89,
+        "blocks": [
+          {
+            "bbox": [
+              157.75799999999998,
+              608.5243631999999,
+              202.2432992,
+              620.4795631999999
+            ],
+            "raw_text": "Abstract\n"
+          },
+          {
+            "bbox": [
+              306.142,
+              568.0196344,
+              526.2175143052,
+              619.5767344
+            ],
+            "raw_text": "rendering traditional trial-and-error approaches in-\nefficient. Consequently, generative models have\nemerged as a promising paradigm to accelerate\ngoal-directed molecular design.\n"
+          },
+          {
+            "bbox": [
+              87.516,
+              238.77107839999996,
+              273.86637715600006,
+              595.4336784000001
+            ],
+            "raw_text": "Goal-directed molecular generation requires\nsatisfying heterogeneous constraints such\nas protein–ligand compatibility and multi-\nobjective drug-like properties, yet existing\nmethods often optimize these constraints in\nisolation, failing to reconcile conflicting ob-\njectives (e.g., affinity vs. safety), and strug-\ngle to navigate the non-differentiable chem-\nical space without compromising structural\nvalidity. To address these challenges, we\npropose CAGenMol, a condition-aware dis-\ncrete diffusion framework over molecular se-\nquences that formulates molecular design as\nconditional denoising guided by heterogeneous\nstructural and property signals. By coupling\ndiscrete diffusion with reinforcement learn-\ning, the model aligns the generation trajec-\ntory with non-differentiable objectives while\npreserving chemical validity and diversity.\nThe non-autoregressive nature of diffusion\nlanguage model further enables iterative re-\nfinement of molecular fragments at inference\ntime. Experiments on structure-conditioned,\nproperty-conditioned, and dual-conditioned\nbenchmarks demonstrate consistent improve-\nments over state-of-the-art methods in bind-\ning affinity, drug-likeness, and success rate,\nhighlighting the effectiveness of our frame-\nwork. The code is available at https://\ngithub.com/Lee612-1/CAGenMol.\n"
+          },
+          {
+            "bbox": [
+              88.7988,
+              202.4013632,
+              153.6796704,
+              214.35656319999998
+            ],
+            "raw_text": "Introduction\n"
+          },
+          {
+            "bbox": [
+              70.528,
+              85.9706344,
+              290.948329138,
+              191.72373439999998
+            ],
+            "raw_text": "The discovery of novel small-molecule therapeu-\ntics is a cornerstone of modern medicine (DiMasi\net al., 2016; Hughes et al., 2011). However, a\nclinical candidate must simultaneously satisfying\ndiverse application settings and their correspond-\ning constraints (Polishchuk et al., 2013; Ferreira\nand Andricopulo, 2019). This multi-objective na-\nture makes the search space vast and discontinuous,\n"
+          }
+        ]
+      },
+      "font_marker_block": "Let xxx be a length-L sequence, where each token\nxxxl is a one-hot vector over K categories, satisfying\ni ∈ {0, 1}K and (cid:80)K\ni=1 xxxl\nxxxl\ni = 1. The K-th cate-\ngory corresponds to the masking token m, with\nmK = 1. We denote by Cat(·; πππ) a categorical\ndistribution with parameter πππ ∈ ∆K.\n",
+      "original_evidence": [
+        {
+          "passage_id": "P010e8db96c7b3e86983a",
+          "paper_id": "https://arxiv.org/abs/2604.11483v1",
+          "source_type": "abstract",
+          "section_title": "Source abstract",
+          "section": "abstract",
+          "section_detection": "source_metadata",
+          "page_start": null,
+          "page_end": null,
+          "start": 0,
+          "end": 182,
+          "text": "Abstract Goal-directed molecular generation requires satisfying heterogeneous constraints such as protein–ligand compatibility and multi- objective drug-like properties, yet existing",
+          "extraction_status": "abstract_only",
+          "limitations": [
+            "abstract_only"
+          ],
+          "support_status": "unverified",
+          "score": 1.5,
+          "selection_reasons": [
+            "section_prior:abstract",
+            "domain",
+            "category_coverage"
+          ],
+          "evidence_id": "P010e8db96c7b3e86983a",
+          "role": "problem",
+          "summary_role": "overview"
+        }
+      ],
+      "raw_response": "{\n  \"research_question\": {\n    \"text\": \"Develop a computational model for generating small molecules that satisfy heterogeneous constraints, including protein-ligand compatibility and multi-objective drug-like properties.\",\n    \"passage_ids\": [\"P010e8db96c7b3e86983a\"]\n  },\n  \"methodology\": {\n    \"text\": \"Proposed CAGenMol, a condition-aware diffusion language model for goal-directed molecular generation. The model uses a conditioning mechanism to incorporate diverse constraints.\",\n    \"passage_ids\": [\"P010e8db96c7b3e86983a\"]\n  },\n  \"quantitative_findings\": {\n    \"text\": \"Not established in the selected evidence.\",\n    \"passage_ids\": []\n  },\n  \"validation\": {\n    \"text\": \"The model's performance was evaluated on a dataset of small molecules, but specific validation metrics or results were not provided.\",\n    \"passage_ids\": [\"P010e8db96c7b3e86983a\"]\n  },\n  \"limitations\": {\n    \"text\": \"The article does not discuss any limitations of the proposed method.\",\n    \"passage_ids\": []\n  },\n  \"relevance\": {\n    \"text\": \"The research presents a novel computational approach for generating small molecules with specific properties, which could be useful in drug discovery and design.\",\n    \"passage_ids\": [\"P010e8db96c7b3e86983a\"]\n  }\n}"
+    }
+  }
+}

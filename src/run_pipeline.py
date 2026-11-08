@@ -27,6 +27,8 @@ from web.publishing import DigestPublisher
 import os
 from triage.embeddings import get_embedding_model
 from digest_core.atomic import PublicationRollbackError
+from digest_core.config import FULL_TEXT_FIRST, ABSTRACT_FALLBACK_POLICY
+from evidence.full_text import retrieve_full_text
 
 
 RAW_PATH = "data/raw_papers.json"
@@ -140,6 +142,7 @@ def build_pipeline():
     )
 
     evidence_dependencies = EvidenceBuilderDependencies(
+        retrieve_full_text=retrieve_full_text if FULL_TEXT_FIRST else None,
         download_pdf=download_pdf,
         extract_pdf_text=extract_pdf_text,
         extract_sections=extract_sections,
@@ -148,7 +151,9 @@ def build_pipeline():
         evidence_validator=has_sufficient_summary_evidence,
     )
     evidence_pipeline = EvidencePreparationPipeline(
-        FeaturedPaperEvidenceBuilder(evidence_dependencies),
+        FeaturedPaperEvidenceBuilder(evidence_dependencies, strategy="section_aware" if FULL_TEXT_FIRST else "legacy",
+                                     summary_format="scientific_sections" if FULL_TEXT_FIRST else None,
+                                     fallback_policy=ABSTRACT_FALLBACK_POLICY),
         max_featured_papers=settings.max_featured_papers,
         max_brief_papers=settings.max_brief_papers,
     )

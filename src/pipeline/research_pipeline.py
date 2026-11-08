@@ -192,6 +192,7 @@ class ResearchDigestPipeline:
 
         for paper in brief:
             summaries.append({
+                **{key: paper[key] for key in ("full_text_retrieval", "full_text_fallback_reason", "extraction_diagnostics", "selection_diagnostics") if key in paper},
                 "title": paper["title"],
                 "url": paper["url"],
                 "topic": paper.get("topic", "Other"),

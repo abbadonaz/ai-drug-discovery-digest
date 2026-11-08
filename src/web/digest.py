@@ -245,7 +245,16 @@ def _render_summary_modes(paper):
         "pdf_full_text": "PDF/full text available (selected passages may be abstract-only)",
         "abstract_only": "Abstract only",
     }.get(paper.get("evidence_mode"), "Unknown")
-    return f'<p class="summary-modes">Summary generation: {generation}. Evidence available: {evidence}.</p>'
+    used = paper.get("summary_evidence_mode")
+    detail = ""
+    if used:
+        detail = " Referenced evidence (unverified): " + {"pdf_full_text": "full-text passages", "abstract_only": "abstract only; not a comprehensive article review", "unknown": "not established"}.get(used, "unknown") + "."
+        detail += " Model: " + escape(str(paper.get("model_identity") or "not used / unknown")) + "."
+        if paper.get("withheld_sections"):
+            detail += f" Sections withheld by mechanical checks: {len(paper['withheld_sections'])}. Source support remains unverified."
+        if paper.get("full_text_fallback_reason"):
+            detail += " Full-text fallback: " + escape(str(paper["full_text_fallback_reason"])) + "."
+    return f'<p class="summary-modes">Summary generation: {generation}. Evidence available: {evidence}.{detail}</p>'
 
 
 def _render_topic_card(paper, rank):

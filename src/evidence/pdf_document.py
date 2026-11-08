@@ -77,12 +77,20 @@ def prepare_document(pages: list[dict]) -> dict:
         output.append({**page, "blocks": prepared, "layout": layout})
     text = "\n\n".join(text_parts)
     compact = re.sub(r"\s", "", text)
-    low = len(compact) < 80 or (sum(c.isalpha() for c in compact) / max(1, len(compact)) < .3) or "(cid:" in text
+    markers = re.findall(r"\(cid:\d+\)", text)
+    marker_chars = sum(map(len, markers))
+    readable = re.sub(r"\(cid:\d+\)", "", compact)
+    marker_fraction = marker_chars / max(1, len(compact))
+    low = (len(readable) < 80 or sum(c.isalpha() for c in readable) / max(1, len(readable)) < .3
+           or marker_fraction > .1)
     limitations = ["table_cells_not_reconstructed", "reading_order_is_heuristic"]
+    if markers:
+        limitations.append("unmapped_font_glyphs")
     if low:
         limitations.append("low_text_quality_or_scanned_pdf")
     return {"backend": "pdfminer", "status": "low_quality" if low else "success",
             "pages": output, "text": text,
+            "quality_diagnostics": {"unmapped_glyph_count": len(markers), "unmapped_glyph_fraction": marker_fraction},
             "raw_text": "\f".join("\n".join(b["raw_text"] for b in p["blocks"]) for p in pages),
             "limitations": limitations}
 

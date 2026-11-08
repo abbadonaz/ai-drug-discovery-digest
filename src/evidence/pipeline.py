@@ -26,6 +26,7 @@ def is_informative_abstract(title, abstract):
 
 def make_brief_record(paper):
     return {
+        **{key: paper[key] for key in ("full_text_retrieval", "full_text_fallback_reason", "extraction_diagnostics", "selection_diagnostics") if key in paper},
         "title": paper["title"],
         "url": paper["url"],
         "topic": paper.get("topic", "Other"),
@@ -82,11 +83,16 @@ class EvidenceBuilderDependencies:
     rank_sentences: Callable[[list[str], int], list[str]]
     evidence_validator: Callable[[dict], bool] = has_sufficient_summary_evidence
     extract_pdf_document: Callable[[object], dict] = extract_pdf_document
+    retrieve_full_text: Callable[[dict], dict] | None = None
 
 
 class FeaturedPaperEvidenceBuilder:
-    def __init__(self, dependencies: EvidenceBuilderDependencies, strategy=None):
+    def __init__(self, dependencies: EvidenceBuilderDependencies, strategy=None, summary_format=None, fallback_policy="allow"):
         self.dependencies = dependencies
+        self.summary_format = summary_format
+        self.fallback_policy = fallback_policy
+        if fallback_policy not in {"allow", "brief_only"}:
+            raise ValueError("Unknown abstract fallback policy")
         self.strategy = strategy or EVIDENCE_SELECTION_STRATEGY
         if self.strategy not in {"legacy", "section_aware"}:
             raise ValueError("Unknown evidence selection strategy")
@@ -153,20 +159,25 @@ class FeaturedPaperEvidenceBuilder:
         return record
 
     def _build_section_record(self, paper):
-        from evidence.scientific_sections import abstract_passages, build_passages, detect_sections
+        from evidence.scientific_sections import abstract_passages, build_passages, detect_sections, extract_document_abstract
         from evidence.section_selection import build_section_payload
-        pdf_path = self.dependencies.download_pdf(paper)
+        retrieval = self.dependencies.retrieve_full_text(paper) if self.dependencies.retrieve_full_text else None
+        pdf_path = retrieval.get("path") if retrieval else self.dependencies.download_pdf(paper)
         document = self.dependencies.extract_pdf_document(pdf_path) if pdf_path else {
             "status": "unavailable", "pages": [], "text": "", "raw_text": "",
             "limitations": ["pdf_unavailable"],
         }
         sections = detect_sections(document) if document["status"] == "success" else []
+        if not is_informative_abstract(paper.get("title", ""), paper.get("abstract", "")):
+            paper = {**paper, "abstract": extract_document_abstract(document) or paper.get("abstract", "")}
         passages = build_passages(document, paper["url"]) if sections else []
         passages += abstract_passages(paper)
         record = {**paper, "evidence_strategy": "section_aware", "passages": passages,
                   "document": document, "scientific_sections": sections,
                   "sections": {}, "context": document["text"], "sentences": [],
                   "extraction_diagnostics": {"status": document["status"], "page_count": len(document["pages"]),
+                                             "quality": document.get("quality_diagnostics", {}),
+                                             "available_abstract_chars": len(paper.get("abstract", "")),
                                              "limitations": document["limitations"]}}
         for section in sections:
             name = section["category"]
@@ -179,6 +190,26 @@ class FeaturedPaperEvidenceBuilder:
                       sentences=[item["text"] for item in selected], context=payload["context"],
                       evidence_mode="pdf_full_text" if any(p["source_type"] == "pdf" and p["section"] not in {"abstract", "references"} for p in passages)
                       else "abstract_only" if any(p["section"] == "abstract" for p in passages) else "unknown")
+        if retrieval is not None:
+            record["full_text_retrieval"] = {k: v for k, v in retrieval.items() if k != "path"}
+        used_full_text = any(p["source_type"] == "pdf" and p["section"] != "abstract" for p in selected)
+        if not used_full_text:
+            record["full_text_fallback_reason"] = (
+                "retrieval_" + retrieval["outcome"] if retrieval and not pdf_path else
+                "extraction_" + document["status"] if document["status"] != "success" else
+                "context_budget" if payload["selection_diagnostics"]["excluded"]["budget"] else
+                "poor_section_detection" if not any(s["category"] not in {"unknown", "abstract", "references"} for s in sections) else
+                "empty_full_text_selection")
+            if self.fallback_policy == "brief_only":
+                # Brief references retain diagnostics too; do not mark a missing
+                # full-text review as a completed featured summary.
+                paper["full_text_retrieval"] = record.get("full_text_retrieval", {})
+                paper["full_text_fallback_reason"] = record["full_text_fallback_reason"]
+                paper["extraction_diagnostics"] = record["extraction_diagnostics"]
+                paper["selection_diagnostics"] = record["selection_diagnostics"]
+                return None
+        if self.summary_format:
+            record["summary_format"] = self.summary_format
         return record if self.dependencies.evidence_validator(record) else None
 
 

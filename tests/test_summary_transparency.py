@@ -177,6 +177,9 @@ def test_saved_legacy_json_is_readable_without_inferred_modes():
         assert record["generation_mode"] == original.get("generation_mode", "unknown")
         assert record["evidence_mode"] == original.get("evidence_mode", "unknown")
         assert all(claim["support_status"] == "unverified" for claim in record["provenance"])
-    html = generate_digest_html(records, "")
+    # Live runs may replace saved records with fully labeled summaries. Exercise
+    # a versionless record explicitly instead of depending on production state.
+    legacy = {key: value for key, value in saved[0].items() if key not in {"generation_mode", "evidence_mode"}}
+    html = generate_digest_html([SummaryRecord.model_validate(legacy).to_dict(), *records], "")
     assert "Summary generation: Unknown" in html
     assert "Evidence available: Unknown" in html

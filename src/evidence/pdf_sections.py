@@ -43,7 +43,13 @@ def extract_sections(text):
     matches = []
 
     for name, pattern in SECTION_PATTERNS.items():
-        match = re.search(pattern, lower)
+        # Flattened legacy text has lost line structure. Require a heading-like
+        # boundary and capitalization there rather than the first prose keyword.
+        word = pattern.replace(r"\b", "")
+        match = re.search(r"(?m)(?:^|\n)[ \t]*(?:\d+(?:\.\d+)*\.?\s+)?" + pattern, text, re.I)
+        if match is None:
+            title = word.capitalize()
+            match = re.search(r"(?<=[.!?])\s+(?:\d+(?:\.\d+)*\.?\s+)?\b" + title + r"\b", text)
         if match:
             matches.append((match.start(), name))
 

@@ -96,6 +96,8 @@ def fetch_pubmed_papers(days_back=14, max_results=200, *, reference_time=None):
             "abstract": abstract,
             "url": f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/",
             "source": "pubmed",
+            "pmcid": article.findtext(".//ArticleId[@IdType='pmc']", ""),
+            "doi": article.findtext(".//ArticleId[@IdType='doi']", ""),
             "published": published.date().isoformat() if published else (
                 article.findtext(".//PubDate/MedlineDate") or
                 " ".join(article.findtext(f".//PubDate/{key}", "") for key in ("Year", "Month", "Day")).strip()

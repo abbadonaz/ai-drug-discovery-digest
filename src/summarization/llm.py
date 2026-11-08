@@ -389,6 +389,9 @@ def _summarize_paper_result(paper):
 
 
 def summarize_paper_record(paper):
+    if paper.get("summary_format") == "scientific_sections":
+        from summarization.scientific_summary import summarize_scientific
+        return summarize_scientific(paper)
     payload = build_summary_payload(paper)
     try:
         generated = _summarize_paper_result(paper)
