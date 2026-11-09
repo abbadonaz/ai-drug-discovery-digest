@@ -1,0 +1,180 @@
+{
+  "source_run": ".evaluation-runs/scientific-quality-2026-11-08",
+  "baseline_commit": "c7ae1dfaac9c70fbb730102f3264d6da2427044f",
+  "run_provenance": {
+    "created_at": "2026-11-08T18:18:57.966665+00:00",
+    "commit": "c7ae1dfaac9c70fbb730102f3264d6da2427044f",
+    "baseline_implementation_unchanged": true,
+    "reused_legacy": {
+      "paper": 2,
+      "source": ".evaluation-runs\\fulltext-2026-11-08\\results\\paper-2-legacy.json",
+      "sha256": "fcb6075cef32f4b1c6b1b44c88cd61d03d2be92de308664b708b44feafe954de",
+      "evidence_match": "exact ordered evidence text match on committed implementation; PYTHONHASHSEED=0; hashed embeddings",
+      "caveat": "Historical legacy response has no returned model digest or original raw prompt; settings recovered from prior run."
+    },
+    "planned_fresh_conditions": [
+      "paper-1-legacy",
+      "paper-1-section_aware",
+      "paper-2-section_aware",
+      "paper-3-legacy",
+      "paper-3-section_aware"
+    ]
+  },
+  "model_inventory": [
+    {
+      "name": "mistral:latest",
+      "model": "mistral:latest",
+      "modified_at": "2026-03-07T18:23:02.1102536+01:00",
+      "size": 4372824384,
+      "digest": "6577803aa9a036369e481d648a2baebb381ebc6e897f2bb9a766a2aa7bfbc1cf",
+      "details": {
+        "parent_model": "",
+        "format": "gguf",
+        "family": "llama",
+        "families": [
+          "llama"
+        ],
+        "parameter_size": "7.2B",
+        "quantization_level": "Q4_K_M",
+        "context_length": 32768,
+        "embedding_length": 4096,
+        "runner": "ggml"
+      },
+      "capabilities": [
+        "completion",
+        "tools"
+      ]
+    }
+  ],
+  "historical_verification": {
+    "production": {
+      "count": 72,
+      "changed": []
+    },
+    "prior_evaluations": {
+      "count": 76,
+      "changed": []
+    },
+    "baseline": {
+      "count": 14,
+      "changed": []
+    },
+    "first_postfix": {
+      "count": 11,
+      "changed": []
+    },
+    "compact_attempts": {
+      "count": 10,
+      "changed": []
+    },
+    "manifest_artifacts": {
+      "count": 9,
+      "changed": []
+    },
+    "syntax": {
+      "files": 88,
+      "passed": true
+    },
+    "new_file_whitespace": {
+      "trailing": []
+    },
+    "tools_in_venv": {
+      "ruff": false,
+      "black": false,
+      "flake8": false,
+      "mypy": false,
+      "pycodestyle": false
+    },
+    "model_digest": "6577803aa9a036369e481d648a2baebb381ebc6e897f2bb9a766a2aa7bfbc1cf",
+    "focused_tests": "96 passed",
+    "full_tests": "412 passed in76.68s",
+    "model_calls_final_revalidation": 0
+  },
+  "historical_test_logs": {
+    "focused-final.log": "........................................................................ [ 75%]\r\n........................                                                 [100%]\r\n96 passed in 13.43s\r\n",
+    "full-pytest-final.log": "........................................................................ [ 17%]\r\n........................................................................ [ 34%]\r\n........................................................................ [ 52%]\r\n........................................................................ [ 69%]\r\n........................................................................ [ 87%]\r\n....................................................                     [100%]\r\n412 passed in 76.68s (0:01:16)\r\n"
+  },
+  "papers": [
+    {
+      "title": "Tabular foundation models for in-context prediction of molecular properties",
+      "url": "https://arxiv.org/abs/2604.16123v1",
+      "pdf_url": "https://arxiv.org/pdf/2604.16123v1",
+      "pdf_sha256": "c81b1f03cb3aa630c744ce2c0405abe992bb83b3b67362e9d508991f3039f4bc"
+    },
+    {
+      "title": "KolTa: A Physics-Informed Active Learning Framework for Formulation Discovery with Limited Data",
+      "url": "http://arxiv.org/abs/2611.06394v1",
+      "pdf_url": "https://arxiv.org/pdf/2611.06394v1",
+      "pdf_sha256": "afb68d740c5e893da173a4af68b5c961802a2cce3298ea9b5b746a9ffdf69a9d"
+    },
+    {
+      "title": "CAGenMol: Condition-Aware Diffusion Language Model for Goal-Directed Molecular Generation",
+      "url": "https://arxiv.org/abs/2604.11483v1",
+      "pdf_url": "https://arxiv.org/pdf/2604.11483v1",
+      "pdf_sha256": "7cd9fce192d1b01b65fbdf5ac34b3e4b65d91093f848873500e84281fc72f6e6"
+    }
+  ],
+  "publication_preserved": {
+    "manifest_sha256": "47fa9482c82d06d7fab9642a5a1a87de3e21f8f8c035e149239294a9d2c5f1c3",
+    "run_id": "8068e0cee89f433a92ca1e1286b48676",
+    "artifacts": [
+      {
+        "path": "..\\data\\raw_papers.json",
+        "role": "state",
+        "sha256": "3c0f6a9d1280ebb84fa81b31da2b66c638a54b1241a7194ef2b6346ec3cdd07d"
+      },
+      {
+        "path": "..\\data\\filtered_papers.json",
+        "role": "state",
+        "sha256": "ff28d33e1a22acf5189ae9620b5d225d05bff321d5c117ade6feef00fdf7a176"
+      },
+      {
+        "path": "..\\data\\clustered_papers.json",
+        "role": "state",
+        "sha256": "74289ac621c2721346dd81d02916b2bc912d37b0352f1d39e4768694be71074f"
+      },
+      {
+        "path": "..\\data\\paper_sentences.json",
+        "role": "state",
+        "sha256": "3831e609c7c229b1f3c0b8d3fae2c6c1a05d3e5cee24634b41fe72514631a02a"
+      },
+      {
+        "path": "..\\data\\summaries.json",
+        "role": "summaries",
+        "sha256": "e2d4b1d6550c17bc7b4592e253c224a10a515eb9c3573305ccd1bccabaa0487b"
+      },
+      {
+        "path": "..\\data\\paper_archive.json",
+        "role": "state",
+        "sha256": "f7b24bc528ad87e73bd0839d6c10c33b723f5d7e97a948e024ef489c3294b129"
+      },
+      {
+        "path": "posts\\2026-11-07.html",
+        "role": "post",
+        "sha256": "9b07ac3a5c67adfddf6bfc16033b98b4966a1d435a4927bf3b83806473480a8f"
+      },
+      {
+        "path": "index.html",
+        "role": "index",
+        "sha256": "4c27d79c2a8d6de13e4836a384ea75ba55a12862e0d7bcd585e460cc523aeaef"
+      },
+      {
+        "path": "archive.html",
+        "role": "archive",
+        "sha256": "375831781ab617eff78b8b5e9dc48e4a64f4fe2cc57d8eb4c70ced07d0cf8924"
+      }
+    ]
+  },
+  "implementation_text_sha256": {
+    "src/evidence/scientific_sections.py": "3de33bbd2bfd544660b57a7f6a3187e549589b941dbd3bbe3dedae3fe1b1dbba",
+    "src/evidence/section_selection.py": "602e24d90cf9ac759f2fa667be034f598698215ffd0799938564234fe59cff4a",
+    "src/summarization/scientific_summary.py": "a4cfb16e26be76ae9447193cc30c6e8f48da9e1a45c13ef24ed25c3b9f938152"
+  },
+  "reproduction_boundary": [
+    "Replays deterministic final validation, not stochastic generation or PDF extraction.",
+    "Original baseline parser outcomes are archived, not replayed through the changed parser.",
+    "Rubric scores are archived agent judgments, not recomputed human scientific assessments.",
+    "Historical KolTa legacy raw prompt, response checkpoint and model digest remain unknown.",
+    "Source PDF byte hashes identify documents; PDFs and model weights are not bundled."
+  ]
+}

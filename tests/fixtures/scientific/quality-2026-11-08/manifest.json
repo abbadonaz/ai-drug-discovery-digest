@@ -1,0 +1,10 @@
+{
+  "hash_method": "sha256_utf8_universal_newlines",
+  "files": {
+    "cached-cases.json": "2eeefacdb795519d9083bce24e8158ff45ba989026ebf22b3e1ce4393fc16f14",
+    "provenance.json": "10264975b15b831aad2d5519f5827c9c8f47eadf2db7ae9a634b3daf0e05df62",
+    "README.md": "8951c308423da4279ccbb257c693f665b279c0e9797eeae7bf251e19fc4dc2a5",
+    "scorecards.json": "007521f10421ffcb3bfbf98367489e1943c9f72d220ddf4d6cee7fe762d8cdd4",
+    "source-checklists.json": "b25c46bcd113f0b9eea3f6a8520e29f13f8e94790d0b5e84cb93cda57b7b5cfc"
+  }
+}

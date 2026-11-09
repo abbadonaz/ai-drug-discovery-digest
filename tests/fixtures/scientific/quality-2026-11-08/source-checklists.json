@@ -1,0 +1,186 @@
+{
+  "rubric": {
+    "assessment_kind": "source-grounded agent assessment; not human-verified scientific accuracy",
+    "anchors": {
+      "0": "Absent, contradicted, or materially misleading on essential source facts.",
+      "1": "Partial coverage with a material omission or qualification error.",
+      "2": "Mostly faithful coverage with minor omissions; no identified major error.",
+      "3": "Faithful, sufficient coverage of the predefined essential facts for this dimension."
+    },
+    "dimensions": [
+      "objectives",
+      "methods_validation",
+      "quantitative_fidelity",
+      "author_caveats",
+      "unsupported_claim_control",
+      "traceability",
+      "readability"
+    ],
+    "rules": [
+      "Score raw and retained outputs separately when guards change content.",
+      "Report claim-level source rationale and critical errors; do not hide errors in an aggregate mean.",
+      "Traceability scores measure navigation to relevant spans, not entailment.",
+      "Use unassessed when the article or evidence cannot resolve a claim.",
+      "Classify losses as extraction, selection, budget, generation, or suppression; absence in selected context is not absence in the article."
+    ]
+  },
+  "papers": [
+    {
+      "paper": 1,
+      "title": "Tabular foundation models for in-context prediction of molecular properties",
+      "pdf_sha256": "c81b1f03cb3aa630c744ce2c0405abe992bb83b3b67362e9d508991f3039f4bc",
+      "checks": [
+        {
+          "id": "objective",
+          "agent_source_assessment": "Evaluate in-context tabular predictors with molecular representations.",
+          "page": 1,
+          "passage_id": "P0c9aa71737651dd26a78",
+          "source_text": "Accurate molecular property prediction is central to drug discovery, catalysis, and process design, yet real-world applications are often limited by small datasets. Molecular foundation models provide a promising direction by learning trans-ferable molecular representations; however, they typically involve task-specific fine-tuning, require machine learning expertise, and often fail to outperform classical baselines. Tabular foundation models (TFMs) offer a fundamentally dif-ferent paradigm: they perform predictions through in-context learning, enabling inference without task-specific training. Here, we evaluate TFMs in the low- to medium-data regime across both standardized pharmaceutical benchmarks and chemical engineering datasets. We evaluate both frozen molecular foundation model representations, as well as classical descriptors and fingerprints. Across the benchmarks, the approach shows excellent predictive performance while reducing computational cost, compared to fine-tuning, with these advantages also transfer-ring to practical engineering data settings. In particular, combining TFMs with CheMeleon embeddings yields up to 100% win rates on 30 MoleculeACE tasks, while compact RDKit2d and Mordred descriptors provide strong descriptor-based alternatives. Molecular representation emerges as a key determinant in TFM performance, with molecular foundation model embeddings and 2D descrip-tor sets both providing substantial gains over classic molecular fingerprints on many tasks. These results suggest that in-context learning with TFMs provides a",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "aggregate_result",
+          "agent_source_assessment": "TabPFN-CheMeleonFP achieves 50/58 wins (86.2%); wins include statistical ties, not strict superiority on every task.",
+          "page": 4,
+          "passage_id": "P8f5c1c22cf2af97cd981",
+          "source_text": "Across the combined benchmark suite, shown in Table 1, TFM-based approaches achieve stronger aggregate performance than the compared classical baselines and previously reported molecular foundation models. The best overall configuration, TabPFN-CheMeleonFP (TabPFN with frozen CheMeleon embeddings), achieves 50 wins out of 58 tasks, corresponding to an 86.2% win rate and an average rank of 4.52. Among descriptor-based methods, TabPFN-RDKit2d achieves the next-best average",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "runtime",
+          "agent_source_assessment": "Runtime case study reports 4.8-27.3x CPU and 18.3-46.0x GPU speedups versus fine-tuned CheMeleon on representative Polaris datasets.",
+          "page": 6,
+          "passage_id": "Pd32a2adfd3963ba7a8e7",
+          "source_text": "The runtime analysis in Fig. 2b further shows that these performance gains are accompanied by substantially lower runtime cost. Across representative Polaris datasets spanning the smallest (adme-fang-rppb-1, ntrain = 111, ntest = 24), median (caco2-wang, ntrain = 728, ntest = 182), and largest (ld50-zhu, ntrain = 5907, ntest = 1478) training-set sizes, TabPFN-CheMeleonFP is consistently faster than fine-tuned CheMeleon on both GPU and CPU, yielding speedups of 4.8×–27.3× on CPU and 18.3×–46.0× on GPU. This is consistent with previously reported computational efficiency of TFMs [15, 18].",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "methods_validation",
+          "agent_source_assessment": "TabPFN-2.6 and TabICLv2; original benchmark splits, five seeds; no task-specific optimization statement applies to classical tabular ML models.",
+          "page": 14,
+          "passage_id": "Pedf5b6408b60568ada91",
+          "source_text": "Following [9], we consider only single-task prediction problems and strictly reuse the original train-test splits. Each newly run benchmark experiment is repeated over five random seeds to quantify stochastic variation. We reuse the train-test splits and evaluation setup from [9], and therefore report their main CheMeleon results together with the other published baseline results to enable a split- and metric-matched comparison. We do not perform task-specific hyperparameter optimization for any of the classical tabular ML models, because the goal is to assess practical out-of-the-box performance. The TFMs used are TabPFN-2.6 [13, 18, 44] and TabICLv2 [15]. For MoleculeACE, we compute the overall test RMSE as well as cliff and non-cliff subset RMSEs from the same predictions; the overall test RMSE is used for the aggregated model rank-ing shown in Fig. 2. For Polaris, benchmark scores are taken directly from the Polaris evaluation interface using the dataset-specific main metric. When the Polaris metric is an error quantity, such as mean squared error or mean absolute error, we rescale",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "limitations",
+          "agent_source_assessment": "Scaling is memory/disk constrained for larger feature sets; primarily single-molecule tasks; mixtures remain open.",
+          "page": 11,
+          "passage_id": "P07eccf49ef731bff3721",
+          "source_text": "At the same time, our study has substantial room for improvement. First, our benchmarks focus primarily on small- to medium-sized supervised datasets, and it remains to be established how well the observed advantages persist for substantially larger datasets, where end-to-end training becomes more competitive. Although we also explored larger-scale datasets, these experiments became hardware-constrained for larger feature sets, making them difficult to benchmark, even though the smaller RDKit2d features continued to run without issues. Specifically, they became memory-limited without disk offloading and disk-limited with disk offloading (∼ 50 GB per fold), such that the practical benefits of TFM-based pipelines over standard deep learning fine-tuning, especially simplicity, ease of use, and speed, were substan-tially reduced. As detailed in Supplementary Information Section S3.1, the Brouwer activity-coefficient dataset comprises approximately 21,000 measurements, and performance remains strong for compact pair representations such as RDKit2d, whereas higher-dimensional representations start to approach practical limits. Second, the present work considers primarily single-molecule prediction tasks; extensions to chem-ically more complex settings, such as many-component mixtures, remain open and potentially challenging, since TFM computation scales considerably with feature dimension [13, 15]. Third, we have focused on out-of-the-box use of TFMs without",
+          "review_status": "unreviewed_agent_inspection"
+        }
+      ]
+    },
+    {
+      "paper": 2,
+      "title": "KolTa: A Physics-Informed Active Learning Framework for Formulation Discovery with Limited Data",
+      "pdf_sha256": "afb68d740c5e893da173a4af68b5c961802a2cce3298ea9b5b746a9ffdf69a9d",
+      "checks": [
+        {
+          "id": "method",
+          "agent_source_assessment": "Three-stage predictor with role-conditioned interactions and anchored temperature response; PRC-UCB uses ensemble disagreement and physics residual.",
+          "page": 1,
+          "passage_id": "P447dd5878f527d4556e5",
+          "source_text": "We propose KolTa, a physics-informed active learning framework that couples a three-stage predictor with error-calibrated acquisition. The predictor decomposes properties into component base contributions, role-conditioned interac-tions, and an anchored temperature response guided by a soft physics derivative constraint. Its Physics-Residual-Calibrated Upper Confidence Bound (PRC-UCB) rule combines predicted utility with ensemble disagreement and the target-temperature physics residual, which measures local departure from the",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "validation",
+          "agent_source_assessment": "Out-of-fold calibration uses five formulation-grouped folds; records from a formulation stay together.",
+          "page": 5,
+          "passage_id": "P1f388cf5f14c136c8029",
+          "source_text": "Out-of-fold errors. We split labeled formulations into five folds, keeping each formulation’s records together. Hyperpa-rameter selection and ensemble training on the other four folds give out-of-fold (OOF) predictions ˜µ(F ) and signals ˜u(F ) and ˜v(F ) from (14) at T ∗. The held-out labels then give the signed utility error",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "locked_evaluation",
+          "agent_source_assessment": "NIST/ILThermo/DiffMix use 80/20 pool/locked sets; Drug has 2159 discovery and 524 locked formulations; locked sets assess final prediction error.",
+          "page": 5,
+          "passage_id": "P8bd9f93719b0d835ec7f",
+          "source_text": "Formulations are assigned to a discovery pool P and a locked set without consulting property values. NIST, ILThermo, and DiffMix use an 80/20 split. Drug retains formulation assignments after drug-group filtering, resulting in 2,159 discovery and 524 locked formulations (Supplementary Section S2). The locked set serves only to evaluate final prediction error (Supplementary Section S4). All records of a formulation stay together. All predictive methods use the source simplified molecular-input line-entry system (SMILES) strings. For Drug, they also use the drug’s melting point and each solvent’s melting point and reference relative permittivity. NIST, ILThermo, and DiffMix use no such additional compo-nent properties. Targets y are base-10 logarithms of viscosity in cP, saturated solute mole fraction, or conductivity in S/cm. Initialization and queries. All methods share a random initial set L0 ⊂ P, drawn without consulting property values, and R rounds of b queries, giving B = bR new queries. Each evaluated method–task pair uses seeds 0, 1, and 2 to determine initialization, training, and out-of-fold splits.",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "primary_and_negative",
+          "agent_source_assessment": "Drug AULC 0.738 and ILThermo 0.748; 75/78 paired wins against seven comparators. Difference versus GP-Greedy is not statistically significant, rather than superiority on every task.",
+          "page": 6,
+          "passage_id": "P5bf056f56e75c18c4840",
+          "source_text": "KolTa ranks first by mean full-budget AULC in (21) on Drug (0.738) and ILThermo (0.748) and second on NIST (0.444) and DiffMix (0.836) (Table II). Across paired com-parisons matched by task and seed, both paired tests support higher AULC than seven of the eight comparator strategies, with KolTa winning 75 of 78 paired comparisons against those seven strategies (80 of 87 overall), median gains of +0.031 to +0.265, and Holm-adjusted p ≤ 0.039 (Supplementary Table S6). Against GP-Greedy, KolTa achieves higher AULC in five of nine pairs, though the difference is not statistically significant (Holm-adjusted p = 0.50 for the sign test and p = 0.18 for the Wilcoxon test).",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "query_efficiency",
+          "agent_source_assessment": "Drug median 348 queries to 80% macro active recall versus 424 SolvGNN-UCB: 76 fewer, about 18%. Conditions include 86-drug task and batch interpolation.",
+          "page": 6,
+          "passage_id": "Pdfe7147dbf31e16c34aa",
+          "source_text": "Query efficiency (q30 and q80) reflects the distinct chemical regimes of the four tasks (Table III). On the 86-drug Drug task, KolTa achieves the lowest q30 (84) and reaches 80% macro active recall in a median of 348 queries, saving 76 queries (18%) over the fastest comparator (SolvGNN-UCB, 424) and over 130 queries relative to descriptor surrogates (GP-Greedy, 483; XGBoost-Greedy, 569). On ILThermo, greedy selection starts faster, and KolTa’s recall curve overtakes the greedy comparators after about one-third of the budget (Fig. 3(c)), achieving the best median q80 (112 vs. 114 for GP-Greedy). On DiffMix (LiPF6–carbonate electrolytes), KolTa shares the",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "limitations",
+          "agent_source_assessment": "Temperature extrapolation not evaluated; only temperature varies; five fixed collocation temperatures.",
+          "page": 8,
+          "passage_id": "P4846c85bf29e78e64243",
+          "source_text": "Limitations. First, the current physics loss applies soft con-straints at five fixed temperatures per task, and extrapolation beyond the training temperature range has not been evaluated. Incorporating physical relations directly into the temperature-response function is a possible direction for improving ex-trapolation. Second, the model treats temperature as its only varying condition; extending it to jointly varying temperature and pressure would require additional condition inputs and coupled physical constraints.",
+          "review_status": "unreviewed_agent_inspection"
+        }
+      ]
+    },
+    {
+      "paper": 3,
+      "title": "CAGenMol: Condition-Aware Diffusion Language Model for Goal-Directed Molecular Generation",
+      "pdf_sha256": "7cd9fce192d1b01b65fbdf5ac34b3e4b65d91093f848873500e84281fc72f6e6",
+      "checks": [
+        {
+          "id": "method",
+          "agent_source_assessment": "Unified Constraint Adaptor, Step-PPO, and inference-time Evolutionary Fragment Optimization are distinct components.",
+          "page": 2,
+          "passage_id": "P208b7c2258a382e88ee6",
+          "source_text": "In this work, we propose CAGenMol, a unified framework that synergizes condition-aware discrete diffusion with reinforcement learning to bridge the gap between biological constraints and chemical space. First, to handle heterogeneous inputs, we in-troduce a Unified Constraint Adaptor (UCA) that projects diverse signals into a shared latent space, serving as a persistent semantic anchor for the dif-fusion backbone. Building on diffusion process, we develop Step-wise Proximal Policy Optimization (Step-PPO). Unlike token-level RL on AR model, Step-PPO leverages the iterative nature of diffusion to perform fine-grained credit assignment at each denoising step, ensuring precise alignment with complex objectives without collapsing the genera-tive prior. Finally, to surpass the limitations of one-shot sampling, we propose Evolutionary Frag-ment Optimization (EFO), an inference-time re-finement strategy that exploits the editing flexibility of our model to perform gradient-free hill-climbing on generated candidates.",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "dataset",
+          "agent_source_assessment": "CrossDocked2020: about 100000 training pocket-ligand complexes, 100 held-out target pockets.",
+          "page": 6,
+          "passage_id": "Pd794a677dd7666271915",
+          "source_text": "Data. Following standard practice in pocket-aware molecular generation (Peng et al., 2022; Guan et al., 2023), we use the CrossDocked2020 dataset (Francoeur et al., 2020). The processed dataset contains approximately 100,000 protein pocket–ligand complexes for training, with 100 target protein pockets held out for evaluation.",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "evaluation",
+          "agent_source_assessment": "Generate 100 molecules per pocket; Vina, QED, SA and diversity are computational surrogate metrics.",
+          "page": 7,
+          "passage_id": "Pbef8b2c1b80cd6e61724",
+          "source_text": "Evaluation Metrics. We evaluate 100 molecules generated for each pocket using the following met-rics: (1) Vina Dock: Binding affinity calculated by AutoDock Vina (Eberhardt et al., 2021) under the protocol of (Guan et al., 2023); (2) QED: Quanti-tative Estimate of Drug-likeness (Bickerton et al., 2012); (3) SA: Synthetic Accessibility score (Ertl",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "result",
+          "agent_source_assessment": "CrossDocked2020 computational success rate 69.7%; reported advantage is not experimentally measured affinity or clinical safety.",
+          "page": 7,
+          "passage_id": "P76ca90e79a14507db6e5",
+          "source_text": "Results. Table 1 shows that CAGenMol estab-lishes a new state-of-the-art with a 69.7% Suc-cess Rate, surpassing the best baseline by over 16%. Unlike methods that sacrifice molecular qual-ity for raw docking scores, CAGenMol achieves a superior balance, dominating in QED and SA while maintaining strong affinity. Notably, it also retains the highest Diversity, demonstrating that Step-PPO effectively optimizes binding without suffering from the mode collapse typically associ-ated with RL. (See Appendix A for visual exam-ples of generated molecules). We also conducted experiments on an additional benchmark following (Zheng et al., 2024) to further demonstrate robust-ness (see Appendix H).",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "protocol",
+          "agent_source_assessment": "Supervised fine-tuning then Step-PPO; EFO excluded from this structure benchmark, not from every experiment.",
+          "page": 7,
+          "passage_id": "P8fed53317669f0e9b7a4",
+          "source_text": "Training and Inference Protocol. We adopt a two-stage training strategy: supervised fine-tuning followed by Step-PPO maximization of Eq. 11. We set Sref = −9.0, where the quadratic term implic-itly shifts optimization focus to QED and SA as affinity improves. To balance the magnitude dis-parity between Vina scores and property metrics, we set λ1 = 7/3 and λ2 = 5/6. EFO is excluded in this benchmark to ensure fair comparison. See Appendix D for details.",
+          "review_status": "unreviewed_agent_inspection"
+        },
+        {
+          "id": "limitations",
+          "agent_source_assessment": "Limited compute and reliance on ESM-2, Vina, MiniMol predictions without modeling their prediction errors.",
+          "page": 9,
+          "passage_id": "Pa6ad3e747717150c8318",
+          "source_text": "Despite the improvements of CAGenMol, sev-eral limitations remain. Limited computational resources prevented large-scale training and ex-tensive benchmarking, forcing us to initialize the model with pretrained weights rather than training from scratch. Additionally, the reliance on predic-tions from tools and models like ESM-2, AutoDock Vina and MiniMol, without accounting for poten-tial prediction errors, may impact overall performance.",
+          "review_status": "unreviewed_agent_inspection"
+        }
+      ]
+    }
+  ]
+}

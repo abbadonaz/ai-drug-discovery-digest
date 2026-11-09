@@ -20,6 +20,7 @@ HEADINGS = {
     "references": "references", "bibliography": "references",
 }
 METHOD_CATEGORIES = {"methods", "experimental_setup", "datasets", "model_architecture", "training_validation"}
+SENTENCE_END = re.compile(r"[.!?](?=\s+[A-Z]|\s*$)")
 
 
 def extract_document_abstract(document: dict) -> str:
@@ -113,8 +114,15 @@ def passage_id(paper_id, source_type, start, end, text):
 
 
 def sentence_spans(text: str, start: int, end: int, max_chars: int) -> list[tuple[int, int]]:
-    """Split oversized prose at sentence ends, never cut a value or a sentence."""
-    boundaries = [start + m.end() for m in re.finditer(r"[.!?](?=\s+[A-Z]|\s*$)", text[start:end])]
+    """Budget whole sentences without presenting a dangling block tail as prose.
+
+    The full document and available abstract retain the omitted continuation.
+    An entirely incomplete block remains available with a limitation label.
+    """
+    boundaries = [start + m.end() for m in SENTENCE_END.finditer(text[start:end])]
+    if (boundaries and boundaries[-1] - start >= 35
+            and not re.search(r"[.!?]\s*$", text[start:end])):
+        end = boundaries[-1]
     spans, cursor = [], start
     while end - cursor > max_chars:
         fitting = [b for b in boundaries if cursor < b <= cursor + max_chars]
@@ -148,13 +156,25 @@ def build_passages(document: dict, paper_id: str, max_chars: int = EVIDENCE_PASS
                         category = "limitations"
                     elif re.match(r"^Results[.:]\s", span_text, re.I):
                         category = "results"
-                for start, end in sentence_spans(document["text"], start, end, max_chars) if start < end else []:
+                spans = (
+                    sentence_spans(document["text"], start, end, max_chars)
+                    if start < end else []
+                )
+                omitted_tail = bool(spans and spans[-1][1] < end)
+                for start, end in spans:
                     raw_span = document["text"][start:end]
                     text = re.sub(r"\s+", " ", raw_span).strip()
                     if not text:
                         continue
                     table = re.search(r"\bTable\s+(\d+[A-Za-z]?)\b", text, re.I)
                     numeric_fragment = len(re.findall(r"\d+(?:\.\d+)?", text)) >= 4 and sum(c.isalpha() for c in text) < 35
+                    limitations = list(document["limitations"])
+                    if omitted_tail:
+                        limitations.append("incomplete_block_tail_omitted")
+                    if not re.search(r"[.!?]\s*$", text):
+                        limitations.append("incomplete_sentence")
+                    if numeric_fragment:
+                        limitations.append("ambiguous_numeric_block")
                     passages.append({"passage_id": passage_id(paper_id, "pdf", start, end, text),
                                  "paper_id": paper_id, "source_type": "pdf", "section_title": section["title"],
                                  "section": category, "section_detection": "run_in_label" if category != section["category"] else section["detection"],
@@ -162,7 +182,7 @@ def build_passages(document: dict, paper_id: str, max_chars: int = EVIDENCE_PASS
                                  "start": start, "end": end, "text": text, "source_text": raw_span,
                                  "table_id": table.group(0) if table else None,
                                  "extraction_status": document["status"],
-                                 "limitations": [*document["limitations"], *(["ambiguous_numeric_block"] if numeric_fragment else [])],
+                                 "limitations": limitations,
                                  "support_status": "unverified"})
     return passages
 

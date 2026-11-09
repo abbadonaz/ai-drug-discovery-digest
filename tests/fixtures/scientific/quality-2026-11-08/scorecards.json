@@ -1,0 +1,459 @@
+{
+  "baseline": {
+    "assessment_kind": "Agent-assessed evidence fidelity; NOT human-verified scientific accuracy",
+    "recorded_before_implementation_changes": true,
+    "recorded_at": "2026-11-08T18:47:08.485812+00:00",
+    "rubric_source": "source-checklists.json",
+    "dimensions": [
+      "objectives",
+      "methods_validation",
+      "quantitative_fidelity",
+      "author_caveats",
+      "unsupported_claim_control",
+      "traceability",
+      "readability"
+    ],
+    "scores_and_rationales": {
+      "1": {
+        "legacy_raw": [
+          2,
+          1,
+          0,
+          0,
+          0,
+          1,
+          2
+        ],
+        "legacy_retained": [
+          2,
+          1,
+          0,
+          0,
+          3,
+          1,
+          3
+        ],
+        "structured_raw": [
+          2,
+          1,
+          0,
+          2,
+          1,
+          2,
+          2
+        ],
+        "structured_retained": [
+          2,
+          1,
+          0,
+          2,
+          1,
+          2,
+          2
+        ],
+        "errors": [
+          "Raw legacy invents article-level absence of concrete datasets (pp4-6,14-16), rejected by length gate.",
+          "Structured quantitative section has no numbers despite supplied 10 percentage-point relative RMSE gap and order-of-magnitude runtime difference (p10).",
+          "Unqualified superiority; supplied p15 shared-fixed-split and wins-include-ties qualifications omitted."
+        ],
+        "losses": {
+          "selection_budget": [
+            "50/58 wins (p4), hardware-specific speedups (p6), model versions/original splits (p14)."
+          ],
+          "generation": [
+            "Supplied effect sizes (p10) and qualifications (p15)."
+          ],
+          "segmentation": [
+            "Selected abstract, discussion, limitations end mid-sentence."
+          ]
+        }
+      },
+      "2": {
+        "legacy_raw": null,
+        "legacy_retained": [
+          2,
+          1,
+          1,
+          0,
+          2,
+          1,
+          3
+        ],
+        "structured_raw": [
+          2,
+          1,
+          1,
+          3,
+          0,
+          2,
+          2
+        ],
+        "structured_retained": [
+          2,
+          1,
+          1,
+          3,
+          0,
+          2,
+          2
+        ],
+        "errors": [
+          "Every-task superiority expands paired evidence: first on two tasks, second on two (p6).",
+          "Validation yielding p<0.05 mistakes supplied decision criterion for observed result (p6).",
+          "Method blends greedy ablation and full PRC-UCB; supplied locked-set role omitted."
+        ],
+        "losses": {
+          "selection_budget": [
+            "Primary AULC and non-significant GP-Greedy result (p6), Drug 348 versus 424 queries (p6), grouped OOF folds (p5)."
+          ],
+          "generation": [
+            "Supplied locked-set protocol and ablation numerical values omitted."
+          ],
+          "preserved": [
+            "Temperature-only, five fixed temperatures, extrapolation not evaluated (p8)."
+          ]
+        },
+        "reuse_caveat": "Exact legacy evidence match; historical raw prompt/response/model digest unavailable."
+      },
+      "3": {
+        "legacy_raw": [
+          2,
+          1,
+          0,
+          0,
+          0,
+          1,
+          2
+        ],
+        "legacy_retained": [
+          2,
+          1,
+          0,
+          0,
+          1,
+          1,
+          2
+        ],
+        "structured_raw": [
+          2,
+          1,
+          1,
+          2,
+          1,
+          1,
+          1
+        ],
+        "structured_retained": [
+          2,
+          1,
+          1,
+          2,
+          1,
+          2,
+          1
+        ],
+        "errors": [
+          "Raw legacy infers missing benchmarks/metrics from selection, contradicted by pp6-7; rejected by length gate.",
+          "69.7% correct but lacks dataset and protocol scope; over16% is source wording, not established percentage-point arithmetic.",
+          "Toxicity avoidance and realistic-design efficacy overstate computational surrogates.",
+          "Validation cites wrong passages for 2024 detail; correctly withheld. Additional benchmark present elsewhere (selected p7), so not article absence."
+        ],
+        "losses": {
+          "selection_budget": [
+            "CrossDocked2020 train/held-out data (p6), 100 molecules/pocket and metrics (p7)."
+          ],
+          "generation": [
+            "Supplied benchmark-specific EFO exclusion omitted (p7); named error-prone predictors replaced by vague caveat (p9)."
+          ]
+        }
+      }
+    },
+    "limitations": [
+      "Single stochastic generation per fresh condition; convenience sample, not representative benchmark.",
+      "Ordinal agent judgments, no aggregate accuracy claim. Passage IDs and numeric membership are not entailment.",
+      "No essential prose fact demonstrated absent from article; table-cell fidelity unassessed."
+    ],
+    "runs": [
+      {
+        "paper": 1,
+        "mode": "legacy",
+        "input_chars": 544,
+        "generation_seconds": 130.31831370014697,
+        "generation_mode": "extractive_fallback",
+        "sections": null,
+        "issues": [],
+        "reused": false
+      },
+      {
+        "paper": 1,
+        "mode": "section_aware",
+        "input_chars": 3591,
+        "generation_seconds": 399.53515930008143,
+        "generation_mode": "llm",
+        "sections": 6,
+        "issues": [],
+        "reused": false
+      },
+      {
+        "paper": 2,
+        "mode": "legacy",
+        "input_chars": 668,
+        "generation_seconds": null,
+        "generation_mode": "llm",
+        "sections": null,
+        "issues": [],
+        "reused": true
+      },
+      {
+        "paper": 2,
+        "mode": "section_aware",
+        "input_chars": 3552,
+        "generation_seconds": 414.53821389982477,
+        "generation_mode": "llm",
+        "sections": 6,
+        "issues": [],
+        "reused": false
+      },
+      {
+        "paper": 3,
+        "mode": "legacy",
+        "input_chars": 771,
+        "generation_seconds": 101.82086239987984,
+        "generation_mode": "extractive_fallback",
+        "sections": null,
+        "issues": [],
+        "reused": false
+      },
+      {
+        "paper": 3,
+        "mode": "section_aware",
+        "input_chars": 3574,
+        "generation_seconds": 443.37557479995303,
+        "generation_mode": "llm",
+        "sections": 5,
+        "issues": [
+          {
+            "section": "validation",
+            "reason": "unreferenced_or_new_number"
+          }
+        ],
+        "reused": false
+      }
+    ]
+  },
+  "baseline_errata": {
+    "correction": "Frozen baseline notes called both legacy failures length gates. Exact gates below supersede that shorthand without changing the frozen original.",
+    "checks": [
+      {
+        "paper": 1,
+        "raw_legacy_quality_issues": [
+          "too long"
+        ]
+      },
+      {
+        "paper": 3,
+        "raw_legacy_quality_issues": [
+          "too many sentences"
+        ]
+      }
+    ]
+  },
+  "final": {
+    "assessment_kind": "Source-grounded agent-assessed evidence fidelity, NOT human-verified scientific accuracy",
+    "rubric_source": "source-checklists.json",
+    "dimensions": [
+      "objectives",
+      "methods_validation",
+      "quantitative_fidelity",
+      "author_caveats",
+      "unsupported_claim_control",
+      "traceability",
+      "readability"
+    ],
+    "baseline": "baseline-scorecard.json (immutable, with baseline-assessment-errata.json)",
+    "postfix": {
+      "1": {
+        "raw_scores": [
+          2,
+          1,
+          1,
+          2,
+          1,
+          1,
+          1
+        ],
+        "retained_scores": [
+          2,
+          1,
+          1,
+          2,
+          1,
+          2,
+          1
+        ],
+        "improvements": [
+          "50/58 wins,86.2%,rank4.52 now reported (p4).",
+          "10 percentage-point relative RMSE gap and order-of-magnitude runtime difference preserved (p10).",
+          "Model-stochasticity rather than alternative-test-set uncertainty preserved (p15)."
+        ],
+        "remaining": [
+          "Win definition includes ties but qualification omitted despite supplied p15.",
+          "Engineering comparison lacks supplied 11-task scope.",
+          "Hardware-specific speedups/model versions remain unselected."
+        ],
+        "regressions": [
+          "Method/validation repeat HSD detail.",
+          "Relevance withheld; 5/6 accepted versus baseline6/6."
+        ],
+        "revision": "First post-fix prompt retained; final compact prompt not freshly evaluated on Tabular.",
+        "input_chars": 3481,
+        "generation_seconds": 460.51731290016323,
+        "accepted_sections": 5,
+        "issues": [
+          {
+            "section": "relevance",
+            "reason": "unreferenced_or_new_number"
+          }
+        ],
+        "evaluation_method": "OFFLINE cached raw response revalidation; ZERO model calls; NOT a fresh generation under final prompt"
+      },
+      "2": {
+        "raw_scores": [
+          2,
+          0,
+          1,
+          1,
+          0,
+          1,
+          2
+        ],
+        "retained_scores": [
+          2,
+          1,
+          1,
+          1,
+          2,
+          2,
+          2
+        ],
+        "improvements": [
+          "Primary first/second ranks replace unsupported every-task superiority (p6).",
+          "Median paired gains+0.031 to+0.265 and Drug76-query/18% savings preserved (p6).",
+          "Wrong AULC-as-acquisition mechanism and uncited relevance withheld.",
+          "Malformed single entry no longer discards otherwise accepted fields."
+        ],
+        "remaining": [
+          "GP-Greedy non-significance supplied but omitted.",
+          "80% macro-recall target,348/424 counts and comparator name omitted despite supplied context.",
+          "OOF formulation grouping and fold counts supplied but absent in retained validation.",
+          "Three-stage/PRC-UCB method remains unselected; withheld generated mechanism was wrong."
+        ],
+        "regressions": [
+          "Temperature-only,five fixed temperatures and explicitly unevaluated extrapolation caveats lost or weakened: L3 to1.",
+          "OOF context selected but locked-set split/design displaced relative to baseline input.",
+          "4/6 retained fields versus baseline6/6."
+        ],
+        "revision": "Compact retry raw652tokens,complete JSON; final parser/guard revalidation offline.",
+        "input_chars": 3051,
+        "generation_seconds": 425.7733785000164,
+        "accepted_sections": 4,
+        "issues": [
+          {
+            "section": "methodology",
+            "reason": "evaluation_metric_as_acquisition_rule"
+          },
+          {
+            "section": "relevance",
+            "reason": "invalid_section_shape"
+          }
+        ],
+        "evaluation_method": "OFFLINE cached raw response revalidation; ZERO model calls; NOT a fresh generation under final prompt"
+      },
+      "3": {
+        "raw_scores": [
+          2,
+          1,
+          1,
+          2,
+          1,
+          1,
+          1
+        ],
+        "retained_scores": [
+          2,
+          1,
+          1,
+          2,
+          1,
+          2,
+          2
+        ],
+        "improvements": [
+          "100 molecules/pocket with Vina,QED,SA now preserved in validation (p7).",
+          "Source architecture,dataset and training protocol fit together after selection fixes.",
+          "Earlier toxicity-avoidance claim disappears.",
+          "Malformed relevance withheld without discarding all fields."
+        ],
+        "remaining": [
+          "CrossDocked2020,100000 training complexes and100 held-out pockets supplied but omitted.",
+          "Unqualified dominance/robustness claims persist; computational scope not sufficiently explicit.",
+          "Method facts available but generated Eq11 cites wrong passages: methodology withheld.",
+          "Named predictor errors and benchmark-specific EFO qualification remain lost or vague."
+        ],
+        "regressions": [
+          "Methodology withheld due citation/number error;4/6 retained fields versus baseline5/6."
+        ],
+        "revision": "Compact retry raw623tokens,complete JSON; final parser revalidation offline.",
+        "input_chars": 3263,
+        "generation_seconds": 526.7816139999777,
+        "accepted_sections": 4,
+        "issues": [
+          {
+            "section": "methodology",
+            "reason": "unreferenced_or_new_number"
+          },
+          {
+            "section": "relevance",
+            "reason": "invalid_section_shape"
+          }
+        ],
+        "evaluation_method": "OFFLINE cached raw response revalidation; ZERO model calls; NOT a fresh generation under final prompt"
+      }
+    },
+    "fresh_generation_count": 10,
+    "breakdown": {
+      "baseline": 5,
+      "first_postfix": 3,
+      "targeted_retries_of_invalid_outputs": 2,
+      "final_cached_revalidation_model_calls": 0
+    },
+    "all_attempts_retained": true,
+    "judgment": "Mixed, limited gains; not a demonstrated overall scientific-quality pass. Not ready to commit as a completed scientific-quality milestone.",
+    "limitations": [
+      "One stochastic sample per condition; no causal/statistical improvement estimate.",
+      "Tabular response belongs to earlier post-fix prompt; compact prompt selectively evaluated only on two failed cases.",
+      "Source-checked factual fidelity does not establish scientific truth.",
+      "Synthetic swapped-attribution and reversed-direction probes still pass mechanical guards."
+    ]
+  },
+  "known_guard_failures": [
+    {
+      "probe": "swapped_dataset_attribution",
+      "fixture_kind": "synthetic adversarial claim based on real source; NOT a model generation or human annotation",
+      "claim": "KolTa AULC was 0.748 on Drug and 0.738 on ILThermo.",
+      "source": "KolTa ranks first by mean full-budget AULC in (21) on Drug (0.738) and ILThermo (0.748) and second on NIST (0.444) and DiffMix (0.836) (Table II). Across paired com-parisons matched by task and seed, both paired tests support higher AULC than seven of the eight comparator strategies, with KolTa winning 75 of 78 paired comparisons against those seven strategies (80 of 87 overall), median gains of +0.031 to +0.265, and Holm-adjusted p ≤ 0.039 (Supplementary Table S6). Against GP-Greedy, KolTa achieves higher AULC in five of nine pairs, though the difference is not statistically significant (Holm-adjusted p = 0.50 for the sign test and p = 0.18 for the Wilcoxon test).",
+      "mechanically_retained": true,
+      "issues": [],
+      "agent_expected_fidelity": "contradicted by source"
+    },
+    {
+      "probe": "reversed_query_direction",
+      "fixture_kind": "synthetic adversarial claim based on real source; NOT a model generation or human annotation",
+      "claim": "On Drug, KolTa used 18% more queries than SolvGNN-UCB.",
+      "source": "Query efficiency (q30 and q80) reflects the distinct chemical regimes of the four tasks (Table III). On the 86-drug Drug task, KolTa achieves the lowest q30 (84) and reaches 80% macro active recall in a median of 348 queries, saving 76 queries (18%) over the fastest comparator (SolvGNN-UCB, 424) and over 130 queries relative to descriptor surrogates (GP-Greedy, 483; XGBoost-Greedy, 569). On ILThermo, greedy selection starts faster, and KolTa’s recall curve overtakes the greedy comparators after about one-third of the budget (Fig. 3(c)), achieving the best median q80 (112 vs. 114 for GP-Greedy). On DiffMix (LiPF6–carbonate electrolytes), KolTa shares the",
+      "mechanically_retained": true,
+      "issues": [],
+      "agent_expected_fidelity": "contradicted by source"
+    }
+  ]
+}

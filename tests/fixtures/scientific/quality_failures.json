@@ -1,0 +1,263 @@
+{
+  "provenance": {
+    "baseline_commit": "c7ae1df",
+    "assessment": "Observed model failures and cached PDF excerpts, agent-inspected; not human-verified annotations.",
+    "rubric": "docs/scientific-quality-2026-11-08.md"
+  },
+  "papers": {
+    "1": {
+      "url": "https://arxiv.org/abs/2604.16123v1",
+      "passages": [
+        {
+          "passage_id": "P108e928d108f6dfcaa06",
+          "section": "results",
+          "text": "The resulting plot reveals a clear Pareto front in the trade-off between computational cost and relative predictive performance. In particular, XGBoost occupies the extreme low-cost end, delivering very fast predictions, whereas TabPFN combined with RDKit2d descriptors and, especially, Mordred descriptors achieves the strongest overall performance. By contrast, the fine-tuned CheMeleon baseline has an average relative RMSE gap that is about 10 percentage points larger while also being an order of magnitude slower.",
+          "page_start": 10,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P643fa7e99e67e19bc39d",
+          "section": "limitations",
+          "text": "As detailed in Supplementary Information Section S3.1, the Brouwer activity-coefficient dataset comprises approximately 21,000 measurements, and performance remains strong for compact pair representations such as RDKit2d, whereas higher-dimensional representations start to approach practical limits. Second, the present work considers primarily single-molecule prediction tasks; extensions to chem-ically more complex settings, such as many-component mixtures, remain open and potentially challenging, since TFM computation scales considerably with feature dimension [13, 15]. Third, we have focused on out-of-the-box use of TFMs without",
+          "page_start": 11,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "Pb9fca254bcba839b9486",
+          "section": "methods",
+          "text": "We use Tukey’s honest significant difference (HSD) test with α = 0.05 on the five seed-specific benchmark scores to determine whether a model is statistically indistin-guishable from the best model on a given dataset, following prior work [9, 28]. Because these repeated seeds share the same fixed train-test split, this test quantifies variation due to model stochasticity rather than uncertainty over alternative molecular test sets. The top model and all models not significantly different from it are counted as wins, and win counts are aggregated into the reported win rates. In parallel, we compute within-dataset model ranks and average them across datasets. The critical-difference diagrams in Fig. 2c,d are based on these average ranks and use the Nemenyi post hoc comparison following Friedman’s test at α = 0.05.",
+          "page_start": 15,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "Pd1c7f35cd2f11aafddb1",
+          "section": "abstract",
+          "text": "Across the benchmarks, the approach shows excellent predictive performance while reducing computational cost, compared to fine-tuning, with these advantages also transfer-ring to practical engineering data settings. In particular, combining TFMs with CheMeleon embeddings yields up to 100% win rates on 30 MoleculeACE tasks, while compact RDKit2d and Mordred descriptors provide strong descriptor-based alternatives. Molecular representation emerges as a key determinant in TFM performance, with molecular foundation model embeddings and 2D descrip-tor sets both providing substantial gains over classic molecular fingerprints on many tasks. These results suggest that in-context learning with TFMs provides a",
+          "page_start": 1,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P4825a7abcff05959794f",
+          "section": "discussion",
+          "text": "We investigate a new paradigm for molecular property prediction: TFMs paired with frozen molecular foundation model embeddings and 2D descriptor sets, thereby enabling in-context learning. Across two representative benchmark suites including datasets from a few hundred to several thousand property data points, the TFM-based approach clearly outperforms the evaluated classical prediction methods and",
+          "page_start": 10,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P8f5c1c22cf2af97cd981",
+          "section": "results",
+          "text": "Across the combined benchmark suite, shown in Table 1, TFM-based approaches achieve stronger aggregate performance than the compared classical baselines and previously reported molecular foundation models. The best overall configuration, TabPFN-CheMeleonFP (TabPFN with frozen CheMeleon embeddings), achieves 50 wins out of 58 tasks, corresponding to an 86.2% win rate and an average rank of 4.52. Among descriptor-based methods, TabPFN-RDKit2d achieves the next-best average",
+          "page_start": 4,
+          "source_type": "pdf"
+        }
+      ],
+      "observed_claims": {
+        "quantitative_findings": "XGBoost delivers fast predictions but has weaker overall performance compared to TabPFN with RDKit2d and Mordred descriptors. The fine-tuned CheMeleon baseline has a larger average relative RMSE gap and is slower. The TFM-based approach outperforms classical prediction methods across the benchmarks.",
+        "validation": "Statistical significance is determined using Tukey’s honest significant difference (HSD) test and Nemenyi post hoc comparison following Friedman’s test."
+      }
+    },
+    "2": {
+      "url": "http://arxiv.org/abs/2611.06394v1",
+      "passages": [
+        {
+          "passage_id": "P5bf056f56e75c18c4840",
+          "section": "results",
+          "text": "KolTa ranks first by mean full-budget AULC in (21) on Drug (0.738) and ILThermo (0.748) and second on NIST (0.444) and DiffMix (0.836) (Table II). Across paired com-parisons matched by task and seed, both paired tests support higher AULC than seven of the eight comparator strategies, with KolTa winning 75 of 78 paired comparisons against those seven strategies (80 of 87 overall), median gains of +0.031 to +0.265, and Holm-adjusted p ≤ 0.039 (Supplementary Table S6). Against GP-Greedy, KolTa achieves higher AULC in five of nine pairs, though the difference is not statistically significant (Holm-adjusted p = 0.50 for the sign test and p = 0.18 for the Wilcoxon test).",
+          "page_start": 6,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "Pdfe7147dbf31e16c34aa",
+          "section": "results",
+          "text": "Query efficiency (q30 and q80) reflects the distinct chemical regimes of the four tasks (Table III). On the 86-drug Drug task, KolTa achieves the lowest q30 (84) and reaches 80% macro active recall in a median of 348 queries, saving 76 queries (18%) over the fastest comparator (SolvGNN-UCB, 424) and over 130 queries relative to descriptor surrogates (GP-Greedy, 483; XGBoost-Greedy, 569). On ILThermo, greedy selection starts faster, and KolTa’s recall curve overtakes the greedy comparators after about one-third of the budget (Fig. 3(c)), achieving the best median q80 (112 vs. 114 for GP-Greedy). On DiffMix (LiPF6–carbonate electrolytes), KolTa shares the",
+          "page_start": 6,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P3aab088091a8e861fcc6",
+          "section": "results",
+          "text": "Comparing greedy A2, disagreement-only A1 (cv = 0), and full PRC-UCB (KolTa) in (19) shows how calibrated exploration and the physics residual improve discovery and cross-task consistency (Table IV(a); Supplementary Table S7). Adding the physics residual v(F ) increases mean AULC over u-only A1 on both tasks, rising from 0.729 to 0.738 on Drug (q80: 360 to 348) and from 0.736 to 0.748 on ILThermo (q80: 115 to 112), and winning five of six paired runs (all three ILThermo seeds by +0.003 to +0.027 and two of three Drug seeds by +0.018 and +0.022). Across Drug and ILThermo, PRC-UCB also attains the smallest worst-case AULC gap among the three variants (0.015, vs. 0.026 for A2 and 0.027 for A1; Supplementary Table S8(b)) and lowers AULC standard deviation relative to A2 on both tasks.",
+          "page_start": 8,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P7a7baba911ac98745f26",
+          "section": "results",
+          "text": "Under a com-mon greedy rule, its three-stage physics-informed predictor outperforms graph and descriptor surrogates on both ablation tasks, while OOF calibration of ensemble disagreement and the target-temperature physics residual improves mean AULC over disagreement-only calibration on both tasks and achieves the smallest worst-case AULC gap across the acquisition variants (0.015 vs. 0.026 for greedy A2 and 0.027 for disagreement-only A1). Code will be made publicly available upon accep-tance.",
+          "page_start": 8,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P4846c85bf29e78e64243",
+          "section": "limitations",
+          "text": "Limitations. First, the current physics loss applies soft con-straints at five fixed temperatures per task, and extrapolation beyond the training temperature range has not been evaluated. Incorporating physical relations directly into the temperature-response function is a possible direction for improving ex-trapolation. Second, the model treats temperature as its only varying condition; extending it to jointly varying temperature and pressure would require additional condition inputs and coupled physical constraints.",
+          "page_start": 8,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "Pe7e9c11fe9084c405ac8",
+          "section": "experimental_setup",
+          "text": "We report support over these evaluated runs when one-sided exact sign and Wilcoxon signed-rank tests [38], each Holm-adjusted [39] across eight comparator strategies, both yield p < 0.05. Medians and ranges summarize paired differences. We summarize the observed differences in query counts, task rankings, and ablation results.",
+          "page_start": 6,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "Pe1397935850236991449",
+          "section": "experimental_setup",
+          "text": "Out-of-fold errors. We split labeled formulations into five folds, keeping each formulation’s records together. Hyperpa-rameter selection and ensemble training on the other four folds give out-of-fold (OOF) predictions ˜µ(F ) and signals ˜u(F ) and ˜v(F ) from (14) at T ∗.",
+          "page_start": 5,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P38543b0d3142f77c143a",
+          "section": "results",
+          "text": "Query efficiency (q30 and q80) reflects the distinct chemical regimes of the four tasks (Table III). On the 86-drug Drug task, KolTa achieves the lowest q30 (84) and reaches 80% macro active recall in a median of 348 queries, saving 76 queries (18%) over the fastest comparator (SolvGNN-UCB, 424) and over 130 queries relative to descriptor surrogates (GP-Greedy, 483; XGBoost-Greedy, 569). On ILThermo, greedy selection starts faster, and KolTa’s recall curve overtakes the greedy comparators after about one-third of the budget (Fig. 3(c)), achieving the best median q80 (112 vs. 114 for GP-Greedy).",
+          "page_start": 6,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P33df3f07ac5dd48bddb1",
+          "section": "results",
+          "text": "To isolate the predictor from acquisition calibration, we compare all model families under a common greedy rule (s µ(F )) on Drug and ILThermo (Table IV(b)). The KolTa predictor (A2) achieves both the highest mean AULC and lowest median q80 on each task: 0.712 (q80 = 383) on Drug vs. 0.682 (436) for SolvGNN-Greedy, and 0.763 (q80 = 108) on ILThermo vs. 0.734 (114) for GP-Greedy.",
+          "page_start": 7,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "Pb96982512ec0db46b5c5",
+          "section": "results",
+          "text": "Cross-task consistency and locked-set accuracy. Across NIST, Drug, and ILThermo, KolTa places in the top three of nine strategies in all nine runs, compared with seven for SolvGNN-Greedy (Supplementary Table S8(a)), and achieves the smallest worst-case AULC gap: 0.032, versus at least 0.056 for every comparator (Fig. 4).",
+          "page_start": 7,
+          "source_type": "pdf"
+        }
+      ],
+      "observed_claims": {
+        "quantitative_findings": "KolTa outperforms seven of eight comparator strategies in mean area under the learning curve (AULC) on every task, winning 75 of 78 paired comparisons.",
+        "validation": "Validation is performed using one-sided exact sign and Wilcoxon signed-rank tests, yielding p < 0.05."
+      },
+      "compact_observed_entries": {
+        "methodology": {
+          "text": "The method involves a framework called KolTa, which ranks formulations based on mean full-budget AULC across four tasks (Drug, ILThermo, NIST, DiffMix). The framework uses a physics loss with soft constraints at five fixed temperatures per task, and out-of-fold errors are calculated by splitting labeled formulations into five folds and training on the other four.",
+          "passage_ids": [
+            "P5bf056f56e75c18c4840",
+            "Pe1397935850236991449"
+          ]
+        },
+        "relevance": {
+          "text": "The research is relevant as it presents a new framework for formulation discovery that outperforms several comparator strategies in terms of query efficiency and cross-task consistency."
+        }
+      }
+    },
+    "3": {
+      "url": "https://arxiv.org/abs/2604.11483v1",
+      "passages": [
+        {
+          "passage_id": "P76ca90e79a14507db6e5",
+          "section": "results",
+          "text": "Results. Table 1 shows that CAGenMol estab-lishes a new state-of-the-art with a 69.7% Suc-cess Rate, surpassing the best baseline by over 16%. Unlike methods that sacrifice molecular qual-ity for raw docking scores, CAGenMol achieves a superior balance, dominating in QED and SA while maintaining strong affinity. Notably, it also retains the highest Diversity, demonstrating that Step-PPO effectively optimizes binding without suffering from the mode collapse typically associ-ated with RL. (See Appendix A for visual exam-ples of generated molecules). We also conducted experiments on an additional benchmark following (Zheng et al., 2024) to further demonstrate robust-ness (see Appendix H).",
+          "page_start": 7,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "Pa6ad3e747717150c8318",
+          "section": "limitations",
+          "text": "Despite the improvements of CAGenMol, sev-eral limitations remain. Limited computational resources prevented large-scale training and ex-tensive benchmarking, forcing us to initialize the model with pretrained weights rather than training from scratch. Additionally, the reliance on predic-tions from tools and models like ESM-2, AutoDock Vina and MiniMol, without accounting for poten-tial prediction errors, may impact overall performance.",
+          "page_start": 9,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "Pd794a677dd7666271915",
+          "section": "experimental_setup",
+          "text": "Data. Following standard practice in pocket-aware molecular generation (Peng et al., 2022; Guan et al., 2023), we use the CrossDocked2020 dataset (Francoeur et al., 2020). The processed dataset contains approximately 100,000 protein pocket–ligand complexes for training, with 100 target protein pockets held out for evaluation.",
+          "page_start": 6,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "Pbef8b2c1b80cd6e61724",
+          "section": "methods",
+          "text": "Evaluation Metrics. We evaluate 100 molecules generated for each pocket using the following met-rics: (1) Vina Dock: Binding affinity calculated by AutoDock Vina (Eberhardt et al., 2021) under the protocol of (Guan et al., 2023); (2) QED: Quanti-tative Estimate of Drug-likeness (Bickerton et al., 2012); (3) SA: Synthetic Accessibility score (Ertl",
+          "page_start": 7,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "Pc8b5cb51b2d37e72e9b0",
+          "section": "methods",
+          "text": "The core design philosophy of CAGenMol is to bridge the modality gap between heterogeneous biological constraints and discrete chemical space. To achieve this, we structurally decouple constraint perception from molecular reasoning. The archi-tecture is composed of two synergistic modules: a Unified Constraint Adaptor (UCA) that projects diverse signals (e.g., 3D geometric pockets or 1D property vectors) into a shared latent semantic space, and a Condition-Aware Diffusion Back-bone that utilizes these unified representations to bias the discrete denoising trajectory. This design allows a single generative framework to flexibly adapt to both extrinsic structural environments and intrinsic property requirements.",
+          "page_start": 4,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P8fed53317669f0e9b7a4",
+          "section": "methods",
+          "text": "Training and Inference Protocol. We adopt a two-stage training strategy: supervised fine-tuning followed by Step-PPO maximization of Eq. 11. We set Sref = −9.0, where the quadratic term implic-itly shifts optimization focus to QED and SA as affinity improves. To balance the magnitude dis-parity between Vina scores and property metrics, we set λ1 = 7/3 and λ2 = 5/6. EFO is excluded in this benchmark to ensure fair comparison. See Appendix D for details.",
+          "page_start": 7,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P491f26cdfdb642139c2e",
+          "section": "limitations",
+          "text": "Results in Table 5 show that CAGenMol achieves the best overall performance under both criteria, producing molecules with superior dock-ing scores while maintaining the highest proportion of Ames-negative candidates among all compared methods. This demonstrates that CAGenMol can effectively balance binding optimization and tox-icity avoidance within a unified framework, high-lighting its practical value for realistic drug design scenarios. Detailed experimental settings and addi-tional analyzes are provided in Appendix G.",
+          "page_start": 9,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P1ad4a2950d5ab8f06a47",
+          "section": "methods",
+          "text": "Moreover, rewards are only well-defined for chemically valid molecules. So we introduce a Validity Mask Mvalid ∈ {0, 1}, which activates policy updates only for valid trajectories and ef-fective denoising steps. To ensure stability, we introduce a mask Mvalid ∈ {0, 1} to restrict up-dates to chemically valid trajectories. Given the pre-trained backbone’s high validity rate (> 90%), this mechanism imposes negligible overhead and serves effectively as a noise filter, preventing un-defined reward signals from corrupting gradient estimation.",
+          "page_start": 5,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P05e69a1a2365066391be",
+          "section": "methods",
+          "text": "Table 2: Ablation study of UCA components and RL training. All variants except the final one are trained solely with Supervised Fine-Tuning (SFT).",
+          "page_start": 7,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P3c4fa1123527951dced9",
+          "section": "results",
+          "text": "Results. We visualize the distribution shift of each target property via histograms in Figure 2 across three distinct stages: (i) Unconditional Gen-eration from the base model; (ii) Step-PPO Opti-mized; and (iii) Step-PPO + EFO, where the can-didates are further refined during inference. This progression highlights how Step-PPO effectively shifts the molecular distribution toward the desired properties, while EFO provides a final sharpening of constraint satisfaction.",
+          "page_start": 8,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P5f009ff47ecd171c6be0",
+          "section": "methods",
+          "text": "Figure 2: Histograms of Distribution shift under ADMET constraints for three settings.",
+          "page_start": 9,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "P6ae704603b002d24e2c0",
+          "section": "methods",
+          "text": "Training and Inference. For each setting, we first sample 10,000 de novo generated molecules from the unconditional base model, and annotate each molecule using MiniMol.",
+          "page_start": 8,
+          "source_type": "pdf"
+        },
+        {
+          "passage_id": "Pc6c30d5c5d1c48c56e93",
+          "section": "methods",
+          "text": "We adapt the BERT-based GenMol (Lee et al., 2025) architecture for conditional generation. In-stead of introducing heavy cross-attention modules which require training from scratch, we propose a parameter-efficient Prompt-based Conditional Denoising strategy. This approach treats the condi-tion vector not merely as an input, but as a semantic prompt that prefixes the molecular sequence.",
+          "page_start": 4,
+          "source_type": "pdf"
+        }
+      ],
+      "observed_claims": {
+        "quantitative_findings": "CAGenMol establishes a new state-of-the-art with a 69.7% success rate, surpassing the best baseline by over 16%. It achieves superior balance in QED, SA, and maintains strong affinity while retaining the highest diversity. It also produces molecules with superior docking scores and the highest proportion of Ames-negative candidates.",
+        "validation": "Experiments were conducted on structure-conditioned, property-conditioned, and dual-conditioned benchmarks. Additional experiments were done on an additional benchmark following Zheng et al. (2024) to demonstrate robustness."
+      },
+      "compact_observed_entries": {
+        "methodology": {
+          "text": "The model, CAGenMol, is designed to bridge the modality gap between biological constraints and discrete chemical space. It consists of a Unified Constraint Adaptor and a Condition-Aware Diffusion Backbone. The training strategy involves supervised fine-tuning followed by Step-PPO maximization of Eq. 11, with specific settings for Sref, λ1, λ2, and EFO exclusion.",
+          "passage_ids": [
+            "Pc8b5cb51b2d37e72e9b0",
+            "Pbef8b2c1b80cd6e61724"
+          ]
+        },
+        "relevance": {
+          "text": "The research addresses the challenge of generating molecules that balance molecular quality and docking scores, which is crucial for drug discovery and design."
+        }
+      }
+    }
+  }
+}

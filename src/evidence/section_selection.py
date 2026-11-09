@@ -13,11 +13,14 @@ class SelectionSettings:
     max_passages: int = EVIDENCE_MAX_PASSAGES
     duplicate_threshold: float = .85
     section_weights: dict[str, float] = field(default_factory=lambda: {
-        "results": 3, "methods": 2.5, "limitations": 2.5, "discussion": 1.5,
+        "results": 3, "methods": 3.5, "limitations": 2.5, "discussion": 1.5,
         "abstract": 1, "conclusion": 1, "introduction": .2, "unknown": 0, "supplementary": .5})
     feature_weights: dict[str, float] = field(default_factory=lambda: {
-        "quantitative_metric": 2, "reported_outcome": 3, "validation_protocol": 2, "protocol": 1, "comparison": 1, "caveat": 1, "domain": .5})
-    coverage_order: tuple[str, ...] = ("results", "limitations", "methods", "abstract", "discussion")
+        "quantitative_metric": 2, "reported_outcome": 3,
+        "negative_result": 3, "ablation": -2,
+        "validation_protocol": 2, "protocol": 1, "architecture": 2,
+        "comparison": 1, "caveat": 1, "domain": .5})
+    coverage_order: tuple[str, ...] = ("results", "limitations", "methods")
 
     def __post_init__(self):
         if not 1 <= self.char_budget <= MAX_SUMMARY_CONTEXT_CHARS or self.max_passages < 1:
@@ -32,13 +35,25 @@ def family(section):
     return "results" if section == "results_discussion" else section
 
 
-def features(text):
+def features(text: str) -> dict[str, bool]:
     return {
         "quantitative_metric": bool(re.search(r"\d", text) and re.search(r"\b(AUROC|AUC|AULC|RMSE|MAE|accuracy|coverage|sharpness|enrichment|scores?|success rate|win rates?|queries|validity|novelty|diversity|uniqueness|p\s*[<=>])\b", text, re.I)),
         "reported_outcome": bool(re.search(r"\d", text) and not re.search(r"\bdefined as\b", text, re.I)
                                  and re.search(r"\b(achieves?|reaches?|yield(?:s|ing)?|sav(?:es?|ing)|gains?|speedups?|outperforms?|wins?\s+\d+|increases?|rising from)\b", text, re.I)),
+        "negative_result": bool(re.search(
+            r"\b(?:not statistically significant|"
+            r"no significant (?:difference|improvement))\b",
+            text, re.I)),
+        "ablation": bool(re.search(
+            r"\b(?:ablation|acquisition variants|disagreement-only)\b", text, re.I)),
+        "architecture": bool(re.search(
+            r"\barchi-?tecture\b[^.!?]{0,60}"
+            r"\b(?:composed of|consists of|comprises)\b", text, re.I)),
         "protocol": bool(re.search(r"\b(scaffold|temporal|random split|external validation|cross.validation|prospective|retrospective|dataset|acquisition|calibrat|training|test set)", text, re.I)),
-        "validation_protocol": bool(re.search(r"\b(scaffold|train.test|locked set|held.out|five folds|cross.validation|random seeds|validation split)\b", text, re.I)),
+        "validation_protocol": bool(re.search(
+            r"\b(scaffold|train.test|locked set|held.out|five folds|"
+            r"cross.validation|random seeds|validation split|evaluation metrics)\b",
+            text, re.I)),
         "comparison": bool(re.search(r"\b(versus|compared|baseline|relative to|ablation|outperform)", text, re.I)),
         "caveat": bool(re.search(r"\b(limit|bias|shift|not synthes|no experimental|not measured|applicability|uncertain|no external)", text, re.I)),
         "domain": bool(re.search(r"\b(molecul|compound|QSAR|ADMET|graph neural|descriptor|docking|binding|molecular dynamics|synthetic accessibility|multi.parameter)", text, re.I)),
@@ -66,7 +81,11 @@ def near_duplicate(left, right, threshold):
 def select_passages(paper: dict, settings: SelectionSettings | None = None) -> tuple[list[dict], dict]:
     settings = settings or SelectionSettings(char_budget=paper.get("evidence_char_budget", EVIDENCE_CHAR_BUDGET))
     candidates = paper.get("passages") or abstract_passages(paper)
-    ranked, excluded = [], {"references": 0, "unsafe": 0, "numeric_block": 0, "font_glyphs": 0, "budget": 0, "duplicate": 0}
+    ranked, excluded = [], {
+        "references": 0, "unsafe": 0, "numeric_block": 0, "font_glyphs": 0,
+        "caption_only": 0, "budget": 0, "duplicate": 0,
+    }
+    signals_by_id = {}
     for passage in candidates:
         item = dict(passage)
         if item["section"] == "references":
@@ -84,12 +103,23 @@ def select_passages(paper: dict, settings: SelectionSettings | None = None) -> t
         if len(item["text"]) < 35:
             continue
         signals = features(item["text"])
-        score = settings.section_weights.get(family(item["section"]), 0)
+        if (re.match(r"^(?:Fig(?:ure)?\.?|Table)\s+\d", item["text"], re.I)
+                and not any(signals[name] for name in (
+                    "protocol", "validation_protocol", "quantitative_metric",
+                    "reported_outcome", "architecture"))):
+            excluded["caption_only"] += 1
+            continue
+        section = family(item["section"])
+        # "To achieve this" in an architecture is not a reported result.
+        for name in ("reported_outcome", "quantitative_metric"):
+            signals[name] = signals[name] and section == "results"
+        signals["architecture"] = signals["architecture"] and section == "methods"
+        signals_by_id[item["passage_id"]] = signals
+        score = settings.section_weights.get(section, 0)
         score += sum(settings.feature_weights.get(name, 0) for name, active in signals.items() if active)
         item.update(score=score, selection_reasons=["section_prior:" + family(item["section"]),
                                                   *[name for name, active in signals.items() if active]],
                     evidence_id=item["passage_id"], support_status="unverified")
-        section = family(item["section"])
         item["role"] = "method" if section == "methods" else "findings" if section == "results" else "problem"
         item["summary_role"] = "approach" if section == "methods" else "result" if section == "results" else "context" if section == "limitations" else "overview"
         ranked.append(item)
@@ -117,10 +147,18 @@ def select_passages(paper: dict, settings: SelectionSettings | None = None) -> t
 
     for category in settings.coverage_order:
         if category == "limitations":
-            category_ranked = sorted(ranked, key=lambda p: (not features(p["text"])["caveat"], -p["score"], p["passage_id"]))
+            category_ranked = sorted(ranked, key=lambda p: (
+                not signals_by_id[p["passage_id"]]["caveat"],
+                -p["score"], p["passage_id"]))
         elif category == "results":
             category_ranked = sorted(ranked, key=lambda p: (
-                not (features(p["text"])["quantitative_metric"] and features(p["text"])["reported_outcome"]),
+                not signals_by_id[p["passage_id"]]["negative_result"],
+                not (signals_by_id[p["passage_id"]]["quantitative_metric"]
+                     and signals_by_id[p["passage_id"]]["reported_outcome"]),
+                -p["score"], p["passage_id"]))
+        elif category == "methods":
+            category_ranked = sorted(ranked, key=lambda p: (
+                not signals_by_id[p["passage_id"]]["validation_protocol"],
                 -p["score"], p["passage_id"]))
         else:
             category_ranked = ranked
@@ -128,6 +166,12 @@ def select_passages(paper: dict, settings: SelectionSettings | None = None) -> t
             if family(item["section"]) == category and pick(item, True):
                 break
     for item in ranked:
+        # A favorable result inherited under a limitations heading must not
+        # displace protocol evidence once an actual author caveat is selected.
+        if (family(item["section"]) == "limitations"
+                and not signals_by_id[item["passage_id"]]["caveat"]
+                and any(family(p["section"]) == "limitations" for p in selected)):
+            continue
         pick(item)
     return selected, {"strategy": "section_aware", "candidate_count": len(candidates),
                       "eligible_count": len(ranked), "selected_count": len(selected), "input_chars": used,
